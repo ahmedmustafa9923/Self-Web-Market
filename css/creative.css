@@ -1,0 +1,323 @@
+/* CREATIVE PRICING PAGE */
+.crp-tog{display:flex;align-items:center;gap:10px;margin-bottom:34px}
+.crp-tl{font-size:13px;color:var(--mut);transition:color .2s}
+.crp-tl.on{color:var(--wht)}
+.crp-trk{width:46px;height:24px;background:#1a1525;border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;border:1px solid rgba(174,139,217,.2)}
+.crp-trk.on{background:rgba(174,139,217,.3)}
+.crp-thb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:var(--pur);border-radius:50%;transition:left .2s}
+.crp-trk.on .crp-thb{left:23px}
+.crp-tabs{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.crp-tab{padding:11px 22px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;border:1px solid rgba(174,139,217,.2);background:transparent;color:rgba(174,139,217,.55)}
+.crp-tab.on{background:rgba(174,139,217,.15);border-color:var(--pur);color:var(--pur)}
+.crp-tab:hover:not(.on){border-color:rgba(174,139,217,.4);color:rgba(174,139,217,.8)}
+.crp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;margin-bottom:44px}
+.crp-card{background:#100d18;border:1px solid rgba(174,139,217,.12);border-radius:14px;padding:28px;position:relative;transition:all .25s}
+.crp-card.feat{border-color:var(--pur);background:#120e1e}
+.crp-fbdg{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--pur);color:#0d0a14;font-size:11px;font-weight:600;padding:4px 16px;border-radius:20px;white-space:nowrap}
+.crp-pl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(174,139,217,.45);margin-bottom:10px}
+.crp-am{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--pur);letter-spacing:-1px;line-height:1}
+.crp-am sub{font-family:'Outfit',sans-serif;font-size:13px;color:rgba(174,139,217,.45);font-weight:300;letter-spacing:0}
+.crp-ds{font-size:13px;color:rgba(255,255,255,.35);margin:10px 0 20px;line-height:1.7}
+.crp-ft{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.crp-ft li{font-size:13px;color:rgba(255,255,255,.48);display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+.crp-ft li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--pur);flex-shrink:0;margin-top:5px}
+.crp-btn{width:100%;padding:12px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:14px;cursor:pointer;transition:all .18s;border:1px solid rgba(174,139,217,.25);background:transparent;color:rgba(174,139,217,.7)}
+.crp-card.feat .crp-btn{background:var(--pur);color:#0d0a14;border-color:var(--pur);font-weight:600}
+.crp-btn:hover{opacity:.8}
+.crp-bundles{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.crp-bc{background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:14px;padding:26px;display:flex;gap:18px;transition:all .25s}
+.crp-bc:hover{border-color:rgba(174,139,217,.28);transform:translateY(-2px)}
+.crp-bnum{font-family:'Bebas Neue',sans-serif;font-size:46px;color:rgba(174,139,217,.1);line-height:1;flex-shrink:0}
+.crp-bnm{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.5px;margin-bottom:6px;color:var(--pur)}
+.crp-bds{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7;margin-bottom:12px}
+.crp-bpr{font-size:20px;font-weight:600;color:var(--pur)}
+.crp-bsv{font-size:11px;color:rgba(255,255,255,.22);margin-top:3px}
+.cr-wrap{max-width:1080px;margin:0 auto;padding:70px 5vw 80px}
+.cr-ey{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--pur);margin-bottom:12px}
+.cr-ti{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,66px);line-height:1;letter-spacing:.5px;margin-bottom:18px}
+.cr-dv{width:54px;height:2px;background:linear-gradient(90deg,var(--pur),var(--pnk));margin-bottom:28px}
+.cr-bo{font-size:15px;color:rgba(255,255,255,.45);max-width:560px;line-height:1.88;margin-bottom:46px}
+.cr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-bottom:50px}
+.cr-card{background:#100d18;border:1px solid rgba(174,139,217,.12);border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:all .28s;cursor:pointer}
+.cr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cr-clr,var(--pur)),transparent);transform:scaleX(0);transition:transform .4s}
+.cr-card:hover{border-color:rgba(174,139,217,.28);transform:translateY(-4px)}
+.cr-card:hover::before{transform:scaleX(1)}
+.cr-ico{width:46px;height:46px;border-radius:12px;background:rgba(174,139,217,.1);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;border:1px solid rgba(174,139,217,.15)}
+.cr-nm{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;margin-bottom:8px;color:var(--cr-clr,var(--pur))}
+.cr-ds{font-size:13px;color:rgba(255,255,255,.4);line-height:1.75;margin-bottom:18px}
+.cr-tags{display:flex;flex-wrap:wrap;gap:5px}
+.cr-tag{padding:3px 9px;background:rgba(174,139,217,.07);color:rgba(174,139,217,.6);font-size:10px;border-radius:4px;border:1px solid rgba(174,139,217,.12)}
+.cr-featured{background:#100d18;border:1px solid rgba(174,139,217,.15);border-radius:18px;padding:36px;margin-bottom:36px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media(max-width:700px){.cr-featured{grid-template-columns:1fr}}
+.crf-badge{display:inline-block;background:rgba(174,139,217,.12);border:1px solid rgba(174,139,217,.25);color:var(--pur);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.crf-ti{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,3.5vw,44px);line-height:1;letter-spacing:.5px;margin-bottom:14px;color:var(--pur)}
+.crf-bo{font-size:14px;color:rgba(255,255,255,.42);line-height:1.85;margin-bottom:24px}
+.crf-visual{background:rgba(174,139,217,.04);border:1px solid rgba(174,139,217,.1);border-radius:14px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.crf-ico-lg{font-size:54px;opacity:.6}
+.crf-sub{font-size:12px;color:rgba(174,139,217,.4);letter-spacing:2px;text-transform:uppercase}
+.cr-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn-cr{padding:13px 26px;background:rgba(174,139,217,.12);color:var(--pur);border:1px solid rgba(174,139,217,.3);border-radius:8px;font-family:'Outfit',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-cr:hover{background:rgba(174,139,217,.2);border-color:var(--pur)}
+
+
+/* ═══════════════════════════════════════════════
+   FLUID RESPONSIVE — ALL APPLE DEVICE SIZES
+   iPhone SE (375px) → iPhone 16 Pro Max (430px)
+   iPad Mini (768px) → iPad Pro 13" (1024px)
+   Apple Watch (180px) — minimal read mode
+   ═══════════════════════════════════════════════ */
+
+/* ── BASE FLUID RULES (apply to all small screens) ── */
+@media(max-width:1024px){
+  :root{--sw:260px;--rsw:270px}
+  .wrap,.cr-wrap,.inq-wrap{padding:60px 4vw 70px}
+  .hcont{padding:80px 5vw 220px}
+}
+
+/* ── iPAD PRO 12.9" LANDSCAPE / DESKTOP-SMALL (1024px) ── */
+@media(max-width:1024px) and (min-width:769px){
+  .mgrid,.cr-grid,.crm-grid{grid-template-columns:repeat(2,1fr)}
+  .pgrid{grid-template-columns:repeat(3,1fr)}
+  .tgrid{grid-template-columns:repeat(2,1fr)}
+  .team-grid{grid-template-columns:repeat(3,1fr)}
+  .about-hero{grid-template-columns:1fr 1.1fr;gap:40px}
+  .callyt,.appt-layout{grid-template-columns:1fr 1fr}
+  .crp-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ── iPAD / iPAD AIR PORTRAIT & LANDSCAPE (768px–1023px) ── */
+@media(max-width:1023px) and (min-width:768px){
+  .sbar{border-radius:16px;bottom:18px}
+  .si{padding:14px 8px}
+  .sn{font-size:24px}
+  .hcont{padding:80px 5vw 200px}
+  .fcode{display:none}
+  .pay-grid{grid-template-columns:repeat(3,1fr)}
+  .bgrid{grid-template-columns:repeat(2,1fr)}
+  .clyt{grid-template-columns:1fr 1fr;gap:28px}
+  .inq-row{grid-template-columns:1fr 1fr}
+  .pay-split{grid-template-columns:1fr 1fr}
+}
+
+/* ── iPAD MINI / SMALL TABLET PORTRAIT (600px–767px) ── */
+@media(max-width:767px) and (min-width:600px){
+  .mgrid,.cr-grid,.crm-grid,.tgrid,.team-grid,.pay-grid{grid-template-columns:repeat(2,1fr)}
+  .pgrid{grid-template-columns:1fr 1fr}
+  .bgrid,.crp-bundles{grid-template-columns:1fr 1fr}
+  .about-hero{grid-template-columns:1fr}
+  .callyt,.appt-layout{grid-template-columns:1fr}
+  .clyt{grid-template-columns:1fr}
+  .crp-grid{grid-template-columns:1fr 1fr}
+  .owner-frame{max-width:220px;margin:0 auto}
+  .cr-featured{grid-template-columns:1fr}
+  .crf-visual{display:none}
+  .hcont{padding:80px 5vw 180px}
+  .fcode{display:none}
+  .sbar{display:none}
+  .inq-row{grid-template-columns:1fr}
+}
+
+/* ── iPHONE / MOBILE PORTRAIT (max 599px) ── */
+@media(max-width:599px){
+  :root{--sw:100vw;--rsw:100vw}
+
+  /* both sidebars go full width on mobile */
+  #sidebar{width:100vw;border-right:none}
+  #rsidebar{width:100vw;border-left:none}
+
+  /* hide custom cursor on touch */
+  #cur,#cur-ring{display:none}
+
+  /* hero */
+  .hcont{padding:80px 5vw 160px}
+  .h-ti{font-size:clamp(48px,14vw,72px)}
+  .h-cta{flex-direction:column;align-items:flex-start}
+  .h-cta button{width:100%;text-align:center}
+  .fcode{display:none}
+  .hscr{display:none}
+  .sbar{display:none}
+
+  /* nav & layout */
+  .wrap,.cr-wrap,.inq-wrap{padding:50px 4vw 60px}
+  .s-ti{font-size:clamp(32px,9vw,48px)}
+
+  /* grids → single column */
+  .mgrid,.bgrid,.tgrid,.pgrid,.photogrid,.pay-grid,
+  .team-grid,.cr-grid,.crm-grid,.crp-grid,.crp-bundles{grid-template-columns:1fr}
+
+  /* about */
+  .about-hero{grid-template-columns:1fr;gap:32px}
+  .owner-frame{max-width:200px;margin:0 auto 10px}
+  .owner-stats{grid-template-columns:1fr 1fr}
+  .owner-badge{right:0;bottom:10px}
+  .about-cta-bar{flex-direction:column;padding:28px 20px}
+  .acta-btns{flex-direction:column;width:100%}
+  .acta-btns button{width:100%}
+
+  /* calendar */
+  .callyt,.appt-layout{grid-template-columns:1fr}
+  .bk-nav-row{flex-wrap:wrap}
+  .bk-home{margin-left:0}
+
+  /* contact */
+  .clyt{grid-template-columns:1fr}
+
+  /* pricing */
+  .ptabs{flex-direction:column}
+  .ptabs button{width:100%}
+  .ptog{flex-wrap:wrap}
+  .crp-tabs{flex-direction:column}
+  .crp-tabs button{width:100%}
+
+  /* AI chat */
+  .ai-msgs{height:260px}
+  .ai-qk{gap:5px}
+  .qb{font-size:11px;padding:5px 10px}
+
+  /* inquiry form */
+  .inq-row{grid-template-columns:1fr}
+  .inq-budget-row{grid-template-columns:repeat(3,1fr)}
+  .inq-submit-row{flex-direction:column}
+  .inq-submit,.inq-skip{width:100%;text-align:center}
+  .inq-steps{gap:4px}
+  .inq-step span{display:none} /* show only numbers on tiny screens */
+  .inq-step-div{width:16px}
+
+  /* payment */
+  .pay-split{grid-template-columns:1fr 1fr}
+  .deposit-row{flex-direction:column;gap:8px}
+  .contract-sign-row{flex-direction:column}
+  .pay-note{flex-direction:column}
+
+  /* creative */
+  .cr-featured{grid-template-columns:1fr;padding:22px}
+  .crf-visual{display:none}
+  .cr-cta{flex-direction:column}
+  .cr-cta button{width:100%}
+
+  /* float elements */
+  #fcta{right:16px;bottom:20px;padding:10px 16px}
+  #home-pill{left:16px;bottom:20px;padding:8px 14px;font-size:11px}
+
+  /* stats per-card à la carte */
+  .inq-budget-row{grid-template-columns:1fr 1fr}
+}
+
+/* ── iPHONE SE / SMALL (max 390px) ── */
+@media(max-width:390px){
+  .h-ti{font-size:clamp(42px,13vw,60px)}
+  .s-ti{font-size:clamp(28px,9vw,40px)}
+  .wrap,.cr-wrap,.inq-wrap{padding:44px 3.5vw 56px}
+  .inq-card{padding:20px}
+  .pay-flow-card{padding:20px}
+  .crp-grid{grid-template-columns:1fr}
+  .inq-budget-row{grid-template-columns:1fr 1fr}
+  .owner-stats{grid-template-columns:1fr 1fr}
+  .team-grid{grid-template-columns:1fr}
+  .pay-split{grid-template-columns:1fr 1fr}
+}
+
+/* ── APPLE WATCH (max 200px) — ultra minimal read mode ── */
+@media(max-width:200px){
+  body{font-size:10px;cursor:auto}
+  #cur,#cur-ring,#burger,#burger-r,#sidebar,#rsidebar,
+  #overlay,#fcta,#home-pill,.fcode,.hscr,.sbar,
+  .hscr,.vid-sec,.photogrid,.pay-grid,
+  .ai-wrap,.callyt,.appt-layout{display:none!important}
+
+  main{padding:8px}
+  .page.on{display:block;min-height:auto}
+  .wrap,.cr-wrap,.inq-wrap{padding:8px;max-width:100%}
+
+  .hcont{padding:12px 8px 20px;min-height:auto}
+  .h-ey{font-size:7px;letter-spacing:1px;margin-bottom:6px}
+  .h-ti{font-size:18px;line-height:1.1;margin-bottom:8px;letter-spacing:0}
+  .h-bo{font-size:9px;line-height:1.6;margin-bottom:12px}
+  .h-cta button{padding:6px 12px;font-size:9px;width:100%;margin-bottom:4px}
+
+  .s-ey{font-size:7px;margin-bottom:4px}
+  .s-ti{font-size:14px;margin-bottom:6px;letter-spacing:0}
+  .s-dv{margin-bottom:10px;width:30px}
+  .s-bo{font-size:9px;line-height:1.6;margin-bottom:12px}
+
+  .mc,.tc,.pc,.bc,.crm-card,.cr-card,.tm,.pay-card{
+    padding:10px;border-radius:8px;margin-bottom:8px
+  }
+  .mc-nm,.cr-nm,.crm-nm,.tm-name{font-size:12px}
+  .mc-ds,.cr-ds,.crm-ds,.tm-bio{font-size:9px;line-height:1.5}
+  .tags,.cr-tags,.crm-tags,.tm-tags{display:none}
+
+  .mgrid,.bgrid,.tgrid,.pgrid,.team-grid,
+  .cr-grid,.crm-grid,.crp-grid{grid-template-columns:1fr;gap:6px}
+
+  .sb-ct,.rsb-ft,.owner-socials,.acta-btns{display:none}
+  .owner-bio{font-size:9px;line-height:1.6}
+  .ostat-n{font-size:20px}
+  .ostat-l{font-size:8px}
+  .owner-stats{grid-template-columns:1fr 1fr;gap:6px}
+
+  .inq-card,.pay-flow-card{padding:10px}
+  .inq-lbl{font-size:8px}
+  .inq-input,.inq-select,.inq-ta{padding:7px 8px;font-size:9px}
+  .inq-notice{font-size:8px;padding:8px}
+  .inq-steps{gap:2px}
+  .inq-step span,.inq-step-div{display:none}
+  .inq-step-num{width:18px;height:18px;font-size:8px}
+
+  .nb-nav-row,.bk-cancel,.cal-clear,.booked-back{display:none}
+  .bkbtn,.inq-submit,.final-btn,.cfbtn,.crp-btn,.pbtn{
+    padding:7px;font-size:9px;border-radius:5px
+  }
+
+  .cform,.cfok{padding:10px}
+  .cfi,.cfta{padding:6px 8px;font-size:9px}
+
+  .ai-msgs{height:120px;padding:8px}
+  .msg{font-size:9px;padding:6px 8px}
+  .ai-qk,.ai-in{padding:6px 8px}
+  .qb{font-size:8px;padding:3px 7px}
+  #ai-inp{font-size:9px;padding:6px 8px}
+  #ai-snd{padding:0 8px;font-size:9px}
+}
+
+/* ── LANDSCAPE ORIENTATION HELPERS (iPhone sideways) ── */
+@media(max-height:500px) and (orientation:landscape) and (max-width:900px){
+  .hcont{padding:40px 6vw 100px;min-height:auto}
+  .h-ti{font-size:clamp(36px,7vw,60px)}
+  .sbar{bottom:10px}
+  .callyt,.appt-layout{grid-template-columns:1fr 1fr}
+  .ai-msgs{height:200px}
+  #fcta{bottom:12px}
+  #home-pill{bottom:12px}
+}
+
+/* ── iPAD LANDSCAPE ORIENTATION SPECIFIC ── */
+@media(min-width:768px) and (max-width:1024px) and (orientation:landscape){
+  .about-hero{grid-template-columns:280px 1fr;gap:36px}
+  .owner-frame{max-width:280px}
+  .callyt,.appt-layout{grid-template-columns:1fr 1fr}
+  .cr-featured{grid-template-columns:1fr 1fr}
+  .pay-grid{grid-template-columns:repeat(3,1fr)}
+  .hcont{padding:70px 6vw 180px}
+}
+
+/* ── TOUCH DEVICE — remove hover artifacts ── */
+@media(hover:none){
+  .mc:hover,.tc:hover,.cr-card:hover,.crm-card:hover,.tm:hover,
+  .bc:hover,.pay-card:hover{transform:none}
+  .mc::before,.cr-card::before,.crm-card::before,.tm::before{display:none}
+  .ni:hover{background:transparent}
+  .btn-p:hover{transform:none}
+}
+
+/* ── SAFE AREA — iPhone notch / Dynamic Island / home indicator ── */
+@supports(padding:max(0px)){
+  #burger{top:max(20px,env(safe-area-inset-top))}
+  #burger-r{top:max(20px,env(safe-area-inset-top))}
+  #fcta{bottom:max(32px,calc(env(safe-area-inset-bottom) + 16px))}
+  #home-pill{bottom:max(32px,calc(env(safe-area-inset-bottom) + 16px))}
+  .wrap,.cr-wrap,.inq-wrap{
+    padding-left:max(4vw,env(safe-area-inset-left));
+    padding-right:max(4vw,env(safe-area-inset-right))
+  }
+}

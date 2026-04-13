@@ -1,0 +1,14 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blk:#0a0a0a;--wht:#f5f3ee;--gld:#c9a84c;--gld2:#e8c87a;
+  --dim:#1c1c1c;--mut:#777;--bdr:rgba(255,255,255,0.08);
+  --sw:280px;--rsw:300px;--ease:cubic-bezier(.4,0,.2,1);
+  --pur:#AFA9EC;--tea:#5DCAA5;--cor:#F0997B;--pnk:#ED93B1;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--blk);color:var(--wht);overflow-x:hidden;cursor:none;min-height:100vh}
+
+/* CURSOR */
+#cur{position:fixed;width:12px;height:12px;background:var(--gld);border-radius:50%;pointer-events:none;z-index:9999;top:-20px;left:-20px;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#cur-ring{position:fixed;width:34px;height:34px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;top:-20px;left:-20px;transform:translate(-50%,-50%);transition:left .06s,top .06s}
+

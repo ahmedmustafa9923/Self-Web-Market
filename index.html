@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,minimum-scale=1.0,maximum-scale=5.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<title>Code Rendering Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/payments.css">
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/creative.css">
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- LEFT BURGER -->
+<div id="burger"><span></span><span></span><span></span></div>
+
+<!-- RIGHT BURGER -->
+<div id="burger-r"><span></span><span></span><span></span></div>
+
+<div id="overlay"></div>
+<div id="home-pill">&#8592; Home</div>
+<div id="fcta"><div class="fc-dot"></div><span class="fc-txt">Book a free call</span></div>
+
+<!-- LEFT SIDEBAR -->
+<aside id="sidebar">
+  <div class="sb-hd">
+    <div class="brand">Code Rendering Studio</div>
+    <div class="brand-s">Digital Craft Agency</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-sec">Navigate</div>
+    <div class="ni on" id="ni-home">Home</div>
+    <div class="ni" id="ni-models-hd">Models <span class="arr" id="arr-models">&#9660;</span></div>
+    <div class="dd" id="dd-models">
+      <div class="di" id="di-mod-all">All Models</div>
+      <div class="di" id="di-mod-web">Web &amp; SaaS</div>
+      <div class="di" id="di-mod-mob">Mobile Apps</div>
+      <div class="di" id="di-mod-ai">AI Solutions</div>
+    </div>
+    <div class="ni" id="ni-pricing-hd">Pricing <span class="arr" id="arr-pricing">&#9660;</span></div>
+    <div class="dd" id="dd-pricing">
+      <div class="di" id="di-pri-all">All Plans</div>
+      <div class="di" id="di-pri-bun">Bundles</div>
+      <div class="di" id="di-pri-ind">Individual</div>
+    </div>
+    <div class="ni" id="ni-ai">AI Session</div>
+    <div class="ni" id="ni-calendar">Book a Call</div>
+    <div class="ni" id="ni-testimonials">Testimonials</div>
+    <div class="ni" id="ni-about">About &amp; Team</div>
+    <div class="ni" id="ni-payments">Payments / QR</div>
+    <div class="ni" id="ni-contact">Contact</div>
+  </nav>
+  <div class="sb-ft">
+    <div class="sb-ct">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#3a3a3a;margin-bottom:8px">Contact</div>
+      <a href="javascript:void(0)" onclick="window.location.href='mailto:'+atob('Y29kZXJlbmRlcmluZ3N0dWRpb0BnbWFpbC5jb20=')" style="color:var(--gld);text-decoration:none">coderenderingstudio@gmail.com</a><br>
+      +1 (630) 335-3342<br>
+      Lombard, IL 60148
+    </div>
+  </div>
+</aside>
+
+<!-- RIGHT SIDEBAR — Creative Writing & Arts -->
+<aside id="rsidebar">
+  <div class="rsb-hd">
+    <div class="rsb-brand">Creative Studio</div>
+    <div class="rsb-sub">Fiction · Film · Arts</div>
+  </div>
+  <nav class="rsb-nav">
+    <div class="rsb-sec">Creative Divisions</div>
+
+    <div class="rni" id="rni-novels">
+      <span class="rni-ico">📖</span> Fictional Novels
+      <span class="rsb-arr" id="rsb-arr-nov">&#9660;</span>
+    </div>
+    <div class="rsb-dd" id="rsb-dd-nov">
+      <div class="rdi" id="rdi-nov-series">Book Series</div>
+      <div class="rdi" id="rdi-nov-genres">Genres & Styles</div>
+      <div class="rdi" id="rdi-nov-ghost">Ghost Writing</div>
+      <div class="rdi" id="rdi-nov-edit">Editorial Services</div>
+    </div>
+
+    <div class="rni" id="rni-film">
+      <span class="rni-ico">🎬</span> Movie Production
+      <span class="rsb-arr" id="rsb-arr-film">&#9660;</span>
+    </div>
+    <div class="rsb-dd" id="rsb-dd-film">
+      <div class="rdi" id="rdi-film-script">Screenwriting</div>
+      <div class="rdi" id="rdi-film-prod">Production Mgmt</div>
+      <div class="rdi" id="rdi-film-post">Post Production</div>
+      <div class="rdi" id="rdi-film-dist">Distribution</div>
+    </div>
+
+    <div class="rni" id="rni-filming">
+      <span class="rni-ico">🎥</span> Filming & Direction
+      <span class="rsb-arr" id="rsb-arr-filming">&#9660;</span>
+    </div>
+    <div class="rsb-dd" id="rsb-dd-filming">
+      <div class="rdi" id="rdi-filming-dir">Directing</div>
+      <div class="rdi" id="rdi-filming-cin">Cinematography</div>
+      <div class="rdi" id="rdi-filming-doc">Documentary</div>
+      <div class="rdi" id="rdi-filming-short">Short Films</div>
+    </div>
+
+    <div class="rni" id="rni-arts">
+      <span class="rni-ico">🎨</span> Arts & Design
+      <span class="rsb-arr" id="rsb-arr-arts">&#9660;</span>
+    </div>
+    <div class="rsb-dd" id="rsb-dd-arts">
+      <div class="rdi" id="rdi-arts-visual">Visual Arts</div>
+      <div class="rdi" id="rdi-arts-dig">Digital Art</div>
+      <div class="rdi" id="rdi-arts-illus">Illustration</div>
+      <div class="rdi" id="rdi-arts-brand">Brand Artistry</div>
+    </div>
+
+    <div class="rsb-sec" style="margin-top:8px">Pricing &amp; Booking</div>
+    <div class="rni" id="rni-cr-models"><span class="rni-ico">🎭</span> Creative Models <span class="rsb-arr" id="rsb-arr-crmod">&#9660;</span></div>
+    <div class="rsb-dd" id="rsb-dd-crmod">
+      <div class="rdi" id="rdi-crm-novel">Novel Writing</div>
+      <div class="rdi" id="rdi-crm-clips">Editing Clips</div>
+      <div class="rdi" id="rdi-crm-dub">Sound Dubbing</div>
+      <div class="rdi" id="rdi-crm-film">Filming</div>
+      <div class="rdi" id="rdi-crm-post">Post Production</div>
+    </div>
+    <div class="rni" id="rni-cr-pricing"><span class="rni-ico">💜</span> Creative Pricing <span class="rsb-arr" id="rsb-arr-crprice">&#9660;</span></div>
+    <div class="rsb-dd" id="rsb-dd-crprice">
+      <div class="rdi" id="rdi-crp-solo">Solo Creator</div>
+      <div class="rdi" id="rdi-crp-pro">Pro Creator</div>
+      <div class="rdi" id="rdi-crp-studio">Studio Bundle</div>
+    </div>
+    <div class="rni" id="rni-collab"><span class="rni-ico">📅</span> Book a Creative Call</div>
+  </nav>
+  <div class="rsb-ft">
+    <div class="rsb-tagline">"Where code meets canvas,<br>and stories find their frame."</div>
+  </div>
+</aside>
+
+<main>
+
+<!-- HOME -->
+<div class="page on" id="page-home">
+  <div class="hbg"><div class="grid-bg"></div></div>
+  <div class="hcont">
+    <div class="h-ey">Est. 2024 &middot; Lombard, Illinois</div>
+    <h1 class="h-ti">Code Rendering Studio<br><em>Digital</em>Welcome</h1>
+    <p class="h-bo">Code Rendering Studio crafts premium websites, mobile apps using AI powered platforms for business and creative clients.</p>
+    <div class="h-cta">
+      <button class="btn-g" id="btn-explore">Explore Our Work &rarr;</button>
+      <button class="btn-pur" id="btn-creative">Creative Studio &rarr;</button>
+    </div>
+  </div>
+  <pre class="fcode">const studio = {
+  name: "Code Rendering Studio",
+  craft: ["Web", "Mobile", "AI"],
+  mission: "Build digital futures",
+  location: "Lombard, IL",
+  since: 2024,
+}
+// Your vision &rarr; our code
+renderStudio(studio)</pre>
+  <div class="hscr"><div class="hsl"></div><span class="hslb">Scroll</span></div>
+  <div class="sbar">
+    <div class="si" style="--ac:rgba(201,168,76,.12)">
+      <div class="sn" style="color:var(--gld);text-shadow:0 0 18px rgba(201,168,76,.5)">40</div>
+      <div class="sl">Projects<br>Delivered</div>
+    </div>
+    <div class="si" style="--ac:rgba(29,158,117,.12)">
+      <div class="sn" style="color:#5DCAA5;text-shadow:0 0 18px rgba(29,158,117,.4)">98%</div>
+      <div class="sl">Client<br>Satisfaction</div>
+    </div>
+    <div class="si" style="--ac:rgba(127,119,221,.12)">
+      <div class="sn" style="color:#AFA9EC;text-shadow:0 0 18px rgba(127,119,221,.4)">4</div>
+      <div class="sl">Industries<br>Served</div>
+    </div>
+    <div class="si" style="--ac:rgba(216,90,48,.12)">
+      <div class="sn" style="color:#F0997B;text-shadow:0 0 18px rgba(216,90,48,.4)">2Yr</div>
+      <div class="sl">Average<br>Partnership</div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRY & BOOKING FLOW -->
+<div class="page" id="page-inquiry">
+  <div class="inq-wrap">
+
+    <!-- STEP INDICATOR -->
+    <div class="inq-steps">
+      <div class="inq-step active" id="istep-1"><div class="inq-step-num">1</div><span>Your Request</span></div>
+      <div class="inq-step-div"></div>
+      <div class="inq-step" id="istep-2"><div class="inq-step-num">2</div><span>Appointment</span></div>
+      <div class="inq-step-div"></div>
+      <div class="inq-step" id="istep-3"><div class="inq-step-num">3</div><span>Payment &amp; Contract</span></div>
+    </div>
+
+    <!-- STEP 1: QUESTIONNAIRE -->
+    <div class="inq-panel active" id="ipanel-1">
+      <div class="s-ey" id="inq-service-label">Service Inquiry</div>
+      <h2 class="s-ti" id="inq-title">Tell Us About Your Project</h2>
+      <div class="s-dv"></div>
+      <p style="font-size:14px;color:rgba(255,255,255,.42);line-height:1.85;margin-bottom:32px;max-width:580px">Fill out the questionnaire below. This helps us prepare before we connect. You can submit this for info only — an appointment is optional but recommended for complex projects.</p>
+
+      <div class="inq-card">
+
+        <div class="inq-row">
+          <div class="inq-field">
+            <div class="inq-lbl">Full Name <span class="inq-req">*</span></div>
+            <input class="inq-input" id="inq-name" type="text" placeholder="Your full name">
+          </div>
+          <div class="inq-field">
+            <div class="inq-lbl">Email Address <span class="inq-req">*</span></div>
+            <input class="inq-input" id="inq-email" type="email" placeholder="you@example.com">
+          </div>
+        </div>
+
+        <div class="inq-row">
+          <div class="inq-field">
+            <div class="inq-lbl">Phone Number</div>
+            <input class="inq-input" id="inq-phone" type="tel" placeholder="+1 (555) 000-0000">
+          </div>
+          <div class="inq-field">
+            <div class="inq-lbl">Service Category <span class="inq-req">*</span></div>
+            <select class="inq-select" id="inq-service">
+              <option value="">— Select a service —</option>
+              <optgroup label="Digital Studio">
+                <option value="Web Platform">Web Platform</option>
+                <option value="Mobile App">Mobile App</option>
+                <option value="AI Integration">AI Integration</option>
+                <option value="SaaS Build">SaaS Build</option>
+                <option value="Booking System">Booking System</option>
+                <option value="Data Dashboard">Data Dashboard</option>
+              </optgroup>
+              <optgroup label="Creative Studio">
+                <option value="Novel Writing">Novel Writing</option>
+                <option value="Editing Clips">Editing Clips</option>
+                <option value="Sound Dubbing">Sound Dubbing</option>
+                <option value="Filming">Filming</option>
+                <option value="Post Production">Post Production</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <div class="inq-field">
+          <div class="inq-lbl">Project Type</div>
+          <div class="inq-chips" id="inq-type-chips">
+            <div class="inq-chip" data-v="New Project">New Project</div>
+            <div class="inq-chip" data-v="Existing Project">Existing Project</div>
+            <div class="inq-chip" data-v="Consultation Only">Consultation Only</div>
+            <div class="inq-chip" data-v="Just Exploring">Just Exploring / Need Info</div>
+          </div>
+        </div>
+
+        <div class="inq-field">
+          <div class="inq-lbl">Timeline</div>
+          <div class="inq-chips" id="inq-timeline-chips">
+            <div class="inq-chip" data-v="ASAP">ASAP</div>
+            <div class="inq-chip" data-v="1-2 months">1–2 months</div>
+            <div class="inq-chip" data-v="3-6 months">3–6 months</div>
+            <div class="inq-chip" data-v="No rush">No rush</div>
+          </div>
+        </div>
+
+        <div class="inq-field">
+          <div class="inq-lbl">Estimated Budget</div>
+          <div class="inq-budget-row" id="inq-budget-opts">
+            <div class="inq-bopt" data-v="Under $1,000">Under $1K</div>
+            <div class="inq-bopt" data-v="$1,000–$3,000">$1K–$3K</div>
+            <div class="inq-bopt" data-v="$3,000–$7,000">$3K–$7K</div>
+            <div class="inq-bopt" data-v="$7,000–$15,000">$7K–$15K</div>
+            <div class="inq-bopt" data-v="$15,000+">$15K+</div>
+            <div class="inq-bopt" data-v="Not sure">Not sure yet</div>
+          </div>
+        </div>
+
+        <div class="inq-field">
+          <div class="inq-lbl">Describe Your Project or Question <span class="inq-req">*</span></div>
+          <textarea class="inq-ta" id="inq-desc" rows="5" placeholder="Tell us what you have in mind. The more detail the better — what's the goal, who's the audience, what do you already have?"></textarea>
+        </div>
+
+        <div class="inq-field">
+          <div class="inq-lbl">How Did You Hear About Us?</div>
+          <select class="inq-select" id="inq-source">
+            <option value="">— Select one —</option>
+            <option>Google Search</option>
+            <option>Social Media</option>
+            <option>Referral / Word of Mouth</option>
+            <option>LinkedIn</option>
+            <option>Direct / Returning Client</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="inq-notice">
+          <strong>First 30–60 minutes are complimentary.</strong> After the initial consultation, all work requires a <strong>50% deposit</strong> and a <strong>signed contract</strong> before any production begins. You can submit this form for information only — booking an appointment is not required.
+        </div>
+
+        <div class="inq-submit-row">
+          <button class="inq-submit" id="inq-next-1">Submit &amp; Continue to Appointment &#8594;</button>
+          <button class="inq-skip" id="inq-submit-only">Submit for Info Only (No Appointment)</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 2: APPOINTMENT -->
+    <div class="inq-panel" id="ipanel-2">
+      <div class="s-ey">Optional — but recommended</div>
+      <h2 class="s-ti">Book Your Appointment</h2>
+      <div class="s-dv"></div>
+
+      <div class="appt-note">
+        <div class="appt-note-ti">&#9432; Consultation Policy</div>
+        <div class="appt-note-bo">Your <strong style="color:var(--gld)">first 30–60 minutes are complimentary</strong>. After that, ongoing consultation time is billed at our standard rate. Grayed-out slots are already taken by other clients. Select an open slot to reserve your time.</div>
+      </div>
+
+      <div class="appt-layout">
+        <div class="calcard">
+          <div class="cal-hd">
+            <div class="cal-mth" id="inq-cal-lbl">April 2026</div>
+            <div class="cal-nav">
+              <button class="cal-nb" id="inq-cal-prev">&#8249;</button>
+              <button class="cal-nb" id="inq-cal-next">&#8250;</button>
+            </div>
+          </div>
+          <div class="calgrid" id="inq-cal-grid"></div>
+        </div>
+
+        <div class="slotscard" id="inq-slots-panel">
+          <div class="slots-hd" id="inq-slots-hd">Pick a date &#8594;</div>
+          <div class="slotsgrid" id="inq-slots-grid"></div>
+          <div id="inq-slot-confirm"></div>
+        </div>
+      </div>
+
+      <div class="appt-skip-row">
+        <button class="inq-skip" id="inq-skip-appt">Skip — I don't need an appointment yet</button>
+        <button class="btn-g" id="inq-back-1">&#8592; Back to form</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAYMENT & CONTRACT -->
+    <div class="inq-panel" id="ipanel-3">
+      <div class="s-ey">Commitment required to begin</div>
+      <h2 class="s-ti">Payment &amp; Contract</h2>
+      <div class="s-dv"></div>
+      <p style="font-size:14px;color:rgba(255,255,255,.42);line-height:1.85;margin-bottom:30px;max-width:580px">To secure your project and begin production, a <strong style="color:var(--gld)">50% deposit</strong> is required alongside a <strong style="color:var(--gld)">signed service agreement</strong>. This protects both parties and guarantees your start date.</p>
+
+      <!-- DEPOSIT BREAKDOWN -->
+      <div class="pay-flow-card">
+        <div class="pay-flow-ti">50% Deposit</div>
+        <div class="pay-flow-sub">Choose your preferred payment method for the deposit. The remaining 50% is due upon project completion.</div>
+        <div class="deposit-row">
+          <div>
+            <div class="dep-lbl">Deposit Due Today</div>
+            <div class="dep-amt" id="dep-amt-display">$0.00</div>
+            <div class="dep-note">Based on your selected service &amp; budget tier</div>
+          </div>
+          <div style="text-align:right">
+            <div class="dep-lbl">Remaining Balance</div>
+            <div style="font-size:18px;font-weight:500;color:rgba(255,255,255,.55)" id="dep-remain-display">$0.00</div>
+            <div class="dep-note">Due on delivery</div>
+          </div>
+        </div>
+        <div class="inq-lbl" style="margin-bottom:10px">Select Payment Method</div>
+        <div class="pay-split">
+          <div class="pay-opt on" data-pm="Zelle"><div class="pay-opt-ico">💜</div><div class="pay-opt-nm">Zelle</div><div class="pay-opt-ds">Instant bank transfer</div></div>
+          <div class="pay-opt" data-pm="Apple Pay"><div class="pay-opt-ico">🍎</div><div class="pay-opt-nm">Apple Pay</div><div class="pay-opt-ds">iOS &amp; Safari</div></div>
+          <div class="pay-opt" data-pm="Google Pay"><div class="pay-opt-ico">🔵</div><div class="pay-opt-nm">Google Pay</div><div class="pay-opt-ds">Android &amp; web</div></div>
+          <div class="pay-opt" data-pm="Credit / Debit Card"><div class="pay-opt-ico">💳</div><div class="pay-opt-nm">Card</div><div class="pay-opt-ds">Visa, MC, Amex</div></div>
+        </div>
+      </div>
+
+      <!-- CONTRACT -->
+      <div class="pay-flow-card">
+        <div class="pay-flow-ti">Service Agreement</div>
+        <div class="pay-flow-sub">Read the agreement below, type your full name as your digital signature, and check the box to confirm your acceptance.</div>
+        <div class="contract-box">
+          <strong style="color:rgba(255,255,255,.6)">Code Rendering Studio — Service Agreement</strong><br><br>
+          This Service Agreement ("Agreement") is entered into between Code Rendering Studio ("Studio") and the undersigned client ("Client").<br><br>
+          <strong style="color:rgba(255,255,255,.5)">1. Scope of Work</strong><br>
+          The Studio agrees to provide the services selected by the Client as outlined in the submitted inquiry form. Specific deliverables, timelines, and milestones will be confirmed in a separate Project Brief within 3 business days of signing.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">2. Payment Terms</strong><br>
+          A non-refundable deposit of 50% of the total project fee is due upon signing this agreement. The remaining 50% balance is due upon final delivery. Invoices unpaid after 14 days accrue a 1.5% monthly late fee.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">3. Consultation Policy</strong><br>
+          The first 30–60 minute consultation is complimentary. Additional consultation time beyond this is billed at the Studio's standard hourly rate, which will be disclosed prior to extended sessions.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">4. Revisions</strong><br>
+          Projects include the number of revision rounds specified in the selected plan. Additional revisions are billed at the Studio's standard rate.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">5. Intellectual Property</strong><br>
+          Upon receipt of full payment, all deliverables and their associated intellectual property transfer to the Client. The Studio retains the right to showcase the work in its portfolio unless otherwise agreed in writing.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">6. Cancellation</strong><br>
+          Cancellation after signing forfeits the 50% deposit. If the Studio cancels, the deposit is refunded in full. Either party may cancel with 7 days written notice before production begins.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">7. Confidentiality</strong><br>
+          Both parties agree to keep project details, pricing, and any shared materials confidential unless written consent is given.<br><br>
+          <strong style="color:rgba(255,255,255,.5)">8. Governing Law</strong><br>
+          This agreement is governed by the laws of the State of Illinois. Disputes shall be resolved through binding arbitration in DuPage County, Illinois.
+        </div>
+        <div class="contract-sign-row">
+          <div class="contract-sign-field">
+            <div class="inq-lbl" style="margin-bottom:8px">Digital Signature — Type Your Full Name</div>
+            <input class="inq-input" id="inq-signature" placeholder="Type your full legal name to sign" style="font-style:italic">
+          </div>
+          <div style="flex-shrink:0">
+            <div class="inq-lbl" style="margin-bottom:8px">Date</div>
+            <div style="padding:11px 14px;background:#111;border:1px solid var(--bdr);border-radius:8px;font-size:13px;color:rgba(255,255,255,.4);white-space:nowrap" id="contract-date"></div>
+          </div>
+        </div>
+        <div class="contract-agree">
+          <input type="checkbox" id="inq-agree">
+          <label for="inq-agree">I have read and agree to the <strong>Code Rendering Studio Service Agreement</strong>. I understand that my 50% deposit is non-refundable and that production begins only after payment and signature are confirmed.</label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="final-btn" id="inq-final-submit" disabled>Submit &amp; Confirm Commitment &#8594;</button>
+        <button class="inq-skip" id="inq-back-2">&#8592; Back</button>
+      </div>
+    </div>
+
+    <!-- CONFIRMATION -->
+    <div class="inq-panel" id="ipanel-done">
+      <div class="inq-confirm">
+        <div class="inq-confirm-ico">✅</div>
+        <div class="inq-confirm-ti">You're All Set!</div>
+        <div class="inq-confirm-sub">Your inquiry has been submitted and your commitment is confirmed. We'll be in touch within 1 business hour to finalize your project brief and process your deposit.</div>
+        <div class="confirm-details" id="inq-summary"></div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-p" id="inq-done-home">&#8962; Back to Home</button>
+          <button class="btn-g" id="inq-done-contact">Contact Us</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODELS -->
+<div class="page" id="page-models">
+  <div class="wrap">
+    <div class="s-ey">What we build</div>
+    <h2 class="s-ti">Our Models</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Every engagement starts with understanding your goal. We match you to the right build model &mdash; no jargon, no guesswork.</p>
+    <div class="mgrid">
+      <div class="mc"><div class="mc-bdg">Popular</div><div class="mc-ico">🌐</div><div class="mc-nm">Web Platform</div><div class="mc-ds">Stunning, fast websites and web apps built to convert visitors into customers. Responsive across every device.</div><div class="tags"><span class="tag">React</span><span class="tag">Vite</span><span class="tag">Node.js</span></div></div>
+      <div class="mc"><div class="mc-ico">📱</div><div class="mc-nm">Mobile App</div><div class="mc-ds">Native iOS and Android experiences including Apple Watch and iPad. Built for iPhone 16 Pro and future-ready.</div><div class="tags"><span class="tag">Swift UI</span><span class="tag">React Native</span></div></div>
+      <div class="mc"><div class="mc-ico">🤖</div><div class="mc-nm">AI Integration</div><div class="mc-ds">Embed intelligence into your product. Chatbots, smart search, automation &mdash; powered by the latest AI models.</div><div class="tags"><span class="tag">Claude API</span><span class="tag">Python</span><span class="tag">LLM</span></div></div>
+      <div class="mc"><div class="mc-ico">☁️</div><div class="mc-nm">SaaS Build</div><div class="mc-ds">Full subscription platform with auth, billing, multi-tenancy, and admin dashboards. Launch your SaaS in weeks.</div><div class="tags"><span class="tag">SaaS</span><span class="tag">Stripe</span><span class="tag">Auth</span></div></div>
+      <div class="mc"><div class="mc-ico">📅</div><div class="mc-nm">Booking System</div><div class="mc-ds">Let your clients schedule with you effortlessly. Calendar sync, SMS/email reminders, and payment at booking.</div><div class="tags"><span class="tag">Calendaring</span><span class="tag">Twilio</span></div></div>
+      <div class="mc"><div class="mc-ico">📊</div><div class="mc-nm">Data Dashboard</div><div class="mc-ds">Real-time analytics, KPI tracking, and beautiful reporting tools that turn raw data into clear business decisions.</div><div class="tags"><span class="tag">D3.js</span><span class="tag">FastAPI</span><span class="tag">SQL</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="page" id="page-pricing">
+  <div class="wrap">
+    <div class="s-ey">Transparent pricing</div>
+    <h2 class="s-ti">Plans &amp; Bundles</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Simple, clear pricing. No surprise invoices. Pick a plan or build a bundle &mdash; we'll scope the rest on your free call.</p>
+    <div class="ptabs">
+      <button class="btn-p" id="tab-ind">Individual Plans</button>
+      <button class="btn-g" id="tab-bun">Bundles</button>
+    </div>
+    <div id="view-ind">
+      <div class="ptog">
+        <span class="tl on" id="lbl-mo">Monthly</span>
+        <div class="trk" id="bill-trk"><div class="thb"></div></div>
+        <span class="tl" id="lbl-yr">Annual &nbsp;<span style="color:var(--gld);font-size:11px">Save 20%</span></span>
+      </div>
+      <div class="pgrid">
+        <div class="pc">
+          <div class="p-pl">Starter</div>
+          <div class="p-am" id="p1">$1,500<sub>/project</sub></div>
+          <div class="p-ds">Perfect for small businesses getting online for the first time.</div>
+          <ul class="p-ft"><li>Beautiful website or web app</li><li>Mobile-responsive design</li><li>Basic booking integration</li><li>Email notifications</li><li>Monthly check-in call</li></ul>
+          <button class="pbtn go-cal">Get started</button>
+        </div>
+        <div class="pc feat">
+          <div class="fbdg">Most Popular</div>
+          <div class="p-pl">Growth</div>
+          <div class="p-am" id="p2">$3,200<sub>/project</sub></div>
+          <div class="p-ds">For businesses ready to scale with powerful digital tools.</div>
+          <ul class="p-ft"><li>Everything in Starter</li><li>Customer portal &amp; dashboard</li><li>Payments &amp; subscriptions</li><li>SMS + push notifications</li><li>AI chatbot integration</li><li>Priority support</li></ul>
+          <button class="pbtn go-cal">Get started</button>
+        </div>
+        <div class="pc">
+          <div class="p-pl">Pro</div>
+          <div class="p-am" id="p3">$5,800<sub>/project</sub></div>
+          <div class="p-ds">Your full vision built by a dedicated team &mdash; no limits.</div>
+          <ul class="p-ft"><li>Everything in Growth</li><li>iPhone &amp; iPad native app</li><li>Advanced AI features</li><li>Unlimited integrations</li><li>Dedicated build team</li><li>Weekly strategy calls</li></ul>
+          <button class="pbtn go-cal">Get started</button>
+        </div>
+      </div>
+    </div>
+    <div id="view-bun" style="display:none">
+      <div class="bgrid">
+        <div class="bc"><div class="bnum">01</div><div><div class="b-nm2">Launch Bundle</div><div class="b-ds">Website + booking system + email notifications. Everything to open your digital doors.</div><div class="b-pr">$4,200/mo</div><div class="b-sv">Saves $600 vs individual pricing</div></div></div>
+        <div class="bc"><div class="bnum">02</div><div><div class="b-nm2">Growth Bundle</div><div class="b-ds">Web app + mobile app + AI chatbot + dashboard. For businesses serious about scaling fast.</div><div class="b-pr">$7,500/mo</div><div class="b-sv">Saves $1,500 vs individual pricing</div></div></div>
+        <div class="bc"><div class="bnum">03</div><div><div class="b-nm2">Enterprise Bundle</div><div class="b-ds">Full SaaS platform + native apps + AI suite + data dashboards. The complete digital ecosystem.</div><div class="b-pr">$12,000/mo</div><div class="b-sv">Saves $3,200 vs individual pricing</div></div></div>
+        <div class="bc"><div class="bnum">04</div><div><div class="b-nm2">AI-First Bundle</div><div class="b-ds">AI chatbot + intelligent search + automation + analytics. Put intelligence at the core of your product.</div><div class="b-pr">$5,500/mo</div><div class="b-sv">Saves $800 vs individual pricing</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI -->
+<div class="page" id="page-ai">
+  <div class="wrap">
+    <div class="s-ey">Try it live</div>
+    <h2 class="s-ti">AI Interactive Session</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Chat with our AI assistant to explore services, get instant answers, or describe your project idea.</p>
+    <div class="ai-wrap">
+      <div class="ai-hd"><div class="ai-dot"></div><span class="ai-st">Studio AI &middot; Online now</span></div>
+      <div class="ai-msgs" id="ai-msgs">
+        <div class="msg bot">Hi! I'm the Code Rendering Studio assistant. Tell me about your project or ask anything about our services, pricing, or timelines &#128075;</div>
+      </div>
+      <div class="ai-qk">
+        <div class="qb" id="qb1">What do you offer?</div>
+        <div class="qb" id="qb2">Timelines?</div>
+        <div class="qb" id="qb3">Pricing?</div>
+        <div class="qb" id="qb4">Mobile app</div>
+      </div>
+      <div class="ai-in">
+        <input id="ai-inp" placeholder="Describe your project or ask a question...">
+        <button id="ai-snd">Send &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div class="page" id="page-calendar">
+  <div class="wrap">
+    <div class="s-ey">Free 60-minute call</div>
+    <h2 class="s-ti">Book a Business Call</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">No sales pressure. Just a real conversation about your project and how we can help you build it right.</p>
+    <div class="callyt">
+      <div class="calcard">
+        <div class="cal-hd">
+          <div class="cal-mth" id="cal-lbl">April 2026</div>
+          <div class="cal-nav">
+            <button class="cal-nb" id="cal-prev">&#8249;</button>
+            <button class="cal-nb" id="cal-next">&#8250;</button>
+          </div>
+        </div>
+        <div class="calgrid" id="cal-grid"></div>
+      </div>
+      <div class="slotscard" id="slots-panel">
+        <div class="bk-nav-row">
+          <button class="bk-back" id="bk-back-btn">&#8592; Back</button>
+          <button class="bk-home" id="bk-home-btn">&#8962; Home</button>
+        </div>
+        <div class="cal-reset-bar">
+          <div class="cal-sel-info" id="cal-sel-info"></div>
+          <button class="cal-clear" id="cal-clear-btn" style="display:none">&#10005; Clear selection</button>
+        </div>
+        <div class="slots-hd" id="slots-hd">Pick a date to see available times &#8594;</div>
+        <div class="slotsgrid" id="slots-grid"></div>
+        <div id="book-form"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="page" id="page-testimonials">
+  <div class="wrap">
+    <div class="s-ey">Client stories</div>
+    <h2 class="s-ti">What Our Clients Say</h2>
+    <div class="s-dv"></div>
+    <div class="tgrid">
+      <div class="tc"><div class="tcq">"</div><div class="tct">Code Rendering Studio completely transformed how our clients interact with us. The booking system they built pays for itself every month.</div><div class="tca"><div class="tcav" style="background:#EF9F27">MJ</div><div><div class="tcn">Marcus Johnson</div><div class="tcr">CEO, NorthLake Consulting</div></div></div></div>
+      <div class="tc"><div class="tcq">"</div><div class="tct">I came in with a rough idea on a napkin. Six weeks later I had a live product with real customers. These people are exceptional.</div><div class="tca"><div class="tcav" style="background:#5DCAA5">SR</div><div><div class="tcn">Sofia Reyes</div><div class="tcr">Founder, PulseHealth App</div></div></div></div>
+      <div class="tc"><div class="tcq">"</div><div class="tct">The AI assistant they integrated reduced our support tickets by 60%. Best investment we've made in three years.</div><div class="tca"><div class="tcav" style="background:#AFA9EC">DK</div><div><div class="tcn">David Kim</div><div class="tcr">CTO, GridFlow SaaS</div></div></div></div>
+      <div class="tc"><div class="tcq">"</div><div class="tct">From a clunky WordPress site to a custom mobile app in one partnership. Our revenue doubled in the first quarter after launch.</div><div class="tca"><div class="tcav" style="background:#F0997B">AP</div><div><div class="tcn">Amara Patel</div><div class="tcr">Director, Flourish Wellness</div></div></div></div>
+      <div class="tc"><div class="tcq">"</div><div class="tct">They don't just build &mdash; they think. Every suggestion improved the product. I trust them as true partners.</div><div class="tca"><div class="tcav" style="background:#97C459">TW</div><div><div class="tcn">Tyler Wren</div><div class="tcr">Owner, Ironworks Gym</div></div></div></div>
+      <div class="tc"><div class="tcq">"</div><div class="tct">Their design sense is genuinely world-class. Our competitors noticed. Our customers noticed. Our sales noticed. Enough said.</div><div class="tca"><div class="tcav" style="background:#ED93B1">LM</div><div><div class="tcn">Lydia Monroe</div><div class="tcr">Brand Director, Vantage Co.</div></div></div></div>
+    </div>
+    <div class="vid-sec">
+      <div class="s-ey" style="margin:0">Client spotlight</div>
+      <div class="vframe" id="vid-frame">
+        <div class="vinner">
+          <div class="playbtn">&#9654;</div>
+          <div class="vtitle">PulseHealth App &mdash; From Idea to Launch in 6 Weeks</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mut)">Watch Sofia share how Code Rendering Studio built her health app from scratch.</div>
+    </div>
+    <div class="s-ey" style="margin-bottom:14px">Studio snapshots</div>
+    <div class="photogrid">
+      <div class="ph"><div class="phi">💻</div><div class="pho"><span class="phlbl">Team at work</span></div></div>
+      <div class="ph"><div class="phi">🏙️</div><div class="pho"><span class="phlbl">Chicago HQ</span></div></div>
+      <div class="ph"><div class="phi">🚀</div><div class="pho"><span class="phlbl">Launch day</span></div></div>
+      <div class="ph"><div class="phi">🤝</div><div class="pho"><span class="phlbl">Client workshop</span></div></div>
+      <div class="ph"><div class="phi">🎨</div><div class="pho"><span class="phlbl">Design session</span></div></div>
+      <div class="ph"><div class="phi">📱</div><div class="pho"><span class="phlbl">App demo day</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT & TEAM -->
+<div class="page" id="page-about">
+  <div class="wrap">
+    <div class="s-ey">The people behind the pixels</div>
+    <h2 class="s-ti">About &amp; Team</h2>
+    <div class="s-dv"></div>
+
+    <!-- OWNER -->
+    <div class="about-hero">
+      <div class="owner-visual">
+        <div class="owner-frame">
+          <div class="owner-avatar">
+            <div class="oa-circle">CR</div>
+            <div class="oa-bar"></div>
+            <div class="oa-tag">Founder &amp; CEO</div>
+          </div>
+        </div>
+        <div class="owner-badge">
+          <div class="ob-dot"></div>
+          <div class="ob-txt">Available for consultation</div>
+        </div>
+      </div>
+      <div class="owner-info">
+        <div class="s-ey">Meet the founder</div>
+        <h3 class="s-ti" style="font-size:clamp(32px,4vw,54px)">The Owner</h3>
+        <div class="s-dv"></div>
+        <p class="owner-bio">Based in Lombard, Illinois, our founder started Code Rendering Studio in 2024 with one belief: great software should feel like art. With deep roots in digital product design, full-stack development, and AI systems, the studio was built to give every client &mdash; from solo founders to enterprise teams &mdash; access to world-class digital craftsmanship.</p>
+        <p class="owner-bio" style="margin-top:-12px">Every line of code we ship is written with intention. Every interface is designed to move people. That's the standard we hold ourselves to, on every single project.</p>
+        <div class="owner-stats">
+          <div class="ostat"><div class="ostat-n">40+</div><div class="ostat-l">Projects shipped</div></div>
+          <div class="ostat"><div class="ostat-n">2+</div><div class="ostat-l">Years in business</div></div>
+          <div class="ostat"><div class="ostat-n">98%</div><div class="ostat-l">Client retention</div></div>
+          <div class="ostat"><div class="ostat-n">4</div><div class="ostat-l">Industries served</div></div>
+        </div>
+        <div class="owner-socials">
+          <div class="osoc">✉️ Email the founder</div>
+          <div class="osoc">📞 +1 (630) 335-3342</div>
+          <div class="osoc">📍 Lombard, IL</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="s-ey" style="margin-bottom:12px">The team</div>
+    <h3 class="s-ti" style="font-size:clamp(28px,3.5vw,48px);margin-bottom:14px">Built by craftspeople</h3>
+    <div class="s-dv"></div>
+    <p class="s-bo">Small enough to care deeply. Skilled enough to build anything.</p>
+
+    <div class="team-grid">
+      <div class="tm" style="--tm-clr:var(--gld)">
+        <div class="tm-av" style="background:rgba(201,168,76,.2)">JR</div>
+        <div class="tm-name">Jordan Rivera</div>
+        <div class="tm-role">Lead Developer</div>
+        <div class="tm-bio">Full-stack architect who turns complex problems into elegant, scalable solutions. 8 years building SaaS products.</div>
+        <div class="tm-tags"><span class="tm-tag">React</span><span class="tm-tag">Node.js</span><span class="tm-tag">AWS</span></div>
+      </div>
+      <div class="tm" style="--tm-clr:var(--tea)">
+        <div class="tm-av" style="background:rgba(93,202,165,.2)">MK</div>
+        <div class="tm-name">Maya Kato</div>
+        <div class="tm-role">UI/UX Designer</div>
+        <div class="tm-bio">Human-centered designer with a background in product psychology. Every pixel she places has a reason.</div>
+        <div class="tm-tags"><span class="tm-tag">Figma</span><span class="tm-tag">Motion</span><span class="tm-tag">Branding</span></div>
+      </div>
+      <div class="tm" style="--tm-clr:var(--pur)">
+        <div class="tm-av" style="background:rgba(175,169,236,.2)">AS</div>
+        <div class="tm-name">Alex Sullivan</div>
+        <div class="tm-role">AI Engineer</div>
+        <div class="tm-bio">Specializes in LLM integration, automation pipelines, and intelligent product features powered by cutting-edge AI.</div>
+        <div class="tm-tags"><span class="tm-tag">Python</span><span class="tm-tag">Claude</span><span class="tm-tag">LangChain</span></div>
+      </div>
+      <div class="tm" style="--tm-clr:var(--cor)">
+        <div class="tm-av" style="background:rgba(240,153,123,.2)">DP</div>
+        <div class="tm-name">Dana Park</div>
+        <div class="tm-role">Mobile Developer</div>
+        <div class="tm-bio">Native iOS and React Native engineer. If it runs on a phone, Dana has built it — and made it feel effortless.</div>
+        <div class="tm-tags"><span class="tm-tag">SwiftUI</span><span class="tm-tag">React Native</span><span class="tm-tag">Expo</span></div>
+      </div>
+      <div class="tm" style="--tm-clr:#5DCAA5">
+        <div class="tm-av" style="background:rgba(93,202,165,.2)">TN</div>
+        <div class="tm-name">Tomas Novak</div>
+        <div class="tm-role">Strategy &amp; Growth</div>
+        <div class="tm-bio">Bridges the gap between technical delivery and business outcomes. Helps clients find the ROI in every build.</div>
+        <div class="tm-tags"><span class="tm-tag">Growth</span><span class="tm-tag">Analytics</span><span class="tm-tag">Strategy</span></div>
+      </div>
+      <div class="tm" style="--tm-clr:var(--pnk)">
+        <div class="tm-av" style="background:rgba(237,147,177,.2)">LW</div>
+        <div class="tm-name">Layla Williams</div>
+        <div class="tm-role">Client Success</div>
+        <div class="tm-bio">First call to final launch, Layla ensures every client feels heard, supported, and confident throughout the build.</div>
+        <div class="tm-tags"><span class="tm-tag">Onboarding</span><span class="tm-tag">PM</span><span class="tm-tag">Support</span></div>
+      </div>
+    </div>
+
+    <div class="about-cta-bar">
+      <div class="acta-txt">
+        <h3>Ready to build something remarkable?</h3>
+        <p>Book a free 60-minute call. No pressure &mdash; just a real conversation about your vision.</p>
+      </div>
+      <div class="acta-btns">
+        <button class="btn-p go-cal">Book a free call &rarr;</button>
+        <button class="btn-g go-contact">Get in touch</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENTS / QR CODES -->
+<div class="page" id="page-payments">
+  <div class="wrap">
+    <div class="s-ey">Secure &amp; instant payments</div>
+    <h2 class="s-ti">Pay Your Way</h2>
+    <div class="s-dv"></div>
+    <p class="pay-intro">Scan any QR code with your phone camera or tap the button to open your payment app directly. Your card details go straight to Zelle, Apple Pay, Google Pay, or Stripe — never through this site.</p>
+
+    <!-- CLIENT-FRIENDLY SECURITY STRIP -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;align-items:center">
+      <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">🔒 100% Secure</div>
+      <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">🛡️ Your card info is never stored here</div>
+      <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">✓ Official platform links only</div>
+      <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">⚡ Payments go directly to us</div>
+    </div>
+
+    <div class="pay-grid" id="pay-grid-container">
+      <!-- QR cards injected by JS after qrcode lib loads -->
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">Generating secure QR codes…</div>
+    </div>
+
+    <div class="pay-note" style="margin-top:32px">
+      <div class="pay-note-ico">🔒</div>
+      <div class="pay-note-txt">
+        <strong>Your payment is always safe.</strong> When you scan a QR code or tap a button, you go directly to Zelle, Apple Pay, Google Pay, or Stripe — we never see or store your card details. Prefer to pay by invoice or bank transfer? Just reach out at <strong>+1 (630) 335-3342</strong> or <strong><a href="javascript:void(0)" onclick="window.location.href='mailto:'+atob('Y29kZXJlbmRlcmluZ3N0dWRpb0BnbWFpbC5jb20=')" style="color:var(--gld);text-decoration:none">coderenderingstudio@gmail.com</a></strong> and we'll handle it for you.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CREATIVE MODELS PAGE -->
+<div class="page" id="page-crmodels">
+  <div class="cr-wrap">
+    <div class="cr-ey">Creative division</div>
+    <h2 class="cr-ti">Creative Models</h2>
+    <div class="cr-dv"></div>
+    <p class="cr-bo">Five distinct creative services, each built for a specific type of storyteller. Whether you're a novelist, a filmmaker, or a sound artist — there's a model tailored for you.</p>
+
+    <div class="crm-grid">
+
+      <div class="crm-card" style="--crm-clr:var(--pur)">
+        <div class="crm-bdg">Writing</div>
+        <div class="crm-ico">📖</div>
+        <div class="crm-nm">Novel Writing</div>
+        <div class="crm-ds">Full manuscript ghostwriting, co-authoring, developmental editing, and series planning. We take your story concept from outline to polished, publish-ready novel. Fiction across all genres — thriller, romance, sci-fi, fantasy, and literary.</div>
+        <div class="crm-tags"><span class="crm-tag">Ghost Writing</span><span class="crm-tag">Co-Authoring</span><span class="crm-tag">Dev Editing</span><span class="crm-tag">Series Arc</span></div>
+      </div>
+
+      <div class="crm-card" style="--crm-clr:var(--pnk)">
+        <div class="crm-bdg">Popular</div>
+        <div class="crm-ico">✂️</div>
+        <div class="crm-nm">Editing Clips</div>
+        <div class="crm-ds">Professional video editing for social media, YouTube, trailers, promos, and short-form content. Color grading, motion graphics, pacing, and transitions — delivered in any format and aspect ratio for any platform.</div>
+        <div class="crm-tags"><span class="crm-tag">Color Grade</span><span class="crm-tag">Motion GFX</span><span class="crm-tag">Short-form</span><span class="crm-tag">Trailers</span></div>
+      </div>
+
+      <div class="crm-card" style="--crm-clr:var(--tea)">
+        <div class="crm-ico">🎙️</div>
+        <div class="crm-nm">Sound Dubbing</div>
+        <div class="crm-ds">Studio-quality audio dubbing, voiceover production, ADR, and multilingual localization for films, commercials, e-learning content, and animated projects. Voice casting and direction included.</div>
+        <div class="crm-tags"><span class="crm-tag">ADR</span><span class="crm-tag">Voice Over</span><span class="crm-tag">Localization</span><span class="crm-tag">Casting</span></div>
+      </div>
+
+      <div class="crm-card" style="--crm-clr:var(--cor)">
+        <div class="crm-ico">🎥</div>
+        <div class="crm-nm">Filming</div>
+        <div class="crm-ds">On-location and studio filming with professional cinematography, lighting, and direction. From indie feature films and documentaries to brand films, music videos, and commercial spots. Full crew or solo-director options available.</div>
+        <div class="crm-tags"><span class="crm-tag">Cinematography</span><span class="crm-tag">On-Location</span><span class="crm-tag">Music Video</span><span class="crm-tag">Documentary</span></div>
+      </div>
+
+      <div class="crm-card" style="--crm-clr:#EF9F27">
+        <div class="crm-ico">🎞️</div>
+        <div class="crm-nm">Post Production</div>
+        <div class="crm-ds">End-to-end post production including editing, VFX compositing, sound design, color grading, and final delivery for broadcast, streaming, and theatrical release. DCP and mastering available.</div>
+        <div class="crm-tags"><span class="crm-tag">VFX</span><span class="crm-tag">Sound Design</span><span class="crm-tag">DCP Master</span><span class="crm-tag">Broadcast</span></div>
+      </div>
+
+    </div>
+
+    <div style="background:#100d18;border:1px solid rgba(174,139,217,.12);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.5px;color:var(--pur);margin-bottom:6px">Ready to see pricing for these services?</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.35);line-height:1.7">Transparent, project-based rates. No hidden fees.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-cr go-crpricing">View Creative Pricing &rarr;</button>
+        <button class="btn-g go-cal">Book a Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATIVE PRICING PAGE -->
+<div class="page" id="page-crpricing">
+  <div class="cr-wrap">
+    <div class="cr-ey">Creative division</div>
+    <h2 class="cr-ti">Creative Pricing</h2>
+    <div class="cr-dv"></div>
+    <p class="cr-bo" style="max-width:600px">Straightforward project-based pricing for every creative service. Pick a plan or mix services into a custom bundle — scoped on your free call.</p>
+
+    <div class="crp-tabs">
+      <button class="crp-tab on" id="crp-tab-ind">Individual Plans</button>
+      <button class="crp-tab" id="crp-tab-bun">Creative Bundles</button>
+    </div>
+
+    <div id="crp-view-ind">
+      <div class="crp-tog">
+        <span class="crp-tl on" id="crp-lbl-mo">Per Project</span>
+        <div class="crp-trk" id="crp-bill-trk"><div class="crp-thb"></div></div>
+        <span class="crp-tl" id="crp-lbl-ret">Retainer &nbsp;<span style="color:var(--pur);font-size:11px">Save 15%</span></span>
+      </div>
+
+      <div class="crp-grid">
+
+        <!-- SOLO CREATOR -->
+        <div class="crp-card">
+          <div class="crp-pl">Solo Creator</div>
+          <div class="crp-am" id="crp1">$800<sub>/project</sub></div>
+          <div class="crp-ds">For independent creators launching their first professional project.</div>
+          <ul class="crp-ft">
+            <li>Novel editing (up to 40k words)</li>
+            <li>3 clip edits (up to 5 min each)</li>
+            <li>Basic voiceover &amp; dubbing</li>
+            <li>1 filming day (4 hrs)</li>
+            <li>Light post-production pass</li>
+            <li>2 revision rounds</li>
+          </ul>
+          <button class="crp-btn go-cal">Get started</button>
+        </div>
+
+        <!-- PRO CREATOR -->
+        <div class="crp-card feat">
+          <div class="crp-fbdg">Most Popular</div>
+          <div class="crp-pl">Pro Creator</div>
+          <div class="crp-am" id="crp2">$2,400<sub>/project</sub></div>
+          <div class="crp-ds">For serious creators producing multi-format, professional-grade content.</div>
+          <ul class="crp-ft">
+            <li>Full novel ghostwriting (80k words)</li>
+            <li>Unlimited clip edits + color grade</li>
+            <li>Full ADR &amp; sound dubbing suite</li>
+            <li>3 filming days + crew</li>
+            <li>Full post-production pipeline</li>
+            <li>Motion graphics &amp; VFX</li>
+            <li>Priority turnaround</li>
+          </ul>
+          <button class="crp-btn go-cal">Get started</button>
+        </div>
+
+        <!-- STUDIO -->
+        <div class="crp-card">
+          <div class="crp-pl">Studio Tier</div>
+          <div class="crp-am" id="crp3">$5,200<sub>/project</sub></div>
+          <div class="crp-ds">Complete studio-level production for feature films, series, and major releases.</div>
+          <ul class="crp-ft">
+            <li>Everything in Pro Creator</li>
+            <li>Feature film or book series</li>
+            <li>Multilingual dubbing &amp; localization</li>
+            <li>DCP mastering &amp; broadcast delivery</li>
+            <li>Dedicated creative director</li>
+            <li>Distribution strategy support</li>
+            <li>Weekly progress screenings</li>
+          </ul>
+          <button class="crp-btn go-cal">Get started</button>
+        </div>
+
+      </div>
+
+      <!-- PER-SERVICE BREAKDOWN -->
+      <div style="margin-bottom:36px">
+        <div class="cr-ey" style="margin-bottom:14px">À la carte — per service rates</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+          <div style="background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:10px;padding:16px 18px">
+            <div style="font-size:18px;margin-bottom:8px">📖</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--pur);margin-bottom:4px">Novel Writing</div>
+            <div style="font-size:20px;font-weight:600;color:var(--wht)">$0.04<span style="font-size:12px;color:rgba(255,255,255,.35)">/word</span></div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);margin-top:4px">Min. 10,000 words</div>
+          </div>
+          <div style="background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:10px;padding:16px 18px">
+            <div style="font-size:18px;margin-bottom:8px">✂️</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--pnk);margin-bottom:4px">Editing Clips</div>
+            <div style="font-size:20px;font-weight:600;color:var(--wht)">$150<span style="font-size:12px;color:rgba(255,255,255,.35)">/clip</span></div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);margin-top:4px">Up to 10 min per clip</div>
+          </div>
+          <div style="background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:10px;padding:16px 18px">
+            <div style="font-size:18px;margin-bottom:8px">🎙️</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--tea);margin-bottom:4px">Sound Dubbing</div>
+            <div style="font-size:20px;font-weight:600;color:var(--wht)">$300<span style="font-size:12px;color:rgba(255,255,255,.35)">/hr studio</span></div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);margin-top:4px">Min. 2-hr session</div>
+          </div>
+          <div style="background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:10px;padding:16px 18px">
+            <div style="font-size:18px;margin-bottom:8px">🎥</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--cor);margin-bottom:4px">Filming</div>
+            <div style="font-size:20px;font-weight:600;color:var(--wht)">$800<span style="font-size:12px;color:rgba(255,255,255,.35)">/day</span></div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);margin-top:4px">Crew &amp; equipment incl.</div>
+          </div>
+          <div style="background:#100d18;border:1px solid rgba(174,139,217,.1);border-radius:10px;padding:16px 18px">
+            <div style="font-size:18px;margin-bottom:8px">🎞️</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#EF9F27;margin-bottom:4px">Post Production</div>
+            <div style="font-size:20px;font-weight:600;color:var(--wht)">$1,200<span style="font-size:12px;color:rgba(255,255,255,.35)">/min finished</span></div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);margin-top:4px">VFX &amp; sound incl.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="crp-view-bun" style="display:none">
+      <div class="crp-bundles">
+        <div class="crp-bc"><div class="crp-bnum">01</div><div><div class="crp-bnm">Author Launch Bundle</div><div class="crp-bds">Novel writing + cover design + book trailer editing + social clip cuts. Everything to launch your debut or next title.</div><div class="crp-bpr">$3,800/project</div><div class="crp-bsv">Saves $1,200 vs individual rates</div></div></div>
+        <div class="crp-bc"><div class="crp-bnum">02</div><div><div class="crp-bnm">Film Maker Bundle</div><div class="crp-bds">Full filming days + post-production + sound dubbing + trailer cut. Indie film ready for festival submission.</div><div class="crp-bpr">$7,500/project</div><div class="crp-bsv">Saves $2,300 vs individual rates</div></div></div>
+        <div class="crp-bc"><div class="crp-bnum">03</div><div><div class="crp-bnm">Content Creator Bundle</div><div class="crp-bds">Monthly clip editing + voiceovers + color grading for YouTube, Reels, and TikTok. Retainer-based, consistent delivery.</div><div class="crp-bpr">$1,800/mo</div><div class="crp-bsv">Saves $600/mo vs individual rates</div></div></div>
+        <div class="crp-bc"><div class="crp-bnum">04</div><div><div class="crp-bnm">Full Creative Suite</div><div class="crp-bds">Novel + film + post + dubbing + social. The complete creative production ecosystem for your brand or franchise.</div><div class="crp-bpr">$11,000/project</div><div class="crp-bsv">Saves $4,000 vs individual rates</div></div></div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(174,139,217,.06),rgba(174,139,217,.02));border:1px solid rgba(174,139,217,.18);border-radius:18px;padding:42px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.5px;color:var(--pur);margin-bottom:6px">Not sure which plan fits?</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.7">Book a free creative consultation. We'll scope the right package for your project in 30 minutes.</div>
+      </div>
+      <button class="btn-cr go-cal">Book a Free Call &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATIVE STUDIO PAGE -->
+<div class="page" id="page-creative">
+  <div class="cr-wrap">
+    <div class="cr-ey">Creative division</div>
+    <h2 class="cr-ti">Creative Studio</h2>
+    <div class="cr-dv"></div>
+    <p class="cr-bo">Beyond code, we tell stories. Our Creative Studio division serves novelists, filmmakers, directors, and artists who want a partner that understands both craft and technology.</p>
+
+    <div class="cr-featured">
+      <div>
+        <div class="crf-badge">Featured division</div>
+        <div class="crf-ti">Where imagination<br>meets execution</div>
+        <p class="crf-bo">From ghostwriting fiction series to producing independent films — our creative team brings decades of storytelling experience to every project. We work with artists, authors, and filmmakers at every stage.</p>
+        <div class="cr-cta">
+          <button class="btn-cr" id="cr-book-call">Book a creative call &rarr;</button>
+          <button class="btn-g" id="cr-portfolio">View portfolio</button>
+        </div>
+      </div>
+      <div class="crf-visual">
+        <div class="crf-ico-lg">🎬</div>
+        <div class="crf-sub">Film &middot; Fiction &middot; Art</div>
+      </div>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card" style="--cr-clr:var(--pur)">
+        <div class="cr-ico">📖</div>
+        <div class="cr-nm">Fictional Novels</div>
+        <div class="cr-ds">Ghost writing, co-authoring, developmental editing, and full manuscript production for fiction series across all genres.</div>
+        <div class="cr-tags"><span class="cr-tag">Ghost Writing</span><span class="cr-tag">Editing</span><span class="cr-tag">Series</span></div>
+      </div>
+      <div class="cr-card" style="--cr-clr:var(--pnk)">
+        <div class="cr-ico">🎬</div>
+        <div class="cr-nm">Movie Production</div>
+        <div class="cr-ds">End-to-end film production support including development, pre-production planning, budgeting, and distribution strategy.</div>
+        <div class="cr-tags"><span class="cr-tag">Pre-Production</span><span class="cr-tag">Budgeting</span><span class="cr-tag">Distribution</span></div>
+      </div>
+      <div class="cr-card" style="--cr-clr:var(--cor)">
+        <div class="cr-ico">🎥</div>
+        <div class="cr-nm">Filming &amp; Direction</div>
+        <div class="cr-ds">On-set direction, cinematography consultation, documentary production, and short film creation from concept to final cut.</div>
+        <div class="cr-tags"><span class="cr-tag">Directing</span><span class="cr-tag">Cinematography</span><span class="cr-tag">Documentary</span></div>
+      </div>
+      <div class="cr-card" style="--cr-clr:var(--tea)">
+        <div class="cr-ico">🎨</div>
+        <div class="cr-nm">Arts &amp; Design</div>
+        <div class="cr-ds">Visual arts, digital illustration, brand artistry, and creative direction for artists looking to bring their vision to the world.</div>
+        <div class="cr-tags"><span class="cr-tag">Visual Arts</span><span class="cr-tag">Illustration</span><span class="cr-tag">Brand Art</span></div>
+      </div>
+    </div>
+
+    <div style="background:#100d18;border:1px solid rgba(174,139,217,.12);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.5px;color:var(--pur);margin-bottom:6px">Collaborate with our creative team</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.7">Every great story deserves the right partner. Let's talk about yours.</div>
+      </div>
+      <button class="btn-cr go-cal-cr">Schedule a creative session &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <div class="wrap">
+    <div class="s-ey">Get in touch</div>
+    <h2 class="s-ti">Let's Talk</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Whether you have a question, a project, or just want to say hello &mdash; we'd love to hear from you.</p>
+    <div class="clyt">
+      <div class="cinfo">
+        <div class="cit"><div class="cico">✉️</div><div><div class="cil">Email</div><div class="civ"><a href="javascript:void(0)" onclick="window.location.href='mailto:'+atob('Y29kZXJlbmRlcmluZ3N0dWRpb0BnbWFpbC5jb20=')" style="color:var(--gld);text-decoration:none">coderenderingstudio@gmail.com</a></div></div></div>
+        <div class="cit"><div class="cico">📞</div><div><div class="cil">Phone</div><div class="civ">+1 (630) 335-3342</div></div></div>
+        <div class="cit"><div class="cico">🕐</div><div><div class="cil">Office Hours</div><div class="civ">Mon&ndash;Fri &middot; 9 AM &ndash; 6 PM CST</div></div></div>
+        <div class="cit"><div class="cico">💬</div><div><div class="cil">Response Time</div><div class="civ">We reply within 1 business hour</div></div></div>
+        <div class="mapbox">
+          <div style="font-size:34px">📍</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.48);line-height:1.8">
+            <strong style="color:var(--gld)">Code Rendering Studio</strong><br>
+            616 South Edson Ave<br>
+            Lombard, IL 60148<br>
+            United States
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cform" id="cf-form">
+          <div><div class="cfl">Your name</div><input class="cfi" id="cf-name" placeholder="Alex Johnson" type="text"></div>
+          <div><div class="cfl">Email address</div><input class="cfi" id="cf-email" placeholder="alex@company.com" type="email"></div>
+          <div><div class="cfl">Subject</div><input class="cfi" id="cf-subj" placeholder="What's on your mind?"></div>
+          <div><div class="cfl">Message</div><textarea class="cfta" id="cf-msg" rows="5" placeholder="Tell us about your project, question, or idea..."></textarea></div>
+          <button class="cfbtn" id="cf-submit">Send Message &#8594;</button>
+        </div>
+        <div class="cfok" id="cf-ok">
+          <div style="font-size:48px">✅</div>
+          <div class="cfok-ti">Message Sent!</div>
+          <div class="cfok-sub">We'll be in touch within 1 business hour.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+
+  <!-- Scripts (load order matters) -->
+  <script src="js/utils.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/pricing.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/contact.js"></script>
+  <script src="js/inquiry.js"></script>
+  <script src="js/payments.js"></script>
+  <script src="js/init.js"></script>
+</body>
+</html>
