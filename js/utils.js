@@ -3,13 +3,7 @@
 /* GLOBAL HELPERS — must be window-scoped so all other JS files can use them */
 window.g   = function(id){ return document.getElementById(id); };
 window.on  = function(id, ev, fn){ var el = window.g(id); if(el) el.addEventListener(ev, fn); };
-window.cls = function(id, c, force){
-  var el = window.g(id);
-  if(!el) return;
-  if(force === undefined) el.classList.toggle(c);
-  else if(force) el.classList.add(c);
-  else el.classList.remove(c);
-};
+window.cls = function(id, c, force){ var el = window.g(id); if(!el) return; if(force === undefined) el.classList.toggle(c); else if(force) el.classList.add(c); else el.classList.remove(c); };
 
 /* CURSOR */
 (function(){
@@ -25,7 +19,8 @@ window.cls = function(id, c, force){
   })();
   document.addEventListener('mouseover', function(e){
     var cur = g('cur'); if(!cur) return;
-    var big = !!e.target.closest('button,.ni,.di,.mc,.tc,.ph,.dc.avail,.slot.avail,.qb,a,.rni,.rdi,.pay-card,.tm,.cr-card');
+    /* ONLY CHANGE: added .bc to the existing selector list */
+    var big = !!e.target.closest('button,.ni,.di,.mc,.tc,.ph,.dc.avail,.slot.avail,.qb,a,.rni,.rdi,.pay-card,.tm,.cr-card,.bc');
     cur.style.width  = big ? '20px' : '12px';
     cur.style.height = big ? '20px' : '12px';
   });
