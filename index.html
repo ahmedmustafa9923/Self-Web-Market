@@ -1856,93 +1856,96 @@ renderStudio(studio)</pre>
 <script src="js/payments.js"></script>
 <script src="js/init.js"></script>
 
-<!-- Orange & Purple Burger Menu Logic + History API -->
+<!-- Burger Menu Logic + History API -->
 <script>
 (function() {
 
   /* ── HISTORY / BROWSER BACK-FORWARD ── */
-  // On first load, replace current state with home
   history.replaceState({ page: 'page-home' }, '', '#home');
 
-  function navigateTo(pageId, pushState = true) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-    const target = document.getElementById(pageId);
+  function navigateTo(pageId, pushState) {
+    if (pushState === undefined) pushState = true;
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('on'); });
+    var target = document.getElementById(pageId);
     if (!target) return;
     target.classList.add('on');
     window.scrollTo(0, 0);
-    // Show/hide home pill
-    const pill = document.getElementById('home-pill');
+    var pill = document.getElementById('home-pill');
     if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
-    // Push to browser history
     if (pushState) {
       history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
     }
   }
 
-  // Handle browser back/forward buttons
   window.addEventListener('popstate', function(e) {
-    if (e.state && e.state.page) {
-      navigateTo(e.state.page, false);
-    } else {
-      navigateTo('page-home', false);
-    }
+    navigateTo((e.state && e.state.page) ? e.state.page : 'page-home', false);
   });
 
-  // Expose globally so navigation.js can use it
   window.navigateTo = navigateTo;
 
   /* ── HOME PILL ── */
-  const homePill = document.getElementById('home-pill');
+  var homePill = document.getElementById('home-pill');
   if (homePill) {
     homePill.innerHTML = '⌂ Home';
-    homePill.addEventListener('click', () => navigateTo('page-home'));
+    homePill.addEventListener('click', function() { navigateTo('page-home'); });
   }
 
-  /* ── PURPLE BURGER ── */
-  const burgerPurple  = document.getElementById('burger-purple');
-  const sidebarPurple = document.getElementById('sidebar-purple');
-  const psbClassroomHd  = document.getElementById('psb-classroom-hd');
-  const psbDdClassroom  = document.getElementById('psb-dd-classroom');
+  /* ── PURPLE BURGER (bottom-right) ── */
+  var burgerPurple  = document.getElementById('burger-purple');
+  var sidebarPurple = document.getElementById('sidebar-purple');
+  var psbClassroomHd  = document.getElementById('psb-classroom-hd');
+  var psbDdClassroom  = document.getElementById('psb-dd-classroom');
 
-  burgerPurple.addEventListener('click', function(e) {
-    e.stopPropagation();
-    burgerPurple.classList.toggle('open');
-    sidebarPurple.classList.toggle('open');
-    burgerOrange.classList.remove('open');
-    sidebarOrange.classList.remove('open');
-  });
+  if (burgerPurple && sidebarPurple) {
+    burgerPurple.addEventListener('click', function(e) {
+      e.stopPropagation();
+      burgerPurple.classList.toggle('open');
+      sidebarPurple.classList.toggle('open');
+    });
+  }
 
-  psbClassroomHd.addEventListener('click', function() {
-    psbClassroomHd.classList.toggle('open');
-    psbDdClassroom.classList.toggle('open');
-  });
+  if (psbClassroomHd && psbDdClassroom) {
+    psbClassroomHd.addEventListener('click', function() {
+      psbClassroomHd.classList.toggle('open');
+      psbDdClassroom.classList.toggle('open');
+    });
+  }
 
-  /* ── CLOSE ON OUTSIDE CLICK ── */
+  /* ── CLOSE PURPLE ON OUTSIDE CLICK ── */
   document.addEventListener('click', function(e) {
-    if (!sidebarPurple.contains(e.target) && e.target !== burgerPurple) {
-      burgerPurple.classList.remove('open');
-      sidebarPurple.classList.remove('open');
+    if (sidebarPurple && burgerPurple) {
+      if (!sidebarPurple.contains(e.target) && e.target !== burgerPurple) {
+        burgerPurple.classList.remove('open');
+        sidebarPurple.classList.remove('open');
+      }
     }
   });
 
-  /* ── PATCH navigation.js showPage to use history ── */
-  // Wait for navigation.js to load, then patch showPage
+  /* ── LIVE VIDEO EMBEDS ── */
+  document.addEventListener('click', function(e) {
+    var thumb = e.target.closest ? e.target.closest('.cl-live-thumb') : null;
+    if (!thumb) return;
+    var url = thumb.getAttribute('data-url');
+    if (!url) return;
+    var embed = thumb.closest('.cl-live-embed');
+    if (embed) {
+      embed.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="' + url + '?autoplay=1" allowfullscreen></iframe>';
+    }
+  });
+
+  /* ── PATCH showPage WITH HISTORY ON LOAD ── */
   window.addEventListener('load', function() {
-    // Intercept all nav item clicks and buttons that call showPage
-    // by hooking into the global navigateTo
-    const origShowPage = window.showPage;
+    var origShowPage = window.showPage;
     if (typeof origShowPage === 'function') {
       window.showPage = function(pageId, opts) {
         origShowPage(pageId, opts);
         history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
-        const pill = document.getElementById('home-pill');
+        var pill = document.getElementById('home-pill');
         if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
       };
     }
-
-    // Handle deep link on page load (e.g. if user lands on #models)
-    const hash = window.location.hash.replace('#', '');
+    // Deep link support
+    var hash = window.location.hash.replace('#', '');
     if (hash && document.getElementById('page-' + hash)) {
       navigateTo('page-' + hash, false);
     }
