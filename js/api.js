@@ -1,14 +1,12 @@
-/* ── API CLIENT — Code Rendering Studio ──────────────────────
+/* -- API CLIENT -- Code Rendering Studio
    Full REST API integration with Supabase
-   GET, POST, PUT/PATCH, DELETE — real-time booking persistence
-   ─────────────────────────────────────────────────────────── */
+   GET, POST, PATCH, DELETE -- real-time booking persistence
+*/
 
 const API = (function () {
 
-  // ── CONFIG — replace with your Supabase project values ────
-  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
-
+  const SUPABASE_URL  = 'https://jndhpdadetvylnluahhk.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_EdVzirg942iSgk3beq6z_A_JZlm04WP';
   const BASE = SUPABASE_URL + '/rest/v1';
 
   const HEADERS = {
@@ -42,17 +40,17 @@ const API = (function () {
       : `?date=eq.${fromDate}&select=date,time_slot`;
     return req('GET', '/taken_slots', null, range);
   }
-  async function createBooking(payload) { return req('POST', '/bookings', payload); }
-  async function updateBooking(id, updates) { return req('PATCH', '/bookings', updates, `?id=eq.${id}`); }
-  async function deleteBooking(id) { return req('DELETE', '/bookings', null, `?id=eq.${id}`); }
-  async function getAllBookings(limit) { return req('GET', '/bookings', null, `?order=date.asc,time_slot.asc&limit=${limit||50}&select=*`); }
-  async function getTodaysBookings() { return req('GET', '/todays_bookings', null, '?select=*'); }
-  async function createInquiry(payload) { return req('POST', '/inquiries', payload); }
-  async function updateInquiry(id, updates) { return req('PATCH', '/inquiries', updates, `?id=eq.${id}`); }
-  async function getAllInquiries() { return req('GET', '/inquiries', null, '?order=created_at.desc&select=*'); }
-  async function createContact(payload) { return req('POST', '/contacts', payload); }
-  async function blockSlot(date, timeSlot, reason) { return req('POST', '/blocked_slots', { date, time_slot: timeSlot, reason: reason||'' }); }
-  async function unblockSlot(date, timeSlot) { return req('DELETE', '/blocked_slots', null, `?date=eq.${date}&time_slot=eq.${encodeURIComponent(timeSlot)}`); }
+  async function createBooking(payload)         { return req('POST',  '/bookings',  payload); }
+  async function updateBooking(id, updates)     { return req('PATCH', '/bookings',  updates, `?id=eq.${id}`); }
+  async function deleteBooking(id)              { return req('DELETE','/bookings',  null,    `?id=eq.${id}`); }
+  async function getAllBookings(limit)           { return req('GET',   '/bookings',  null,    `?order=date.asc,time_slot.asc&limit=${limit||50}&select=*`); }
+  async function getTodaysBookings()            { return req('GET',   '/todays_bookings', null, '?select=*'); }
+  async function createInquiry(payload)         { return req('POST',  '/inquiries', payload); }
+  async function updateInquiry(id, updates)     { return req('PATCH', '/inquiries', updates, `?id=eq.${id}`); }
+  async function getAllInquiries()              { return req('GET',   '/inquiries', null,    '?order=created_at.desc&select=*'); }
+  async function createContact(payload)         { return req('POST',  '/contacts',  payload); }
+  async function blockSlot(date, timeSlot, reason) { return req('POST',  '/blocked_slots', { date, time_slot: timeSlot, reason: reason||'' }); }
+  async function unblockSlot(date, timeSlot)    { return req('DELETE','/blocked_slots', null, `?date=eq.${date}&time_slot=eq.${encodeURIComponent(timeSlot)}`); }
 
   return {
     bookings:  { getForDate: getBookingsForDate, getTaken: getTakenSlots, create: createBooking, update: updateBooking, delete: deleteBooking, getAll: getAllBookings, getToday: getTodaysBookings },
