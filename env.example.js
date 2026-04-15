@@ -1,13 +1,18 @@
-/* env.example.js
-   SETUP INSTRUCTIONS:
-   1. Copy this file and rename it to: env.js
-   2. Fill in your real Supabase credentials below
-   3. env.js is in .gitignore so it will NEVER be committed to GitHub
-
-   Get your credentials from:
-   https://supabase.com/dashboard/project/YOUR_PROJECT/settings/api-keys
-*/
+/* env.example.js - TEMPLATE (safe to commit, no secrets)
+ *
+ * SETUP:
+ * 1. Copy this file and rename to: env.js
+ * 2. env.js is gitignored and will never be committed
+ *
+ * PROXY_URL is the public Edge Function endpoint.
+ * It is safe to use here because the real DB keys live inside
+ * the Edge Function as Supabase secrets, not in any frontend file.
+ *
+ * Set your secrets server-side with:
+ *   supabase secrets set SUPABASE_URL=https://jndhpdadetvylnluahhk.supabase.co
+ *   supabase secrets set SUPABASE_SERVICE_KEY=YOUR_SERVICE_ROLE_KEY
+ *   supabase secrets set ALLOWED_ORIGIN=https://ahmedmustafa9923.github.io
+ */
 window.ENV = {
-  SUPABASE_URL:      'https://YOUR_PROJECT_ID.supabase.co',
-  SUPABASE_ANON_KEY: 'YOUR_ANON_KEY_HERE'
+  PROXY_URL: 'https://jndhpdadetvylnluahhk.supabase.co/functions/v1/api-proxy'
 };
