@@ -1,40 +1,44 @@
-/* -- API CLIENT -- Code Rendering Studio
- * SECURE: No DB credentials here.
- * All calls route through the Edge Function proxy (server-side).
- * The proxy URL is public — it is safe to commit.
- * The real DB keys live ONLY inside Supabase Edge Function secrets.
- */
-const API = (function () {
+/* ── API ── Code Rendering Studio
+   Handles all backend communication
+   Uses env.js for config
+*/
 
-  // Proxy URL — safe to commit (it is just an endpoint, not a key)
-  // Override via env.js PROXY_URL for local dev if needed
-  const PROXY = (window.ENV && window.ENV.PROXY_URL)
-    ? window.ENV.PROXY_URL
-    : 'https://jndhpdadetvylnluahhk.supabase.co/functions/v1/api-proxy';
+window.submitForm = function(data) {
+  console.log('[API] submitForm:', data);
+  // Extend with real Supabase/backend call when ready
+};
 
-  async function call(action, payload) {
-    try {
-      const r = await fetch(PROXY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Client-Version': '1.0' },
-        body: JSON.stringify({ action, payload: payload || {} })
-      });
-      const data = await r.json();
-      if (!r.ok) return { ok: false, error: data.error || r.statusText };
-      return { ok: true, data: data.data !== undefined ? data.data : data, status: r.status };
-    } catch (e) {
-      console.error('[API]', action, e.message);
-      return { ok: false, error: e.message };
-    }
-  }
+window.submitContact = function(data) {
+  console.log('[API] submitContact:', data);
+};
 
-  return {
-    bookings: {
-      getTaken:   function(from, to) { return call('getSlots',        { from: from, to: to }); },
-      getForDate: function(date)     { return call('getSlotsForDate', { date: date }); },
-      create:     function(p)        { return call('createBooking',   p); },
+window.submitBooking = function(data) {
+  console.log('[API] submitBooking:', data);
+};
+
+window.callAI = function(message) {
+  // Returns a Promise — resolved by ai.js
+  var apiKey = (window.ENV && window.ENV.ANTHROPIC_API_KEY) || '';
+  if (!apiKey) return Promise.reject('No API key');
+
+  return fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
     },
-    inquiries: { create: function(p) { return call('createInquiry', p); } },
-    contacts:  { create: function(p) { return call('createContact',  p); } },
-  };
-})();
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      system: 'You are the helpful assistant for Code Rendering Studio, a digital agency in Lombard, IL. Answer questions about our services: web platforms, mobile apps, AI integration, SaaS, booking systems, data dashboards, and creative studio (novels, films, arts). Keep replies under 3 sentences. Be friendly and professional.',
+      messages: [{ role: 'user', content: message }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    return d.content && d.content[0] ? d.content[0].text : 'Thanks for your message! Please book a free call to discuss further.';
+  });
+};
+
+console.log('✅ api.js loaded');
