@@ -1,12 +1,11 @@
 /* ── NAVIGATION ── Code Rendering Studio
-   Handles: page switching, sidebar open/close,
-   all nav links, browser history, home pill
-   Depends on: utils.js (loaded first)
+   CSS conventions (from layout.css):
+   - body.sb-on  → left sidebar slides in
+   - body.rsb-on → right sidebar slides in
+   - .page.on    → page is visible (display:block)
+   - .page       → display:none by default
 */
 
-/* ══════════════════════════════════════════
-   PAGE REGISTRY — every page id in the app
-══════════════════════════════════════════ */
 var ALL_PAGES = [
   'page-home','page-inquiry','page-models','page-pricing',
   'page-ai','page-calendar','page-testimonials','page-about',
@@ -17,127 +16,110 @@ var ALL_PAGES = [
 ];
 
 /* ══════════════════════════════════════════
-   CORE PAGE SWITCHER
+   PAGE SWITCHER
 ══════════════════════════════════════════ */
 window.showPage = function(pageId, opts) {
   var target = document.getElementById(pageId);
-  if (!target) { console.warn('showPage: page not found:', pageId); return; }
+  if (!target) { console.warn('showPage: not found:', pageId); return; }
 
-  // Hide all pages
   ALL_PAGES.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.classList.remove('on');
   });
 
-  // Show target
   target.classList.add('on');
   window.scrollTo(0, 0);
-
-  // Close sidebars
   closeSidebars();
 
-  // Home pill
   var pill = document.getElementById('home-pill');
   if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
 
-  // Browser history
-  try {
-    history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
-  } catch(e) {}
+  try { history.pushState({page:pageId}, '', '#'+pageId.replace('page-','')); } catch(e){}
 
-  // Pricing tab preset
   if (opts && opts.pricingTab) {
     setTimeout(function() {
-      var btn = document.getElementById(opts.pricingTab === 'bundles' ? 'tab-bun' : 'tab-ind');
+      var id = opts.pricingTab === 'bundles' ? 'tab-bun' : 'tab-ind';
+      var btn = document.getElementById(id);
       if (btn) btn.click();
     }, 60);
   }
-
-  // Inquiry service prefill
   if (opts && opts.service) {
     var sel = document.getElementById('inq-service');
-    if (sel) sel.value = opts.service;
+    if (sel) { sel.value = opts.service; sel.dispatchEvent(new Event('change')); }
     var lbl = document.getElementById('inq-service-label');
     if (lbl) lbl.textContent = opts.service + ' Inquiry';
-    var ti = document.getElementById('inq-title');
-    if (ti) ti.textContent = 'Tell Us About Your ' + opts.service + ' Project';
+    var ti  = document.getElementById('inq-title');
+    if (ti)  ti.textContent  = 'Tell Us About Your ' + opts.service + ' Project';
   }
+};
+window.showPage = window.showPage;
+
+/* ══════════════════════════════════════════
+   SIDEBAR — uses body classes (CSS requirement)
+══════════════════════════════════════════ */
+function closeSidebars() {
+  document.body.classList.remove('sb-on', 'rsb-on');
+}
+function openLeft() {
+  document.body.classList.add('sb-on');
+  document.body.classList.remove('rsb-on');
+}
+function openRight() {
+  document.body.classList.add('rsb-on');
+  document.body.classList.remove('sb-on');
+}
+
+/* ══════════════════════════════════════════
+   DROPDOWN HELPER
+══════════════════════════════════════════ */
+window.toggleDD = function(ddId, arrId) {
+  var dd = document.getElementById(ddId);
+  if (!dd) return;
+  var isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight    = isOpen ? '0px' : '400px';
+  dd.style.overflow     = 'hidden';
+  dd.style.transition   = 'max-height 0.3s ease';
+  var arr = document.getElementById(arrId);
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
 };
 
 /* ══════════════════════════════════════════
-   SIDEBAR HELPERS
-══════════════════════════════════════════ */
-function closeSidebars() {
-  var sb = document.getElementById('sidebar');
-  var rs = document.getElementById('rsidebar');
-  var ov = document.getElementById('overlay');
-  if (sb) sb.classList.remove('open');
-  if (rs) rs.classList.remove('open');
-  if (ov) ov.classList.remove('on');
-}
-
-function openLeftSidebar() {
-  var sb = document.getElementById('sidebar');
-  var rs = document.getElementById('rsidebar');
-  var ov = document.getElementById('overlay');
-  if (sb) sb.classList.add('open');
-  if (rs) rs.classList.remove('open');
-  if (ov) ov.classList.add('on');
-}
-
-function openRightSidebar() {
-  var rs = document.getElementById('rsidebar');
-  var sb = document.getElementById('sidebar');
-  var ov = document.getElementById('overlay');
-  if (rs) rs.classList.add('open');
-  if (sb) sb.classList.remove('open');
-  if (ov) ov.classList.add('on');
-}
-
-/* ══════════════════════════════════════════
-   WIRE UP — runs after DOM ready
+   WIRE UP ALL EVENTS
 ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
 
-  /* ── BURGER BUTTONS ── */
-  on('burger', 'click', function(e) {
+  /* ── BURGERS ── */
+  var burger  = document.getElementById('burger');
+  var burgerR = document.getElementById('burger-r');
+  var overlay = document.getElementById('overlay');
+
+  if (burger) burger.addEventListener('click', function(e) {
     e.stopPropagation();
-    var sb = document.getElementById('sidebar');
-    if (sb && sb.classList.contains('open')) { closeSidebars(); }
-    else { openLeftSidebar(); }
+    document.body.classList.contains('sb-on') ? closeSidebars() : openLeft();
   });
-
-  on('burger-r', 'click', function(e) {
+  if (burgerR) burgerR.addEventListener('click', function(e) {
     e.stopPropagation();
-    var rs = document.getElementById('rsidebar');
-    if (rs && rs.classList.contains('open')) { closeSidebars(); }
-    else { openRightSidebar(); }
+    document.body.classList.contains('rsb-on') ? closeSidebars() : openRight();
   });
+  if (overlay) overlay.addEventListener('click', closeSidebars);
 
-  on('overlay', 'click', closeSidebars);
-
-  /* ── HOME PILL & TOP CTA ── */
-  on('home-pill', 'click', function() { showPage('page-home'); });
-  on('fcta', 'click', function() { showPage('page-calendar'); });
-
-  /* ── HOME PAGE BUTTONS ── */
+  /* ── TOP BUTTONS ── */
+  on('home-pill',    'click', function() { showPage('page-home'); });
+  on('fcta',         'click', function() { showPage('page-calendar'); });
   on('btn-explore',  'click', function() { showPage('page-models'); });
   on('btn-creative', 'click', function() { showPage('page-creative'); });
 
   /* ── LEFT SIDEBAR — BUSINESS ── */
-  on('ni-home', 'click', function() { showPage('page-home'); });
-
-  on('ni-models-hd', 'click', function() { toggleDD('dd-models','arr-models'); });
-  on('di-mod-all', 'click', function() { showPage('page-models'); });
-  on('di-mod-web', 'click', function() { showPage('page-models'); });
-  on('di-mod-mob', 'click', function() { showPage('page-models'); });
-  on('di-mod-ai',  'click', function() { showPage('page-models'); });
-
-  on('ni-pricing-hd', 'click', function() { toggleDD('dd-pricing','arr-pricing'); });
-  on('di-pri-all', 'click', function() { showPage('page-pricing'); });
-  on('di-pri-bun', 'click', function() { showPage('page-pricing', {pricingTab:'bundles'}); });
-  on('di-pri-ind', 'click', function() { showPage('page-pricing', {pricingTab:'individual'}); });
-
+  on('ni-home',         'click', function() { showPage('page-home'); });
+  on('ni-models-hd',    'click', function() { toggleDD('dd-models',  'arr-models'); });
+  on('di-mod-all',      'click', function() { showPage('page-models'); });
+  on('di-mod-web',      'click', function() { showPage('page-models'); });
+  on('di-mod-mob',      'click', function() { showPage('page-models'); });
+  on('di-mod-ai',       'click', function() { showPage('page-models'); });
+  on('ni-pricing-hd',   'click', function() { toggleDD('dd-pricing', 'arr-pricing'); });
+  on('di-pri-all',      'click', function() { showPage('page-pricing'); });
+  on('di-pri-bun',      'click', function() { showPage('page-pricing', {pricingTab:'bundles'}); });
+  on('di-pri-ind',      'click', function() { showPage('page-pricing', {pricingTab:'individual'}); });
   on('ni-ai',           'click', function() { showPage('page-ai'); });
   on('ni-calendar',     'click', function() { showPage('page-calendar'); });
   on('ni-testimonials', 'click', function() { showPage('page-testimonials'); });
@@ -147,39 +129,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /* ── LEFT SIDEBAR — ONLINE CLASSROOM ── */
   on('ni-classroom-hd', 'click', function() { toggleDD('dd-classroom','arr-classroom'); });
-  on('di-cl-java',    'click', function() { showPage('page-java'); });
-  on('di-cl-js',      'click', function() { showPage('page-js'); });
-  on('di-cl-html',    'click', function() { showPage('page-html'); });
-  on('di-cl-python',  'click', function() { showPage('page-python'); });
-  on('di-cl-backend', 'click', function() { showPage('page-backend'); });
-  on('ni-fees',       'click', function() { showPage('page-fees'); });
-  on('ni-lab',        'click', function() { showPage('page-lab'); });
-  on('ni-placement',  'click', function() { showPage('page-placement'); });
+  on('di-cl-java',      'click', function() { showPage('page-java'); });
+  on('di-cl-js',        'click', function() { showPage('page-js'); });
+  on('di-cl-html',      'click', function() { showPage('page-html'); });
+  on('di-cl-python',    'click', function() { showPage('page-python'); });
+  on('di-cl-backend',   'click', function() { showPage('page-backend'); });
+  on('ni-fees',         'click', function() { showPage('page-fees'); });
+  on('ni-lab',          'click', function() { showPage('page-lab'); });
+  on('ni-placement',    'click', function() { showPage('page-placement'); });
+  on('ni-live-demo',    'click', function() { toggleDD('dd-live','arr-live'); });
+  on('di-live-youtube', 'click', function() { showPage('page-live'); });
+  on('di-live-social',  'click', function() { showPage('page-live'); });
+  on('di-live-schedule','click', function() { showPage('page-calendar'); });
 
-  on('ni-live-demo',     'click', function() { toggleDD('dd-live','arr-live'); });
-  on('di-live-youtube',  'click', function() { showPage('page-live'); });
-  on('di-live-social',   'click', function() { showPage('page-live'); });
-  on('di-live-schedule', 'click', function() { showPage('page-calendar'); });
+  /* ── RIGHT SIDEBAR — CREATIVE ── */
+  on('rni-novels',    'click', function() { toggleDD('rsb-dd-nov',    'rsb-arr-nov'); });
+  on('rni-film',      'click', function() { toggleDD('rsb-dd-film',   'rsb-arr-film'); });
+  on('rni-filming',   'click', function() { toggleDD('rsb-dd-filming','rsb-arr-filming'); });
+  on('rni-arts',      'click', function() { toggleDD('rsb-dd-arts',   'rsb-arr-arts'); });
+  on('rni-cr-models', 'click', function() { toggleDD('rsb-dd-crmod',  'rsb-arr-crmod'); });
+  on('rni-cr-pricing','click', function() { toggleDD('rsb-dd-crprice','rsb-arr-crprice'); });
+  on('rni-collab',    'click', function() { showPage('page-calendar'); });
 
-  /* ── RIGHT SIDEBAR — CREATIVE STUDIO ── */
-  on('rni-novels',     'click', function() { toggleDD('rsb-dd-nov',     'rsb-arr-nov'); });
-  on('rni-film',       'click', function() { toggleDD('rsb-dd-film',    'rsb-arr-film'); });
-  on('rni-filming',    'click', function() { toggleDD('rsb-dd-filming', 'rsb-arr-filming'); });
-  on('rni-arts',       'click', function() { toggleDD('rsb-dd-arts',    'rsb-arr-arts'); });
-  on('rni-cr-models',  'click', function() { toggleDD('rsb-dd-crmod',   'rsb-arr-crmod'); });
-  on('rni-cr-pricing', 'click', function() { toggleDD('rsb-dd-crprice', 'rsb-arr-crprice'); });
-  on('rni-collab',     'click', function() { showPage('page-calendar'); });
-
-  ['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit'].forEach(function(id) {
-    on(id, 'click', function() { showPage('page-creative'); });
-  });
-  ['rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist'].forEach(function(id) {
-    on(id, 'click', function() { showPage('page-creative'); });
-  });
-  ['rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short'].forEach(function(id) {
-    on(id, 'click', function() { showPage('page-creative'); });
-  });
-  ['rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(function(id) {
+  ['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit',
+   'rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist',
+   'rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short',
+   'rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(function(id) {
     on(id, 'click', function() { showPage('page-creative'); });
   });
   ['rdi-crm-novel','rdi-crm-clips','rdi-crm-dub','rdi-crm-film','rdi-crm-post'].forEach(function(id) {
@@ -189,121 +164,100 @@ document.addEventListener('DOMContentLoaded', function() {
     on(id, 'click', function() { showPage('page-crpricing'); });
   });
 
-  /* ── SPECIFIC PAGE BUTTONS ── */
+  /* ── PAGE-SPECIFIC BUTTONS ── */
   on('cr-book-call',     'click', function() { showPage('page-calendar'); });
   on('cr-portfolio',     'click', function() { showPage('page-crmodels'); });
   on('bk-back-btn',      'click', function() { history.back(); });
   on('bk-home-btn',      'click', function() { showPage('page-home'); });
   on('inq-done-home',    'click', function() { showPage('page-home'); });
   on('inq-done-contact', 'click', function() { showPage('page-contact'); });
-
-  /* ── CLASSROOM COURSE CARDS (hub page) ── */
-  on('goto-java',      'click', function() { showPage('page-java'); });
-  on('goto-js',        'click', function() { showPage('page-js'); });
-  on('goto-html',      'click', function() { showPage('page-html'); });
-  on('goto-python',    'click', function() { showPage('page-python'); });
-  on('goto-backend',   'click', function() { showPage('page-backend'); });
-  on('goto-fees-page', 'click', function() { showPage('page-fees'); });
+  on('goto-java',        'click', function() { showPage('page-java'); });
+  on('goto-js',          'click', function() { showPage('page-js'); });
+  on('goto-html',        'click', function() { showPage('page-html'); });
+  on('goto-python',      'click', function() { showPage('page-python'); });
+  on('goto-backend',     'click', function() { showPage('page-backend'); });
+  on('goto-fees-page',   'click', function() { showPage('page-fees'); });
 
   /* ── PURPLE BURGER (bottom-right) ── */
-  var burgerPurple  = document.getElementById('burger-purple');
-  var sidebarPurple = document.getElementById('sidebar-purple');
-  var psbHd = document.getElementById('psb-classroom-hd');
-  var psbDd = document.getElementById('psb-dd-classroom');
-
-  if (burgerPurple && sidebarPurple) {
-    burgerPurple.addEventListener('click', function(e) {
+  var bp  = document.getElementById('burger-purple');
+  var sp  = document.getElementById('sidebar-purple');
+  var pHd = document.getElementById('psb-classroom-hd');
+  var pDd = document.getElementById('psb-dd-classroom');
+  if (bp && sp) {
+    bp.addEventListener('click', function(e) {
       e.stopPropagation();
-      var isOpen = sidebarPurple.classList.contains('open');
-      sidebarPurple.classList.toggle('open', !isOpen);
-      burgerPurple.classList.toggle('open', !isOpen);
+      sp.classList.toggle('open');
+      bp.classList.toggle('open');
     });
     document.addEventListener('click', function(e) {
-      if (!sidebarPurple.contains(e.target) && e.target !== burgerPurple) {
-        sidebarPurple.classList.remove('open');
-        burgerPurple.classList.remove('open');
+      if (!sp.contains(e.target) && e.target !== bp) {
+        sp.classList.remove('open');
+        bp.classList.remove('open');
       }
     });
   }
-  if (psbHd && psbDd) {
-    psbHd.addEventListener('click', function() {
-      psbDd.classList.toggle('open');
-      psbDd.style.maxHeight = psbDd.classList.contains('open') ? '300px' : '0px';
+  if (pHd && pDd) {
+    pHd.addEventListener('click', function() {
+      var open = pDd.classList.toggle('open');
+      pDd.style.maxHeight = open ? '300px' : '0px';
+      pDd.style.overflow  = 'hidden';
+      pDd.style.transition= 'max-height 0.3s ease';
     });
   }
 
   /* ── CLASS-BASED BUTTON DELEGATION ── */
-  // Handles .go-* buttons anywhere in the page
   document.addEventListener('click', function(e) {
-    var t = e.target;
-    var closest = function(cls) {
-      var el = t;
-      while (el) {
-        if (el.classList && el.classList.contains(cls)) return el;
-        el = el.parentElement;
-      }
+    var el = e.target;
+    function up(cls) {
+      var node = el;
+      while (node) { if (node.classList && node.classList.contains(cls)) return node; node = node.parentElement; }
       return null;
-    };
-
-    var inqBtn = closest('go-inquiry');
-    if (inqBtn) { showPage('page-inquiry', {service: inqBtn.dataset.service||''}); return; }
-
-    if (closest('go-cal') || closest('go-cal-cr')) { showPage('page-calendar'); return; }
-    if (closest('go-contact'))   { showPage('page-contact'); return; }
-    if (closest('go-crpricing')) { showPage('page-crpricing'); return; }
-    if (closest('go-calendar'))  { showPage('page-calendar'); return; }
-    if (closest('go-classroom')) { showPage('page-classroom'); return; }
-    if (closest('go-java'))      { showPage('page-java'); return; }
-    if (closest('go-js'))        { showPage('page-js'); return; }
-    if (closest('go-html'))      { showPage('page-html'); return; }
-    if (closest('go-python'))    { showPage('page-python'); return; }
-    if (closest('go-backend'))   { showPage('page-backend'); return; }
-    if (closest('go-lab'))       { showPage('page-lab'); return; }
-    if (closest('go-fees'))      { showPage('page-fees'); return; }
-    if (closest('go-placement')) { showPage('page-placement'); return; }
-    if (closest('go-live'))      { showPage('page-live'); return; }
-
-    // Live video embed click
-    var thumb = closest('cl-live-thumb');
+    }
+    var inq = up('go-inquiry');
+    if (inq)            { showPage('page-inquiry',  {service: inq.dataset.service||''}); return; }
+    if (up('go-cal') || up('go-cal-cr'))
+                        { showPage('page-calendar'); return; }
+    if (up('go-contact'))   { showPage('page-contact');   return; }
+    if (up('go-crpricing')) { showPage('page-crpricing'); return; }
+    if (up('go-calendar'))  { showPage('page-calendar');  return; }
+    if (up('go-classroom')) { showPage('page-classroom'); return; }
+    if (up('go-java'))      { showPage('page-java');      return; }
+    if (up('go-js'))        { showPage('page-js');        return; }
+    if (up('go-html'))      { showPage('page-html');      return; }
+    if (up('go-python'))    { showPage('page-python');    return; }
+    if (up('go-backend'))   { showPage('page-backend');   return; }
+    if (up('go-lab'))       { showPage('page-lab');       return; }
+    if (up('go-fees'))      { showPage('page-fees');      return; }
+    if (up('go-placement')) { showPage('page-placement'); return; }
+    if (up('go-live'))      { showPage('page-live');      return; }
+    // Live video embed
+    var thumb = up('cl-live-thumb');
     if (thumb) {
-      var url = thumb.getAttribute('data-url');
+      var url  = thumb.getAttribute('data-url');
       var wrap = thumb.closest ? thumb.closest('.cl-live-embed') : thumb.parentElement;
-      if (url && wrap) {
-        wrap.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="' + url + '?autoplay=1" allowfullscreen></iframe>';
-      }
+      if (url && wrap) wrap.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="'+url+'?autoplay=1" allowfullscreen></iframe>';
     }
   });
 
-  /* ── BROWSER BACK / FORWARD ── */
+  /* ── BROWSER BACK/FORWARD ── */
   window.addEventListener('popstate', function(e) {
-    var pageId = (e.state && e.state.page) ? e.state.page : 'page-home';
-    if (!document.getElementById(pageId)) pageId = 'page-home';
-    ALL_PAGES.forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.classList.remove('on');
-    });
-    var target = document.getElementById(pageId);
-    if (target) target.classList.add('on');
-    window.scrollTo(0, 0);
+    var pid = (e.state && e.state.page) ? e.state.page : 'page-home';
+    if (!document.getElementById(pid)) pid = 'page-home';
+    ALL_PAGES.forEach(function(id) { var el=document.getElementById(id); if(el) el.classList.remove('on'); });
+    document.getElementById(pid).classList.add('on');
+    window.scrollTo(0,0);
     var pill = document.getElementById('home-pill');
-    if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
+    if (pill) pill.style.display = pid==='page-home'?'none':'flex';
   });
 
   /* ── INIT STATE ── */
-  // Set home as initial history state
-  try {
-    history.replaceState({ page: 'page-home' }, '', window.location.href.split('#')[0] + '#home');
-  } catch(e) {}
-
-  // Home pill starts hidden
+  try { history.replaceState({page:'page-home'}, '', '#home'); } catch(e) {}
   var pill = document.getElementById('home-pill');
   if (pill) pill.style.display = 'none';
-
-  // Deep link support — if URL has a hash, navigate there
   var hash = window.location.hash.replace('#','');
-  if (hash && document.getElementById('page-' + hash)) {
-    setTimeout(function() { showPage('page-' + hash); }, 100);
+  if (hash && document.getElementById('page-'+hash)) {
+    setTimeout(function() { showPage('page-'+hash); }, 50);
   }
 
-  console.log('✅ navigation.js loaded — ' + ALL_PAGES.length + ' pages registered');
+  console.log('✅ navigation.js — '+ALL_PAGES.length+' pages, body class CSS convention');
 });
