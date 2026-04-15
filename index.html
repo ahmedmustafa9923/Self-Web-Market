@@ -254,6 +254,33 @@
   background: rgba(174,139,217,0.4);
 }
 .psb-sub-item:hover { background: rgba(174,139,217,0.06); color: #AE8BD9; }
+
+/* ── HOME PILL — center bottom ── */
+#home-pill {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  background: rgba(201,168,76,0.10);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 50px;
+  padding: 9px 22px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gld, #C9A84C);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  white-space: nowrap;
+}
+#home-pill:hover {
+  background: rgba(201,168,76,0.22);
+  border-color: rgba(201,168,76,0.6);
+}
 </style>
 </head>
 <body>
@@ -1322,20 +1349,59 @@ renderStudio(studio)</pre>
 <script src="js/payments.js"></script>
 <script src="js/init.js"></script>
 
-<!-- Orange & Purple Burger Menu Logic -->
+<!-- Orange & Purple Burger Menu Logic + History API -->
 <script>
 (function() {
-  // ── ORANGE BURGER ──
-  const burgerOrange = document.getElementById('burger-orange');
+
+  /* ── HISTORY / BROWSER BACK-FORWARD ── */
+  // On first load, replace current state with home
+  history.replaceState({ page: 'page-home' }, '', '#home');
+
+  function navigateTo(pageId, pushState = true) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+    const target = document.getElementById(pageId);
+    if (!target) return;
+    target.classList.add('on');
+    window.scrollTo(0, 0);
+    // Show/hide home pill
+    const pill = document.getElementById('home-pill');
+    if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
+    // Push to browser history
+    if (pushState) {
+      history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
+    }
+  }
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.page) {
+      navigateTo(e.state.page, false);
+    } else {
+      navigateTo('page-home', false);
+    }
+  });
+
+  // Expose globally so navigation.js can use it
+  window.navigateTo = navigateTo;
+
+  /* ── HOME PILL ── */
+  const homePill = document.getElementById('home-pill');
+  if (homePill) {
+    homePill.innerHTML = '⌂ Home';
+    homePill.addEventListener('click', () => navigateTo('page-home'));
+  }
+
+  /* ── ORANGE BURGER ── */
+  const burgerOrange  = document.getElementById('burger-orange');
   const sidebarOrange = document.getElementById('sidebar-orange');
-  const osbClassroomHd = document.getElementById('osb-classroom-hd');
-  const osbDdClassroom = document.getElementById('osb-dd-classroom');
+  const osbClassroomHd  = document.getElementById('osb-classroom-hd');
+  const osbDdClassroom  = document.getElementById('osb-dd-classroom');
 
   burgerOrange.addEventListener('click', function(e) {
     e.stopPropagation();
     burgerOrange.classList.toggle('open');
     sidebarOrange.classList.toggle('open');
-    // close purple if open
     burgerPurple.classList.remove('open');
     sidebarPurple.classList.remove('open');
   });
@@ -1345,17 +1411,16 @@ renderStudio(studio)</pre>
     osbDdClassroom.classList.toggle('open');
   });
 
-  // ── PURPLE BURGER ──
-  const burgerPurple = document.getElementById('burger-purple');
+  /* ── PURPLE BURGER ── */
+  const burgerPurple  = document.getElementById('burger-purple');
   const sidebarPurple = document.getElementById('sidebar-purple');
-  const psbClassroomHd = document.getElementById('psb-classroom-hd');
-  const psbDdClassroom = document.getElementById('psb-dd-classroom');
+  const psbClassroomHd  = document.getElementById('psb-classroom-hd');
+  const psbDdClassroom  = document.getElementById('psb-dd-classroom');
 
   burgerPurple.addEventListener('click', function(e) {
     e.stopPropagation();
     burgerPurple.classList.toggle('open');
     sidebarPurple.classList.toggle('open');
-    // close orange if open
     burgerOrange.classList.remove('open');
     sidebarOrange.classList.remove('open');
   });
@@ -1365,7 +1430,7 @@ renderStudio(studio)</pre>
     psbDdClassroom.classList.toggle('open');
   });
 
-  // ── CLOSE ON OUTSIDE CLICK ──
+  /* ── CLOSE ON OUTSIDE CLICK ── */
   document.addEventListener('click', function(e) {
     if (!sidebarOrange.contains(e.target) && e.target !== burgerOrange) {
       burgerOrange.classList.remove('open');
@@ -1376,6 +1441,29 @@ renderStudio(studio)</pre>
       sidebarPurple.classList.remove('open');
     }
   });
+
+  /* ── PATCH navigation.js showPage to use history ── */
+  // Wait for navigation.js to load, then patch showPage
+  window.addEventListener('load', function() {
+    // Intercept all nav item clicks and buttons that call showPage
+    // by hooking into the global navigateTo
+    const origShowPage = window.showPage;
+    if (typeof origShowPage === 'function') {
+      window.showPage = function(pageId, opts) {
+        origShowPage(pageId, opts);
+        history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
+        const pill = document.getElementById('home-pill');
+        if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
+      };
+    }
+
+    // Handle deep link on page load (e.g. if user lands on #models)
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('page-' + hash)) {
+      navigateTo('page-' + hash, false);
+    }
+  });
+
 })();
 </script>
 
