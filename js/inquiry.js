@@ -1,310 +1,175 @@
-/* ── INQUIRY FORM — wiring + full flow ── Code Rendering Studio */
+/* ── INQUIRY FLOW ── Code Rendering Studio
+   Handles: multi-step form, chip selection,
+   budget selection, step progression,
+   form validation, submission
+   Depends on: utils.js, pricing.js
+*/
 
-/* ── WIRE ALL DEAD MODEL / CATEGORY CARD LINKS → INQUIRY ── */
-function openInquiry(service){
-  /* reset to step 1 fresh */
-  inqStep=1; inqData={};
-  renderInqSteps();
-  document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-  var p1=g('ipanel-1'); if(p1) p1.classList.add('active');
-  /* pre-select service if known */
-  var sel=g('inq-service');
-  if(sel && service){
-    for(var i=0;i<sel.options.length;i++){
-      if(sel.options[i].value===service){sel.selectedIndex=i;break;}
-    }
+window.initInquiry = function() {
+
+  /* ── STEP MANAGEMENT ── */
+  var currentStep = 1;
+
+  function goToStep(n) {
+    [1,2,3].forEach(function(i) {
+      var panel = document.getElementById('ipanel-' + i);
+      var step  = document.getElementById('istep-' + i);
+      if (panel) panel.classList.toggle('active', i === n);
+      if (step)  {
+        step.classList.toggle('active', i === n);
+        step.classList.toggle('done', i < n);
+      }
+    });
+    currentStep = n;
+    window.scrollTo(0, 0);
   }
-  /* reset chips */
-  document.querySelectorAll('.inq-chip,.inq-bopt').forEach(function(c){c.classList.remove('on');});
-  ['inq-name','inq-email','inq-phone','inq-desc'].forEach(function(id){
-    var el=g(id); if(el) el.value='';
-  });
-  goPage('inquiry');
-}
 
-/* left side model cards */
-document.querySelectorAll('.mc').forEach(function(card){
-  card.style.cursor='pointer';
-  card.addEventListener('click',function(){
-    var nm=this.querySelector('.mc-nm');
-    openInquiry(nm?nm.textContent:'');
-  });
-});
-/* left pricing buttons already go to calendar — also add inquiry entry */
-document.querySelectorAll('.pbtn:not(.go-cal)').forEach(function(b){
-  b.addEventListener('click',function(){openInquiry('');});
-});
-/* creative model cards */
-document.querySelectorAll('.crm-card').forEach(function(card){
-  card.style.cursor='pointer';
-  card.addEventListener('click',function(){
-    var nm=this.querySelector('.crm-nm');
-    openInquiry(nm?nm.textContent:'');
-  });
-});
-/* creative pricing buttons */
-document.querySelectorAll('.crp-btn').forEach(function(b){
-  b.addEventListener('click',function(){openInquiry('');});
-});
-/* cr-card (creative overview) */
-document.querySelectorAll('.cr-card').forEach(function(card){
-  card.style.cursor='pointer';
-  card.addEventListener('click',function(){
-    var nm=this.querySelector('.cr-nm');
-    openInquiry(nm?nm.textContent:'');
-  });
-});
-
-/* ── INQUIRY FLOW ── */
-var inqStep=1;
-var inqData={};
-var INQ_CAL_Y=2026, INQ_CAL_M=3;
-var INQ_BOOKED={'2026-04-17':['10:00 AM'],'2026-04-22':['9:00 AM','2:00 PM'],'2026-04-25':['1:00 PM','3:00 PM']};
-var INQ_SLOTS=['9:00 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:00 PM','4:00 PM'];
-var inqSelDate=null, inqSelTime=null;
-
-function renderInqSteps(){
-  [1,2,3].forEach(function(n){
-    var el=g('istep-'+n);if(!el)return;
-    el.classList.remove('active','done');
-    if(n<inqStep) el.classList.add('done');
-    else if(n===inqStep) el.classList.add('active');
-  });
-}
-
-/* chips */
-document.querySelectorAll('#inq-type-chips .inq-chip').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('#inq-type-chips .inq-chip').forEach(function(x){x.classList.remove('on');});
-    this.classList.add('on');
-    inqData.projectType=this.getAttribute('data-v');
-  });
-});
-document.querySelectorAll('#inq-timeline-chips .inq-chip').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('#inq-timeline-chips .inq-chip').forEach(function(x){x.classList.remove('on');});
-    this.classList.add('on');
-    inqData.timeline=this.getAttribute('data-v');
-  });
-});
-document.querySelectorAll('#inq-budget-opts .inq-bopt').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('#inq-budget-opts .inq-bopt').forEach(function(x){x.classList.remove('on');});
-    this.classList.add('on');
-    inqData.budget=this.getAttribute('data-v');
-  });
-});
-
-function collectStep1(){
-  inqData.name=(g('inq-name')||{}).value||'';
-  inqData.email=(g('inq-email')||{}).value||'';
-  inqData.phone=(g('inq-phone')||{}).value||'';
-  inqData.service=(g('inq-service')||{}).value||'';
-  inqData.desc=(g('inq-desc')||{}).value||'';
-  inqData.source=(g('inq-source')||{}).value||'';
-}
-function validateStep1(){
-  collectStep1();
-  if(!inqData.name.trim()){alert('Please enter your name.');return false;}
-  if(!inqData.email.trim()||inqData.email.indexOf('@')<0){alert('Please enter a valid email.');return false;}
-  if(!inqData.service){alert('Please select a service category.');return false;}
-  if(!inqData.desc.trim()){alert('Please describe your project or question.');return false;}
-  return true;
-}
-
-/* Step 1 → Step 2 (with appointment) */
-on('inq-next-1','click',function(){
-  if(!validateStep1()) return;
-  inqStep=2; renderInqSteps();
-  document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-  g('ipanel-2').classList.add('active');
-  renderInqCal();
-  window.scrollTo(0,0);
-});
-
-/* Step 1 → submit info only (skip to done) */
-on('inq-submit-only','click',function(){
-  if(!validateStep1()) return;
-  inqData.appt=null; inqData.payMethod=null; inqData.signed=false;
-  showInqConfirm(false);
-});
-
-/* Back from step 2 → step 1 */
-on('inq-back-1','click',function(){
-  inqStep=1; renderInqSteps();
-  document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-  g('ipanel-1').classList.add('active');
-  window.scrollTo(0,0);
-});
-
-/* Skip appointment → go to payment */
-on('inq-skip-appt','click',function(){
-  inqData.appt=null;
-  goToStep3();
-});
-
-/* INQUIRY CALENDAR */
-function renderInqCal(){
-  var lbl=g('inq-cal-lbl'), grid=g('inq-cal-grid');if(!lbl||!grid)return;
-  var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  lbl.textContent=MN[INQ_CAL_M]+' '+INQ_CAL_Y;
-  var DN=['Su','Mo','Tu','We','Th','Fr','Sa'];
-  var h=DN.map(function(d){return '<div class="dn">'+d+'</div>';}).join('');
-  var first=new Date(INQ_CAL_Y,INQ_CAL_M,1).getDay();
-  var days=new Date(INQ_CAL_Y,INQ_CAL_M+1,0).getDate();
-  var today=new Date();today.setHours(0,0,0,0);
-  var p2=function(n){return n<10?'0'+n:''+n;};
-  for(var i=0;i<first;i++) h+='<div class="dc empty"></div>';
-  for(var d=1;d<=days;d++){
-    var dt=new Date(INQ_CAL_Y,INQ_CAL_M,d);
-    var key=INQ_CAL_Y+'-'+p2(INQ_CAL_M+1)+'-'+p2(d);
-    var isP=dt<today, isW=dt.getDay()===0||dt.getDay()===6;
-    var isS=inqSelDate===key, isT=dt.getTime()===today.getTime();
-    var cl='dc'+(isP||isW?' past':isS?' sel avail':isT?' today avail':' avail');
-    h+='<div class="'+cl+'" data-k="'+key+'" data-d="'+d+'">'+d+'</div>';
-  }
-  grid.innerHTML=h;
-  grid.querySelectorAll('.dc.avail').forEach(function(el){
-    el.addEventListener('click',function(){
-      inqSelDate=this.getAttribute('data-k');
-      inqSelTime=null;
-      renderInqCal();
-      renderInqSlots(inqSelDate, parseInt(this.getAttribute('data-d')));
+  /* ── CHIP SELECTION (project type, timeline) ── */
+  document.querySelectorAll('.inq-chips').forEach(function(group) {
+    group.querySelectorAll('.inq-chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        group.querySelectorAll('.inq-chip').forEach(function(c) { c.classList.remove('on'); });
+        chip.classList.add('on');
+      });
     });
   });
-}
 
-function renderInqSlots(key,d){
-  var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var mo=parseInt(key.split('-')[1])-1;
-  var hd=g('inq-slots-hd'); if(hd) hd.textContent='Times — '+MN[mo]+' '+d;
-  var bk=INQ_BOOKED[key]||[], sg=g('inq-slots-grid');if(!sg)return;
-  sg.innerHTML='';
-  INQ_SLOTS.forEach(function(t){
-    var isTaken=bk.indexOf(t)>=0;
-    var el=document.createElement('div');
-    el.className='slot'+(isTaken?' taken':' avail');
-    el.textContent=isTaken?'Taken':t;
-    if(!isTaken){
-      el.addEventListener('click',function(){
-        inqSelTime=t;
-        sg.querySelectorAll('.slot.avail').forEach(function(s){s.classList.toggle('picked',s.textContent===t);});
-        renderInqSlotConfirm(key,d,t);
+  /* ── BUDGET SELECTION ── */
+  var budgetOpts = document.getElementById('inq-budget-opts');
+  if (budgetOpts) {
+    budgetOpts.querySelectorAll('.inq-bopt').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        budgetOpts.querySelectorAll('.inq-bopt').forEach(function(o) { o.classList.remove('on'); });
+        opt.classList.add('on');
+        // Update deposit display when budget changes
+        if (typeof updateDeposit === 'function') updateDeposit();
       });
-    }
-    sg.appendChild(el);
-  });
-  var sc=g('inq-slot-confirm'); if(sc) sc.innerHTML='';
-}
-
-function renderInqSlotConfirm(key,d,t){
-  var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var mo=parseInt(key.split('-')[1])-1;
-  var sc=g('inq-slot-confirm');if(!sc)return;
-  sc.innerHTML='<div style="margin-top:14px;padding:14px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:8px;font-size:13px;line-height:1.8">'
-    +'<div style="color:var(--gld);font-weight:500;margin-bottom:4px">&#10003; Slot selected</div>'
-    +'<div style="color:rgba(255,255,255,.55)">'+MN[mo]+' '+d+' at <strong style="color:var(--wht)">'+t+'</strong></div>'
-    +'<button style="margin-top:12px;width:100%;padding:11px;background:var(--gld);color:var(--blk);border:none;border-radius:7px;font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="inq-confirm-slot">Confirm &amp; Continue to Payment &#8594;</button>'
-    +'</div>';
-  on('inq-confirm-slot','click',function(){
-    inqData.appt=MN[mo]+' '+d+' at '+t;
-    /* mark slot as taken for this session */
-    if(!INQ_BOOKED[key]) INQ_BOOKED[key]=[];
-    INQ_BOOKED[key].push(t);
-    goToStep3();
-  });
-}
-
-on('inq-cal-prev','click',function(){INQ_CAL_M--;if(INQ_CAL_M<0){INQ_CAL_M=11;INQ_CAL_Y--;}renderInqCal();});
-on('inq-cal-next','click',function(){INQ_CAL_M++;if(INQ_CAL_M>11){INQ_CAL_M=0;INQ_CAL_Y++;}renderInqCal();});
-
-function goToStep3(){
-  inqStep=3; renderInqSteps();
-  document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-  g('ipanel-3').classList.add('active');
-  /* set contract date */
-  var cd=g('contract-date'); if(cd) cd.textContent=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  /* calc deposit */
-  calcDeposit();
-  window.scrollTo(0,0);
-}
-
-function calcDeposit(){
-  var BUDGET_MAP={'Under $1,000':1000,'$1,000–$3,000':2000,'$3,000–$7,000':5000,'$7,000–$15,000':11000,'$15,000+':20000,'Not sure':3000};
-  var total=BUDGET_MAP[inqData.budget]||2000;
-  var dep=total*0.5;
-  var rem=total-dep;
-  var da=g('dep-amt-display'),dr=g('dep-remain-display');
-  if(da) da.textContent='$'+dep.toLocaleString()+'.00';
-  if(dr) dr.textContent='$'+rem.toLocaleString()+'.00';
-}
-
-/* payment method selection */
-document.querySelectorAll('.pay-opt').forEach(function(opt){
-  opt.addEventListener('click',function(){
-    document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('on');});
-    this.classList.add('on');
-    inqData.payMethod=this.getAttribute('data-pm');
-    checkFinalReady();
-  });
-});
-inqData.payMethod='Zelle'; /* default */
-
-/* enable final button only when signed + agreed */
-function checkFinalReady(){
-  var sig=g('inq-signature'), chk=g('inq-agree'), btn=g('inq-final-submit');
-  if(!btn)return;
-  var ready=(sig&&sig.value.trim().length>2)&&(chk&&chk.checked);
-  btn.disabled=!ready;
-}
-on('inq-signature','input',checkFinalReady);
-on('inq-agree','change',checkFinalReady);
-
-on('inq-back-2','click',function(){
-  if(inqData.appt){
-    inqStep=2; renderInqSteps();
-    document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-    g('ipanel-2').classList.add('active');
-  } else {
-    inqStep=1; renderInqSteps();
-    document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-    g('ipanel-1').classList.add('active');
+    });
   }
-  window.scrollTo(0,0);
-});
 
-on('inq-final-submit','click',function(){
-  var sig=g('inq-signature'); if(sig) inqData.signature=sig.value.trim();
-  showInqConfirm(true);
-});
-
-function showInqConfirm(withContract){
-  inqStep=4;
-  document.querySelectorAll('.inq-panel').forEach(function(p){p.classList.remove('active');});
-  var done=g('ipanel-done');if(done)done.classList.add('active');
-  var sum=g('inq-summary');
-  if(sum){
-    var rows=[
-      ['Name', inqData.name||'—'],
-      ['Email', inqData.email||'—'],
-      ['Service', inqData.service||'—'],
-      ['Project Type', inqData.projectType||'Not specified'],
-      ['Budget', inqData.budget||'Not specified'],
-      ['Timeline', inqData.timeline||'Not specified'],
-      ['Appointment', inqData.appt||'No appointment booked'],
-    ];
-    if(withContract){
-      rows.push(['Payment Method', inqData.payMethod||'—']);
-      rows.push(['Deposit', '50% — awaiting processing']);
-      rows.push(['Contract Signed', inqData.signature?'Yes — '+inqData.signature:'—']);
-    }
-    sum.innerHTML=rows.map(function(r){
-      return '<div class="cd-row"><span class="cd-lbl">'+r[0]+'</span><span class="cd-val">'+r[1]+'</span></div>';
-    }).join('');
+  /* ── FORM VALIDATION ── */
+  function validateStep1() {
+    var name  = document.getElementById('inq-name');
+    var email = document.getElementById('inq-email');
+    var desc  = document.getElementById('inq-desc');
+    var svc   = document.getElementById('inq-service');
+    var errors = [];
+    if (!name  || !name.value.trim())  errors.push('Full name is required');
+    if (!email || !email.value.trim() || !email.value.includes('@')) errors.push('Valid email is required');
+    if (!svc   || !svc.value)          errors.push('Please select a service');
+    if (!desc  || !desc.value.trim())  errors.push('Please describe your project');
+    return errors;
   }
-  window.scrollTo(0,0);
-}
 
-on('inq-done-home','click',function(){goPage('home');});
-on('inq-done-contact','click',function(){goPage('contact');});
+  function showErrors(errors) {
+    var existing = document.getElementById('inq-errors');
+    if (existing) existing.remove();
+    if (!errors.length) return;
+    var box = document.createElement('div');
+    box.id = 'inq-errors';
+    box.style.cssText = 'background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#ff8080;';
+    box.innerHTML = errors.map(function(e) { return '• ' + e; }).join('<br>');
+    var card = document.querySelector('.inq-card');
+    if (card) card.insertBefore(box, card.firstChild);
+  }
 
+  /* ── STEP 1 → 2 ── */
+  on('inq-next-1', 'click', function() {
+    var errors = validateStep1();
+    if (errors.length) { showErrors(errors); return; }
+    showErrors([]);
+    goToStep(2);
+  });
+
+  /* ── STEP 1 SUBMIT ONLY (no appointment) ── */
+  on('inq-submit-only', 'click', function() {
+    var errors = validateStep1();
+    if (errors.length) { showErrors(errors); return; }
+    showErrors([]);
+    submitInquiry(false);
+    showDone();
+  });
+
+  /* ── STEP 2 → 3 or SKIP ── */
+  on('inq-skip-appt', 'click', function() { goToStep(3); });
+  on('inq-back-1',    'click', function() { goToStep(1); });
+
+  /* ── STEP 3 ── */
+  on('inq-back-2', 'click', function() { goToStep(2); });
+
+  // Enable submit when signature + agree
+  var sig   = document.getElementById('inq-signature');
+  var agree = document.getElementById('inq-agree');
+  var final = document.getElementById('inq-final-submit');
+
+  function checkReady() {
+    if (!sig || !agree || !final) return;
+    final.disabled = !(sig.value.trim().length > 2 && agree.checked);
+  }
+  if (sig)   sig.addEventListener('input', checkReady);
+  if (agree) agree.addEventListener('change', checkReady);
+
+  on('inq-final-submit', 'click', function() {
+    submitInquiry(true);
+    showDone();
+  });
+
+  /* ── SHOW CONFIRMATION ── */
+  function showDone() {
+    [1,2,3].forEach(function(i) {
+      var panel = document.getElementById('ipanel-' + i);
+      if (panel) panel.classList.remove('active');
+    });
+    var done = document.getElementById('ipanel-done');
+    if (done) done.classList.add('active');
+
+    // Populate summary
+    var summary = document.getElementById('inq-summary');
+    if (summary) {
+      var name  = document.getElementById('inq-name');
+      var email = document.getElementById('inq-email');
+      var svc   = document.getElementById('inq-service');
+      summary.innerHTML = [
+        name  ? '<div><strong>Name:</strong> '    + name.value  + '</div>' : '',
+        email ? '<div><strong>Email:</strong> '   + email.value + '</div>' : '',
+        svc   ? '<div><strong>Service:</strong> ' + svc.value   + '</div>' : '',
+      ].join('');
+    }
+  }
+
+  /* ── SUBMIT HANDLER ── */
+  function submitInquiry(withCommitment) {
+    // Collect all form data
+    var data = {
+      name:        (document.getElementById('inq-name')  || {}).value  || '',
+      email:       (document.getElementById('inq-email') || {}).value  || '',
+      phone:       (document.getElementById('inq-phone') || {}).value  || '',
+      service:     (document.getElementById('inq-service')|| {}).value || '',
+      description: (document.getElementById('inq-desc')  || {}).value  || '',
+      source:      (document.getElementById('inq-source')|| {}).value  || '',
+      commitment:  withCommitment,
+      timestamp:   new Date().toISOString(),
+      // Chips
+      projectType: (document.querySelector('.inq-chip.on') || {}).dataset?.v || '',
+      timeline:    (document.querySelectorAll('.inq-chip.on')[1] || {}).dataset?.v || '',
+      budget:      (document.querySelector('.inq-bopt.on') || {}).dataset?.v || '',
+      paymentMethod: (document.querySelector('.pay-opt.on .pay-opt-nm') || {}).textContent || '',
+      signature:   (document.getElementById('inq-signature') || {}).value || '',
+    };
+    // Send via api.js if available
+    if (typeof window.submitForm === 'function') {
+      window.submitForm(data);
+    }
+    console.log('Inquiry submitted:', data);
+  }
+
+  // Contract date
+  var dateEl = document.getElementById('contract-date');
+  if (dateEl) {
+    dateEl.textContent = new Date().toLocaleDateString('en-US', {
+      year:'numeric', month:'long', day:'numeric'
+    });
+  }
+
+  console.log('✅ inquiry.js loaded');
+};
