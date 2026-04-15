@@ -1,26 +1,17 @@
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# Environment
+# Environment & credentials - NEVER commit
+env.js
 .env
 .env.local
 .env.production
+.env.*
 
-# Node (for future use)
-node_modules/
-npm-debug.log*
+# OS
+.DS_Store
+Thumbs.db
 
-# Build output (for future use)
-dist/
-build/
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log

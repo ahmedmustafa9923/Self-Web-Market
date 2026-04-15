@@ -1,24 +1,18 @@
-/* ── VIDEO + CONTACT + ABOUT ── Code Rendering Studio */
-
-/* VIDEO */
-on('vid-frame','click',function(){
-  var vf=g('vid-frame');if(!vf)return;
-  vf.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:rgba(255,255,255,.3);font-size:15px;font-family:\'Outfit\',sans-serif">&#9654; Video plays in production build</div>';
-});
-
-/* CONTACT */
-on('cf-submit','click',function(){
-  var n=g('cf-name'),e=g('cf-email');
-  if(!n||!e||!n.value.trim()||!e.value.trim()){alert('Please enter your name and email.');return;}
-  var form=g('cf-form'),ok=g('cf-ok');
-  if(form)form.style.display='none';
-  if(ok)ok.style.display='block';
-});
-
-/* ABOUT PAGE LINKS */
-document.querySelectorAll('.osoc').forEach(function(el,i){
-  el.addEventListener('click',function(){
-    if(i===0||i===2)goPage('contact');
+/* -- CONTACT FORM - REST API -- Code Rendering Studio */
+on('cf-submit','click', async function(){
+  var n=g('cf-name'), e=g('cf-email'), s=g('cf-subj'), m=g('cf-msg');
+  if(!n||!e||!n.value.trim()||!e.value.trim()){ alert('Please enter your name and email.'); return; }
+  var btn=g('cf-submit');
+  if(btn){ btn.disabled=true; btn.textContent='Sending...'; }
+  const result = await API.contacts.create({
+    name:    n.value.trim(),
+    email:   e.value.trim(),
+    subject: s ? s.value.trim() : '',
+    message: m ? m.value.trim() : ''
   });
+  if(btn){ btn.disabled=false; btn.textContent='Send Message'; }
+  if(!result.ok){ alert('Could not send. Please email coderenderingstudio@gmail.com directly.'); return; }
+  var form=g('cf-form'), ok=g('cf-ok');
+  if(form) form.style.display='none';
+  if(ok)   ok.style.display='block';
 });
-
