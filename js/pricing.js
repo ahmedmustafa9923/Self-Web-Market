@@ -1,112 +1,143 @@
-/* -- PRICING: tabs + billing toggles -- Code Rendering Studio */
+/* ── PRICING ── Code Rendering Studio
+   Handles: pricing tabs, billing toggle,
+   creative pricing toggle, deposit calculator,
+   payment method selection
+   Depends on: utils.js
+*/
 
-/* PRICING TABS */
-function showPTab(tab){
-  var vi=g('view-ind'),vb=g('view-bun'); if(!vi||!vb) return;
-  vi.style.display=tab==='ind'?'block':'none';
-  vb.style.display=tab==='bun'?'block':'none';
-  var ti=g('tab-ind'),tb=g('tab-bun'); if(!ti||!tb) return;
-  ti.className=tab==='ind'?'btn-p':'btn-g';
-  tb.className=tab==='bun'?'btn-p':'btn-g';
-}
-on('tab-ind','click',function(){ showPTab('ind'); });
-on('tab-bun','click',function(){ showPTab('bun'); });
+window.initPricing = function() {
 
-/* SIDEBAR DROPDOWN → pricing sub-tabs */
-on('di-pri-bun','click',function(){ goPage('pricing'); showPTab('bun'); });
-on('di-pri-ind','click',function(){ goPage('pricing'); showPTab('ind'); });
-on('di-pri-all','click',function(){ goPage('pricing'); showPTab('ind'); });
+  /* ── INDIVIDUAL vs BUNDLES TABS ── */
+  var tabInd  = document.getElementById('tab-ind');
+  var tabBun  = document.getElementById('tab-bun');
+  var viewInd = document.getElementById('view-ind');
+  var viewBun = document.getElementById('view-bun');
 
-/* INDIVIDUAL PLAN BUTTONS — go-inquiry with pre-filled service */
-document.querySelectorAll('.pbtn.go-inquiry').forEach(function(b){
-  b.addEventListener('click',function(e){
-    e.stopPropagation();
-    var service = this.getAttribute('data-service') || '';
-    if(typeof openInquiry === 'function') openInquiry(service);
-    else goPage('inquiry');
+  function showIndividual() {
+    if (viewInd) viewInd.style.display = '';
+    if (viewBun) viewBun.style.display = 'none';
+    if (tabInd) tabInd.classList.add('active');
+    if (tabBun) tabBun.classList.remove('active');
+  }
+  function showBundles() {
+    if (viewBun) viewBun.style.display = '';
+    if (viewInd) viewInd.style.display = 'none';
+    if (tabBun) tabBun.classList.add('active');
+    if (tabInd) tabInd.classList.remove('active');
+  }
+
+  if (tabInd) tabInd.addEventListener('click', showIndividual);
+  if (tabBun) tabBun.addEventListener('click', showBundles);
+  showIndividual(); // default
+
+  /* ── MONTHLY / ANNUAL BILLING TOGGLE ── */
+  var PRICES = {
+    monthly: { p1:'$1,500', p2:'$3,200', p3:'$5,800' },
+    annual:  { p1:'$1,200', p2:'$2,560', p3:'$4,640' }
+  };
+  var isAnnual = false;
+  var billTrk = document.getElementById('bill-trk');
+
+  function updatePrices() {
+    var set = isAnnual ? PRICES.annual : PRICES.monthly;
+    var lblMo = document.getElementById('lbl-mo');
+    var lblYr = document.getElementById('lbl-yr');
+    if (lblMo) { lblMo.classList.toggle('on', !isAnnual); }
+    if (lblYr) { lblYr.classList.toggle('on', isAnnual); }
+    ['p1','p2','p3'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = set[id] + '<sub>/project</sub>';
+    });
+  }
+
+  if (billTrk) {
+    billTrk.addEventListener('click', function() {
+      isAnnual = !isAnnual;
+      billTrk.classList.toggle('on', isAnnual);
+      updatePrices();
+    });
+  }
+  updatePrices();
+
+  /* ── CREATIVE: PER PROJECT / RETAINER TOGGLE ── */
+  var CR_PRICES = {
+    project:  { crp1:'$800',  crp2:'$2,400', crp3:'$5,200' },
+    retainer: { crp1:'$680',  crp2:'$2,040', crp3:'$4,420' }
+  };
+  var isCrRetainer = false;
+  var crTrk = document.getElementById('crp-bill-trk');
+
+  function updateCreativePrices() {
+    var set = isCrRetainer ? CR_PRICES.retainer : CR_PRICES.project;
+    var suffix = isCrRetainer ? '/mo retainer' : '/project';
+    var lblMo  = document.getElementById('crp-lbl-mo');
+    var lblRet = document.getElementById('crp-lbl-ret');
+    if (lblMo)  lblMo.classList.toggle('on', !isCrRetainer);
+    if (lblRet) lblRet.classList.toggle('on', isCrRetainer);
+    ['crp1','crp2','crp3'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = set[id] + '<sub>' + suffix + '</sub>';
+    });
+  }
+
+  if (crTrk) {
+    crTrk.addEventListener('click', function() {
+      isCrRetainer = !isCrRetainer;
+      crTrk.classList.toggle('on', isCrRetainer);
+      updateCreativePrices();
+    });
+  }
+  updateCreativePrices();
+
+  /* ── CREATIVE: INDIVIDUAL / BUNDLES TABS ── */
+  var crpTabInd  = document.getElementById('crp-tab-ind');
+  var crpTabBun  = document.getElementById('crp-tab-bun');
+  var crpViewInd = document.getElementById('crp-view-ind');
+  var crpViewBun = document.getElementById('crp-view-bun');
+
+  if (crpTabInd) crpTabInd.addEventListener('click', function() {
+    if (crpViewInd) crpViewInd.style.display = '';
+    if (crpViewBun) crpViewBun.style.display = 'none';
+    crpTabInd.classList.add('on');
+    if (crpTabBun) crpTabBun.classList.remove('on');
   });
-});
-
-/* BUNDLE CARDS — entire card is clickable, opens inquiry */
-document.querySelectorAll('#view-bun .bc').forEach(function(card){
-  card.style.cursor='pointer';
-  card.addEventListener('click',function(e){
-    // Let button clicks bubble up naturally — card handles anything not on the button text itself
-    if(e.target.closest('button')) return;
-    var nm = this.querySelector('.b-nm2');
-    var service = nm ? nm.textContent.trim() : '';
-    if(typeof openInquiry === 'function') openInquiry(service);
-    else goPage('inquiry');
+  if (crpTabBun) crpTabBun.addEventListener('click', function() {
+    if (crpViewBun) crpViewBun.style.display = '';
+    if (crpViewInd) crpViewInd.style.display = 'none';
+    crpTabBun.classList.add('on');
+    if (crpTabInd) crpTabInd.classList.remove('on');
   });
-});
 
-/* DELEGATE: go-cal class buttons (Book a Call CTAs) */
-document.querySelectorAll('.go-cal').forEach(function(b){ b.addEventListener('click',function(){ goPage('calendar'); }); });
-document.querySelectorAll('.go-contact').forEach(function(b){ b.addEventListener('click',function(){ goPage('contact'); }); });
-document.querySelectorAll('.go-cal-cr').forEach(function(b){ b.addEventListener('click',function(){ goPage('calendar'); }); });
-document.querySelectorAll('.go-crpricing').forEach(function(b){ b.addEventListener('click',function(){ goPage('crpricing'); }); });
-
-on('cr-book-call','click',function(){ goPage('calendar'); });
-on('cr-portfolio','click',function(){ goPage('creative'); });
-
-/* CREATIVE PRICING TABS */
-function showCrpTab(tab){
-  var vi=g('crp-view-ind'),vb=g('crp-view-bun'); if(!vi||!vb) return;
-  vi.style.display=tab==='ind'?'block':'none';
-  vb.style.display=tab==='bun'?'block':'none';
-  var ti=g('crp-tab-ind'),tb=g('crp-tab-bun'); if(!ti||!tb) return;
-  ti.classList.toggle('on',tab==='ind');
-  tb.classList.toggle('on',tab==='bun');
-}
-on('crp-tab-ind','click',function(){ showCrpTab('ind'); });
-on('crp-tab-bun','click',function(){ showCrpTab('bun'); });
-
-/* CREATIVE PRICING BILLING TOGGLE */
-var crpIsRet=false;
-var CRP_PRICES=[[800,2400,5200],[680,2040,4420]];
-on('crp-bill-trk','click',function(){
-  crpIsRet=!crpIsRet;
-  cls('crp-bill-trk','on',crpIsRet);
-  cls('crp-lbl-mo','on',!crpIsRet);
-  cls('crp-lbl-ret','on',crpIsRet);
-  var row=CRP_PRICES[crpIsRet?1:0];
-  ['crp1','crp2','crp3'].forEach(function(id,i){
-    var el=g(id); if(!el) return;
-    el.innerHTML='$'+row[i].toLocaleString()+'<sub>'+(crpIsRet?'/mo retainer':'/project')+'</sub>';
+  /* ── PAYMENT METHOD SELECTION ── */
+  document.querySelectorAll('.pay-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.pay-opt').forEach(function(o) { o.classList.remove('on'); });
+      opt.classList.add('on');
+    });
   });
-});
 
-/* DIGITAL PRICING BILLING TOGGLE */
-var isAnn=false;
-var PRICES=[[1500,3200,5800],[1200,2560,4640]];
-on('bill-trk','click',function(){
-  isAnn=!isAnn;
-  cls('bill-trk','on',isAnn);
-  cls('lbl-mo','on',!isAnn);
-  cls('lbl-yr','on',isAnn);
-  var row=PRICES[isAnn?1:0];
-  ['p1','p2','p3'].forEach(function(id,i){
-    var el=g(id); if(!el) return;
-    el.innerHTML='$'+row[i].toLocaleString()+'<sub>'+(isAnn?'/mo billed annually':'/project')+'</sub>';
-  });
-});
+  /* ── DEPOSIT CALCULATOR ── */
+  var DEPOSIT_MAP = {
+    'Web Platform': 3200, 'Mobile App': 5800, 'AI Integration': 4500,
+    'SaaS Build': 7500, 'Booking System': 2800, 'Data Dashboard': 3500,
+    'Novel Writing': 2400, 'Editing Clips': 1200, 'Sound Dubbing': 1800,
+    'Filming': 4000, 'Post Production': 5200,
+    'Online Classroom': 349
+  };
 
-/* CREATIVE PRICING BUNDLE CARDS — clickable */
-document.querySelectorAll('.crp-bundles .crp-bc').forEach(function(card){
-  card.style.cursor='pointer';
-  card.addEventListener('click',function(e){
-    if(e.target.tagName==='BUTTON') return;
-    var nm=this.querySelector('.crp-bnm');
-    if(typeof openInquiry==='function') openInquiry(nm?nm.textContent.trim():'');
-    else goPage('inquiry');
-  });
-});
+  function updateDeposit() {
+    var svc = document.getElementById('inq-service');
+    var dep = document.getElementById('dep-amt-display');
+    var rem = document.getElementById('dep-remain-display');
+    if (!svc || !dep || !rem) return;
+    var total = DEPOSIT_MAP[svc.value] || 0;
+    var deposit = total * 0.5;
+    dep.textContent  = deposit ? '$' + deposit.toLocaleString() + '.00' : '$0.00';
+    rem.textContent  = deposit ? '$' + deposit.toLocaleString() + '.00' : '$0.00';
+  }
 
-/* CREATIVE PRICING PLAN BUTTONS */
-document.querySelectorAll('.crp-btn').forEach(function(b){
-  b.addEventListener('click',function(e){
-    e.stopPropagation();
-    if(typeof openInquiry==='function') openInquiry('');
-    else goPage('inquiry');
-  });
-});
+  var inqSvc = document.getElementById('inq-service');
+  if (inqSvc) inqSvc.addEventListener('change', updateDeposit);
+
+  console.log('✅ pricing.js loaded');
+};
