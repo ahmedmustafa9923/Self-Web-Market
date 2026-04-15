@@ -1,23 +1,15 @@
 /* ── NAVIGATION: sidebars, pages, nav, routing ── Code Rendering Studio */
 
 /* SIDEBARS */
-on('burger','click',function(){
-  document.body.classList.toggle('sb-on');
-  document.body.classList.remove('rsb-on');
-});
-on('burger-r','click',function(){
-  document.body.classList.toggle('rsb-on');
-  document.body.classList.remove('sb-on');
-});
-on('overlay','click',function(){
-  document.body.classList.remove('sb-on');
-  document.body.classList.remove('rsb-on');
-});
+on('burger','click',function(){ document.body.classList.toggle('sb-on'); document.body.classList.remove('rsb-on'); });
+on('burger-r','click',function(){ document.body.classList.toggle('rsb-on'); document.body.classList.remove('sb-on'); });
+on('overlay','click',function(){ document.body.classList.remove('sb-on'); document.body.classList.remove('rsb-on'); });
 function closeSB(){ document.body.classList.remove('sb-on'); document.body.classList.remove('rsb-on'); }
 
 /* HOME PILL */
 function updateHomePill(name){
-  var pill = g('home-pill'); if(!pill) return;
+  var pill = g('home-pill');
+  if(!pill) return;
   if(name === 'home'){ pill.classList.remove('vis'); }
   else { pill.classList.add('vis'); }
 }
@@ -34,10 +26,10 @@ function goPage(name){
   currentPage = name;
   ALL_PAGES.forEach(function(p){
     var el = g('page-'+p); if(el) el.classList.remove('on');
-    var ni = g('ni-'+p);   if(ni) ni.classList.remove('on');
+    var ni = g('ni-'+p); if(ni) ni.classList.remove('on');
   });
   var pg = g('page-'+name); if(pg) pg.classList.add('on');
-  var ni = g('ni-'+name);   if(ni) ni.classList.add('on');
+  var ni = g('ni-'+name); if(ni) ni.classList.add('on');
   closeSB();
   window.scrollTo(0, 0);
   updateHomePill(name);
@@ -69,7 +61,8 @@ on('ni-contact','click',function(){ goPage('contact'); });
 on('ni-inquiry','click',function(){ goPage('inquiry'); });
 
 function toggleDD(ddId, arrId){
-  var dd = g('dd-'+ddId), arr = g('arr-'+arrId); if(!dd) return;
+  var dd = g('dd-'+ddId), arr = g('arr-'+arrId);
+  if(!dd) return;
   var opening = !dd.classList.contains('open');
   ['models','pricing'].forEach(function(x){
     var d = g('dd-'+x), a = g('arr-'+x);
@@ -78,6 +71,7 @@ function toggleDD(ddId, arrId){
   });
   if(opening){ dd.classList.add('open'); if(arr) arr.classList.add('spin'); }
 }
+
 on('ni-models-hd','click',function(){ toggleDD('models','models'); });
 on('ni-pricing-hd','click',function(){ toggleDD('pricing','pricing'); });
 on('di-mod-all','click',function(){ goPage('models'); });
@@ -90,7 +84,8 @@ on('di-pri-ind','click',function(){ goPage('pricing'); if(typeof showPTab==='fun
 
 /* RIGHT NAV DROPDOWNS */
 function toggleRDD(key){
-  var dd = g('rsb-dd-'+key), arr = g('rsb-arr-'+key); if(!dd) return;
+  var dd = g('rsb-dd-'+key), arr = g('rsb-arr-'+key);
+  if(!dd) return;
   var opening = !dd.classList.contains('open');
   ['nov','film','filming','arts','crmod','crprice'].forEach(function(x){
     var d = g('rsb-dd-'+x), a = g('rsb-arr-'+x);
@@ -99,6 +94,7 @@ function toggleRDD(key){
   });
   if(opening){ dd.classList.add('open'); if(arr) arr.classList.add('spin'); }
 }
+
 on('rni-novels','click',function(){ toggleRDD('nov'); });
 on('rni-film','click',function(){ toggleRDD('film'); });
 on('rni-filming','click',function(){ toggleRDD('filming'); });
@@ -128,9 +124,13 @@ on('rni-collab','click',function(){ goPage('calendar'); });
 on('btn-explore','click',function(){ goPage('models'); });
 on('btn-creative','click',function(){ goPage('creative'); });
 
-/* DELEGATE: go-cal / go-contact class buttons anywhere on page */
+/* DELEGATE: class-based buttons anywhere on page */
 document.addEventListener('click', function(e){
-  if(e.target.closest('.go-cal'))     goPage('calendar');
-  if(e.target.closest('.go-contact')) goPage('contact');
-  if(e.target.closest('.go-inquiry')) goPage('inquiry');
+  if(e.target.closest('.go-cal'))       goPage('calendar');
+  if(e.target.closest('.go-cal-cr'))    goPage('calendar');
+  if(e.target.closest('.go-contact'))   goPage('contact');
+  if(e.target.closest('.go-inquiry'))   goPage('inquiry');
+  if(e.target.closest('.go-crmodels'))  goPage('crmodels');
+  if(e.target.closest('.go-crpricing')) goPage('crpricing');
+  if(e.target.closest('.go-creative'))  goPage('creative');
 });
