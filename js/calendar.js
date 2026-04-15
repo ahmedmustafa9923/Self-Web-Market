@@ -1,160 +1,180 @@
-/* -- CALENDAR & BOOKING -- Code Rendering Studio */
-var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-var SLOTS=['9:00 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:00 PM','4:00 PM'];
-var TAKEN={};
-var calY=2026,calM=3,selDate=null,selTime=null,notifMode='email';
-function pad(n){return n<10?'0'+n:''+n;}
+/* ── CALENDAR ── Code Rendering Studio
+   Handles: booking calendar, time slot selection,
+   booking form, inquiry calendar
+   Depends on: utils.js
+*/
 
-async function loadTakenSlots(year,month){
-  var from=year+'-'+pad(month+1)+'-01';
-  var lastDay=new Date(year,month+1,0).getDate();
-  var to=year+'-'+pad(month+1)+'-'+pad(lastDay);
-  var result=await API.bookings.getTaken(from,to);
-  if(result.ok&&result.data){
-    result.data.forEach(function(row){
-      if(!TAKEN[row.date])TAKEN[row.date]=[];
-      if(TAKEN[row.date].indexOf(row.time_slot)<0)TAKEN[row.date].push(row.time_slot);
+var CAL_STATE = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth(),
+  selectedDate: null,
+  selectedSlot: null,
+};
+
+var BOOKED_SLOTS = {
+  /* pre-booked slots: 'YYYY-MM-DD': ['HH:MM','HH:MM'] */
+};
+
+var TIME_SLOTS = [
+  '9:00 AM','9:30 AM','10:00 AM','10:30 AM',
+  '11:00 AM','11:30 AM','1:00 PM','1:30 PM',
+  '2:00 PM','2:30 PM','3:00 PM','3:30 PM',
+  '4:00 PM','4:30 PM','5:00 PM'
+];
+
+var MONTH_NAMES = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December'
+];
+
+function buildCalendar(gridId, lblId, prevId, nextId, state, onDateSelect) {
+  var grid = document.getElementById(gridId);
+  var lbl  = document.getElementById(lblId);
+  if (!grid) return;
+
+  function render() {
+    if (lbl) lbl.textContent = MONTH_NAMES[state.month] + ' ' + state.year;
+    var firstDay = new Date(state.year, state.month, 1).getDay();
+    var daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
+    var today = new Date();
+
+    var html = '<div class="cal-day-hd">Su</div><div class="cal-day-hd">Mo</div><div class="cal-day-hd">Tu</div><div class="cal-day-hd">We</div><div class="cal-day-hd">Th</div><div class="cal-day-hd">Fr</div><div class="cal-day-hd">Sa</div>';
+
+    for (var i = 0; i < firstDay; i++) html += '<div class="cal-blank"></div>';
+
+    for (var d = 1; d <= daysInMonth; d++) {
+      var date = new Date(state.year, state.month, d);
+      var isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      var isWeekend = date.getDay() === 0 || date.getDay() === 6;
+      var dateStr = state.year + '-' + String(state.month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+      var isSelected = state.selectedDate === dateStr;
+      var cls = 'cal-d';
+      if (isPast || isWeekend) cls += ' cal-d-dis';
+      else cls += ' cal-d-av';
+      if (isSelected) cls += ' cal-d-sel';
+      html += '<div class="' + cls + '" data-date="' + dateStr + '">' + d + '</div>';
+    }
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('.cal-d-av').forEach(function(el) {
+      el.addEventListener('click', function() {
+        state.selectedDate = el.dataset.date;
+        state.selectedSlot = null;
+        render();
+        if (onDateSelect) onDateSelect(state.selectedDate);
+      });
     });
   }
-}
 
-function resetBookingState(){
-  selDate=null;selTime=null;notifMode='email';
-  var hd=g('slots-hd');if(hd)hd.textContent='Pick a date to see available times';
-  var sg=g('slots-grid');if(sg)sg.innerHTML='';
-  var bf=g('book-form');if(bf)bf.innerHTML='';
-  var info=g('cal-sel-info');if(info)info.textContent='';
-  var clr=g('cal-clear');if(clr)clr.style.display='none';
-  renderCal();
-}
-
-on('bk-back-btn','click',function(){if(prevPage&&prevPage!=='calendar')goPage(prevPage);else goPage('home');});
-on('bk-home-btn','click',function(){goPage('home');});
-on('cal-clear-btn','click',function(){resetBookingState();});
-
-function renderCal(){
-  var lbl=g('cal-lbl'),grid=g('cal-grid');if(!lbl||!grid)return;
-  lbl.textContent=MONTHS[calM]+' '+calY;
-  var DN=['Su','Mo','Tu','We','Th','Fr','Sa'];
-  var h=DN.map(function(d){return '<div class="dn">'+d+'</div>';}).join('');
-  var first=new Date(calY,calM,1).getDay();
-  var days=new Date(calY,calM+1,0).getDate();
-  var today=new Date();today.setHours(0,0,0,0);
-  for(var i=0;i<first;i++)h+='<div class="dc empty"></div>';
-  for(var d=1;d<=days;d++){
-    var dt=new Date(calY,calM,d);
-    var key=calY+'-'+pad(calM+1)+'-'+pad(d);
-    var takenAll=TAKEN[key]&&TAKEN[key].length>=SLOTS.length;
-    var isP=dt<today,isW=dt.getDay()===0||dt.getDay()===6;
-    var isS=selDate===key,isT=dt.getTime()===today.getTime();
-    var cls='dc'+(isP||isW||takenAll?' past':isS?' sel avail':isT?' today avail':' avail');
-    h+='<div class="'+cls+'" data-k="'+key+'" data-d="'+d+'">'+d+'</div>';
-  }
-  grid.innerHTML=h;
-  grid.querySelectorAll('.dc.avail').forEach(function(el){
-    el.addEventListener('click',function(){pickDate(this.getAttribute('data-k'),parseInt(this.getAttribute('data-d')));});
+  on(prevId, 'click', function() {
+    state.month--;
+    if (state.month < 0) { state.month = 11; state.year--; }
+    render();
   });
+  on(nextId, 'click', function() {
+    state.month++;
+    if (state.month > 11) { state.month = 0; state.year++; }
+    render();
+  });
+
+  render();
 }
 
-function pickDate(key,d){
-  selDate=key;selTime=null;renderCal();
-  var mo=parseInt(key.split('-')[1])-1;
-  var hd=g('slots-hd');if(hd)hd.textContent='Available times -- '+MONTHS[mo]+' '+d;
-  var info=g('cal-sel-info');if(info)info.textContent=MONTHS[mo]+' '+d;
-  var clr=g('cal-clear');if(clr)clr.style.display='block';
-  var sg=g('slots-grid');if(!sg)return;
-  sg.innerHTML='<div style="grid-column:1/-1;font-size:12px;color:rgba(255,255,255,.3);padding:8px 0">Loading availability...</div>';
-  var bf=g('book-form');if(bf)bf.innerHTML='';
-  API.bookings.getForDate(key).then(function(result){
-    var taken=[];
-    if(result.ok&&result.data)taken=result.data.filter(function(r){return r.status!=='cancelled';}).map(function(r){return r.time_slot;});
-    TAKEN[key]=taken;
-    sg.innerHTML='';
-    SLOTS.forEach(function(t){
-      var isBk=taken.indexOf(t)>=0;
-      var el=document.createElement('div');
-      el.className='slot'+(isBk?' taken':' avail');
-      el.textContent=isBk?'Taken':t;
-      if(!isBk)el.addEventListener('click',function(){pickTime(t);});
-      sg.appendChild(el);
+function buildSlots(gridId, hdId, dateStr, onSlotSelect) {
+  var grid = document.getElementById(gridId);
+  var hd   = document.getElementById(hdId);
+  if (!grid) return;
+
+  var dateObj = new Date(dateStr + 'T12:00:00');
+  var label = MONTH_NAMES[dateObj.getMonth()] + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear();
+  if (hd) hd.textContent = 'Available times for ' + label;
+
+  var booked = BOOKED_SLOTS[dateStr] || [];
+  var html = '';
+  TIME_SLOTS.forEach(function(slot) {
+    var isTaken = booked.indexOf(slot) !== -1;
+    html += '<div class="slot' + (isTaken ? ' slot-taken' : '') + '" data-slot="' + slot + '">' + slot + (isTaken ? ' — Taken' : '') + '</div>';
+  });
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.slot:not(.slot-taken)').forEach(function(el) {
+    el.addEventListener('click', function() {
+      grid.querySelectorAll('.slot').forEach(function(s) { s.classList.remove('slot-sel'); });
+      el.classList.add('slot-sel');
+      if (onSlotSelect) onSlotSelect(el.dataset.slot, dateStr);
     });
   });
 }
 
-function pickTime(t){
-  selTime=t;
-  document.querySelectorAll('.slot.avail').forEach(function(s){s.classList.toggle('picked',s.textContent===t);});
-  renderBkForm();
-}
+/* ── MAIN BOOKING CALENDAR ── */
+window.initCalendar = function() {
+  var state = { year: CAL_STATE.year, month: CAL_STATE.month, selectedDate: null };
 
-function renderBkForm(){
-  var bf=g('book-form');if(!bf)return;
-  var modes=['Email','SMS','Both'];
-  var npHtml=modes.map(function(m){return '<div class="np'+(m.toLowerCase()===notifMode?' on':'')+'" data-m="'+m.toLowerCase()+'">'+m+'</div>';}).join('');
-  bf.innerHTML='<div class="bkform">'
-    +'<input class="bki" id="bk-name" placeholder="Your name" type="text">'
-    +'<input class="bki" id="bk-email" placeholder="Email address" type="email">'
-    +'<input class="bki" id="bk-phone" placeholder="Phone (optional)" type="tel">'
-    +'<div class="notifrow">'+npHtml+'</div>'
-    +'<button class="bkbtn" id="bk-confirm">Confirm Free Call</button>'
-    +'<button class="bk-cancel" id="bk-cancel-btn">Cancel</button>'
-    +'</div>';
-  bf.querySelectorAll('.np').forEach(function(el){
-    el.addEventListener('click',function(){
-      notifMode=this.getAttribute('data-m');
-      bf.querySelectorAll('.np').forEach(function(x){x.classList.toggle('on',x===el);});
+  buildCalendar('cal-grid','cal-lbl','cal-prev','cal-next', state, function(dateStr) {
+    buildSlots('slots-grid','slots-hd', dateStr, function(slot, date) {
+      var confirm = document.getElementById('book-form');
+      if (!confirm) return;
+      confirm.innerHTML = [
+        '<div class="book-confirm">',
+        '<div class="book-confirm-ti">📅 ' + slot + ' on ' + date + '</div>',
+        '<div class="book-confirm-sub">Fill in your details to confirm this slot.</div>',
+        '<input class="inq-input" id="book-name"  placeholder="Full name" style="margin-bottom:10px">',
+        '<input class="inq-input" id="book-email" placeholder="Email address" type="email" style="margin-bottom:10px">',
+        '<input class="inq-input" id="book-topic" placeholder="What would you like to discuss?" style="margin-bottom:14px">',
+        '<button class="btn-g" id="book-submit">Confirm Booking →</button>',
+        '</div>'
+      ].join('');
+
+      document.getElementById('book-submit').addEventListener('click', function() {
+        var name  = document.getElementById('book-name');
+        var email = document.getElementById('book-email');
+        if (!name || !name.value.trim())  { alert('Please enter your name'); return; }
+        if (!email || !email.value.trim()) { alert('Please enter your email'); return; }
+        if (typeof window.submitBooking === 'function') {
+          window.submitBooking({ name: name.value, email: email.value, slot: slot, date: date });
+        }
+        confirm.innerHTML = '<div class="book-confirm"><div class="book-confirm-ti">✅ Booked!</div><div class="book-confirm-sub">We\'ll send a confirmation to ' + email.value + ' shortly. See you then!</div></div>';
+      });
     });
   });
-  on('bk-confirm','click',confirmBook);
-  on('bk-cancel-btn','click',function(){
-    selTime=null;
-    document.querySelectorAll('.slot.avail').forEach(function(s){s.classList.remove('picked');});
-    bf.innerHTML='';
-  });
-}
 
-async function confirmBook(){
-  var nEl=g('bk-name'),eEl=g('bk-email'),phEl=g('bk-phone');
-  var nv=nEl?nEl.value.trim():'',ev=eEl?eEl.value.trim():'';
-  if(!nv||!ev){alert('Please enter your name and email.');return;}
-  if(!selDate||!selTime){alert('Please select a date and time.');return;}
-  var btn=g('bk-confirm');
-  if(btn){btn.disabled=true;btn.textContent='Booking...';}
-  var result=await API.bookings.create({
-    name:nv, email:ev, phone:phEl?phEl.value.trim():'',
-    date:selDate, time_slot:selTime, notif_mode:notifMode, source:'website'
-  });
-  if(!result.ok){
-    if(btn){btn.disabled=false;btn.textContent='Confirm Free Call';}
-    alert('Booking failed: '+result.error+'. Please call +1 (630) 335-3342 directly.');
-    return;
+  // Cal info bar
+  var selInfo = document.getElementById('cal-sel-info');
+  var clearBtn = document.getElementById('cal-clear-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      state.selectedDate = null;
+      var grid = document.getElementById('slots-grid');
+      var hd   = document.getElementById('slots-hd');
+      var form = document.getElementById('book-form');
+      if (grid) grid.innerHTML = '';
+      if (hd)   hd.textContent = 'Pick a date to see available times →';
+      if (form) form.innerHTML = '';
+      clearBtn.style.display = 'none';
+      if (selInfo) selInfo.textContent = '';
+    });
   }
-  if(!TAKEN[selDate])TAKEN[selDate]=[];
-  TAKEN[selDate].push(selTime);
-  var panel=g('slots-panel');if(!panel)return;
-  var bookingId=result.data&&result.data[0]?result.data[0].id:'';
-  panel.innerHTML='<div style="text-align:center;padding:40px 20px">'
-    +'<div style="font-size:52px;margin-bottom:16px">&#10003;</div>'
-    +'<div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gld);margin-bottom:10px">Call Booked!</div>'
-    +'<div style="font-size:14px;color:var(--mut);line-height:2">'+nv+', we will see you on<br>'
-    +'<strong style="color:var(--wht)">'+selDate+' at '+selTime+'</strong><br><br>'
-    +'Confirmation sent via <strong style="color:var(--gld)">'+notifMode+'</strong>.'
-    +(bookingId?'<br><span style="font-size:11px;color:rgba(255,255,255,.25)">Ref: '+bookingId.substring(0,8)+'</span>':'')
-    +'</div>'
-    +'<div style="display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap">'
-    +'<button class="booked-back" id="booked-home-btn">Home</button>'
-    +'<button class="booked-back" id="booked-new-btn" style="color:rgba(201,168,76,.6)">+ Book Another</button>'
-    +'</div></div>';
-  on('booked-home-btn','click',function(){goPage('home');});
-  on('booked-new-btn','click',function(){resetBookingState();renderCal();});
-}
 
-on('cal-prev','click',function(){calM--;if(calM<0){calM=11;calY--;}loadTakenSlots(calY,calM).then(renderCal);});
-on('cal-next','click',function(){calM++;if(calM>11){calM=0;calY++;}loadTakenSlots(calY,calM).then(renderCal);});
+  console.log('✅ calendar.js (main) loaded');
+};
 
-on('vid-frame','click',function(){
-  var vf=g('vid-frame');if(!vf)return;
-  vf.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:rgba(255,255,255,.3);font-size:15px">Video plays in production build</div>';
-});
+/* ── INQUIRY CALENDAR ── */
+window.initInquiryCalendar = function() {
+  var state = { year: CAL_STATE.year, month: CAL_STATE.month, selectedDate: null };
 
-loadTakenSlots(calY,calM);
+  buildCalendar('inq-cal-grid','inq-cal-lbl','inq-cal-prev','inq-cal-next', state, function(dateStr) {
+    buildSlots('inq-slots-grid','inq-slots-hd', dateStr, function(slot, date) {
+      var confirm = document.getElementById('inq-slot-confirm');
+      if (confirm) {
+        confirm.innerHTML = '<div class="slot-confirmed">✅ <strong>' + slot + '</strong> on <strong>' + date + '</strong> selected. Click below to proceed.</div>';
+      }
+      // Auto-advance to step 3 after slot selection
+      setTimeout(function() {
+        var skip = document.getElementById('inq-skip-appt');
+        if (skip) skip.click();
+      }, 1200);
+    });
+  });
+
+  console.log('✅ calendar.js (inquiry) loaded');
+};
