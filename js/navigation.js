@@ -210,3 +210,74 @@ document.addEventListener('DOMContentLoaded', () => {
   const pill = $('home-pill');
   if (pill) pill.style.display = 'none';
 });
+
+
+/* ── ONLINE CLASSROOM NAVIGATION ── */
+on('ni-classroom-hd', 'click', () => {
+  const dd = $('dd-classroom');
+  const arr = $('arr-classroom');
+  if (!dd) return;
+  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight = isOpen ? '0px' : '300px';
+  dd.style.overflow = 'hidden';
+  dd.style.transition = 'max-height 0.3s ease';
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+});
+
+on('di-cl-java',    'click', () => { showPage('page-java');    closeSidebars(); });
+on('di-cl-js',      'click', () => { showPage('page-js');      closeSidebars(); });
+on('di-cl-html',    'click', () => { showPage('page-html');    closeSidebars(); });
+on('di-cl-python',  'click', () => { showPage('page-python');  closeSidebars(); });
+on('di-cl-backend', 'click', () => { showPage('page-backend'); closeSidebars(); });
+on('ni-fees',       'click', () => { showPage('page-fees');    closeSidebars(); });
+on('ni-lab',        'click', () => { showPage('page-lab');     closeSidebars(); });
+on('ni-placement',  'click', () => { showPage('page-placement'); closeSidebars(); });
+
+// Live demo sessions dropdown
+on('ni-live-demo', 'click', () => {
+  const dd = $('dd-live');
+  const arr = $('arr-live');
+  if (!dd) return;
+  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight = isOpen ? '0px' : '200px';
+  dd.style.overflow = 'hidden';
+  dd.style.transition = 'max-height 0.3s ease';
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+});
+on('di-live-youtube',  'click', () => { showPage('page-live'); closeSidebars(); });
+on('di-live-social',   'click', () => { showPage('page-live'); closeSidebars(); });
+on('di-live-schedule', 'click', () => { showPage('page-calendar'); closeSidebars(); });
+
+/* ── CLASSROOM COURSE CARD CLICKS (hub page) ── */
+document.addEventListener('click', e => {
+  if (e.target.closest('#goto-java'))      { showPage('page-java');      return; }
+  if (e.target.closest('#goto-js'))        { showPage('page-js');        return; }
+  if (e.target.closest('#goto-html'))      { showPage('page-html');      return; }
+  if (e.target.closest('#goto-python'))    { showPage('page-python');    return; }
+  if (e.target.closest('#goto-backend'))   { showPage('page-backend');   return; }
+  if (e.target.closest('#goto-fees-page')) { showPage('page-fees');      return; }
+
+  // Lab page course buttons
+  if (e.target.classList.contains('go-java'))      { showPage('page-java');      return; }
+  if (e.target.classList.contains('go-js'))        { showPage('page-js');        return; }
+  if (e.target.classList.contains('go-html'))      { showPage('page-html');      return; }
+  if (e.target.classList.contains('go-python'))    { showPage('page-python');    return; }
+  if (e.target.classList.contains('go-backend'))   { showPage('page-backend');   return; }
+  if (e.target.classList.contains('go-lab'))       { showPage('page-lab');       return; }
+  if (e.target.classList.contains('go-fees'))      { showPage('page-fees');      return; }
+  if (e.target.classList.contains('go-placement')) { showPage('page-placement'); return; }
+  if (e.target.classList.contains('go-live'))      { showPage('page-live');      return; }
+  if (e.target.classList.contains('go-classroom')) { showPage('page-classroom'); return; }
+});
+
+/* ── LIVE DEMO VIDEO EMBEDS ── */
+document.addEventListener('click', e => {
+  const thumb = e.target.closest('.cl-live-thumb');
+  if (!thumb) return;
+  const url = thumb.dataset.url;
+  if (!url) return;
+  const embed = thumb.closest('.cl-live-embed');
+  if (embed) {
+    embed.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="' + url + '?autoplay=1" allowfullscreen></iframe>';
+  }
+});
