@@ -1,17 +1,17 @@
-# Environment variables — NEVER commit real credentials
+# Environment & credentials - NEVER commit
 env.js
 .env
 .env.local
 .env.production
+.env.*
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Editor files
+# Editor
 .vscode/
 .idea/
 
 # Logs
 *.log
-npm-debug.log*
