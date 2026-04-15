@@ -17,6 +17,244 @@
   <link rel="stylesheet" href="css/payments.css">
   <link rel="stylesheet" href="css/about.css">
   <link rel="stylesheet" href="css/creative.css">
+
+<style>
+/* ── ORANGE BURGER (bottom-left) ── */
+#burger-orange {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1100;
+  background: rgba(239,159,39,0.12);
+  border: 1px solid rgba(239,159,39,0.35);
+  border-radius: 10px;
+  padding: 8px;
+  transition: background 0.2s, border-color 0.2s;
+}
+#burger-orange:hover { background: rgba(239,159,39,0.22); border-color: rgba(239,159,39,0.6); }
+#burger-orange span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #EF9F27;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+#burger-orange.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#burger-orange.open span:nth-child(2) { opacity: 0; }
+#burger-orange.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── PURPLE BURGER (bottom-right) ── */
+#burger-purple {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1100;
+  background: rgba(174,139,217,0.12);
+  border: 1px solid rgba(174,139,217,0.35);
+  border-radius: 10px;
+  padding: 8px;
+  transition: background 0.2s, border-color 0.2s;
+}
+#burger-purple:hover { background: rgba(174,139,217,0.22); border-color: rgba(174,139,217,0.6); }
+#burger-purple span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #AE8BD9;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+#burger-purple.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#burger-purple.open span:nth-child(2) { opacity: 0; }
+#burger-purple.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── ORANGE SIDEBAR (bottom-left panel) ── */
+#sidebar-orange {
+  position: fixed;
+  bottom: 84px;
+  left: 16px;
+  width: 240px;
+  background: #0e0b08;
+  border: 1px solid rgba(239,159,39,0.25);
+  border-radius: 14px;
+  padding: 0;
+  z-index: 1099;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(239,159,39,0.08);
+  transform: translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  overflow: hidden;
+}
+#sidebar-orange.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.osb-hd {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(239,159,39,0.12);
+}
+.osb-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #EF9F27;
+}
+.osb-sub {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(239,159,39,0.45);
+  margin-top: 2px;
+}
+.osb-nav { padding: 8px 0; }
+.osb-item {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.3px;
+}
+.osb-item:hover { background: rgba(239,159,39,0.08); color: #EF9F27; }
+.osb-item.parent { font-weight: 500; color: rgba(255,255,255,0.9); }
+.osb-item.parent:hover { color: #EF9F27; }
+.osb-arr { font-size: 10px; color: rgba(239,159,39,0.5); transition: transform 0.2s; }
+.osb-item.open .osb-arr { transform: rotate(180deg); }
+.osb-dd {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  background: rgba(239,159,39,0.03);
+}
+.osb-dd.open { max-height: 200px; }
+.osb-sub-item {
+  padding: 8px 18px 8px 30px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+.osb-sub-item::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(239,159,39,0.4);
+}
+.osb-sub-item:hover { background: rgba(239,159,39,0.06); color: #EF9F27; }
+
+/* ── PURPLE SIDEBAR (bottom-right panel) ── */
+#sidebar-purple {
+  position: fixed;
+  bottom: 84px;
+  right: 16px;
+  width: 240px;
+  background: #0d0b12;
+  border: 1px solid rgba(174,139,217,0.25);
+  border-radius: 14px;
+  padding: 0;
+  z-index: 1099;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(174,139,217,0.08);
+  transform: translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  overflow: hidden;
+}
+#sidebar-purple.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.psb-hd {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(174,139,217,0.12);
+}
+.psb-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #AE8BD9;
+}
+.psb-sub {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(174,139,217,0.45);
+  margin-top: 2px;
+}
+.psb-nav { padding: 8px 0; }
+.psb-item {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.3px;
+}
+.psb-item:hover { background: rgba(174,139,217,0.08); color: #AE8BD9; }
+.psb-item.parent { font-weight: 500; color: rgba(255,255,255,0.9); }
+.psb-item.parent:hover { color: #AE8BD9; }
+.psb-arr { font-size: 10px; color: rgba(174,139,217,0.5); transition: transform 0.2s; }
+.psb-item.open .psb-arr { transform: rotate(180deg); }
+.psb-dd {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  background: rgba(174,139,217,0.03);
+}
+.psb-dd.open { max-height: 200px; }
+.psb-sub-item {
+  padding: 8px 18px 8px 30px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+.psb-sub-item::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(174,139,217,0.4);
+}
+.psb-sub-item:hover { background: rgba(174,139,217,0.06); color: #AE8BD9; }
+</style>
 </head>
 <body>
 
@@ -28,6 +266,48 @@
 
 <!-- RIGHT BURGER -->
 <div id="burger-r"><span></span><span></span><span></span></div>
+
+<!-- ORANGE BURGER (bottom-left) — Online Classroom -->
+<div id="burger-orange"><span></span><span></span><span></span></div>
+
+<!-- PURPLE BURGER (bottom-right) — Online Classroom -->
+<div id="burger-purple"><span></span><span></span><span></span></div>
+
+<!-- ORANGE SIDEBAR PANEL -->
+<div id="sidebar-orange">
+  <div class="osb-hd">
+    <div class="osb-brand">Online Classroom</div>
+    <div class="osb-sub">Education Portal</div>
+  </div>
+  <nav class="osb-nav">
+    <div class="osb-item parent" id="osb-classroom-hd">
+      🎓 Online Classroom <span class="osb-arr">&#9660;</span>
+    </div>
+    <div class="osb-dd" id="osb-dd-classroom">
+      <div class="osb-sub-item">📚 Courses</div>
+      <div class="osb-sub-item">💰 Fees</div>
+      <div class="osb-sub-item">🔬 Lab &amp; Placement</div>
+    </div>
+  </nav>
+</div>
+
+<!-- PURPLE SIDEBAR PANEL -->
+<div id="sidebar-purple">
+  <div class="psb-hd">
+    <div class="psb-brand">Online Classroom</div>
+    <div class="psb-sub">Education Portal</div>
+  </div>
+  <nav class="psb-nav">
+    <div class="psb-item parent" id="psb-classroom-hd">
+      🎓 Online Classroom <span class="psb-arr">&#9660;</span>
+    </div>
+    <div class="psb-dd" id="psb-dd-classroom">
+      <div class="psb-sub-item">📚 Courses</div>
+      <div class="psb-sub-item">💰 Fees</div>
+      <div class="psb-sub-item">🔬 Lab &amp; Placement</div>
+    </div>
+  </nav>
+</div>
 
 <div id="overlay"></div>
 <div id="home-pill">&#8592; Home</div>
@@ -357,7 +637,6 @@ renderStudio(studio)</pre>
       <div class="s-dv"></div>
       <p style="font-size:14px;color:rgba(255,255,255,.42);line-height:1.85;margin-bottom:30px;max-width:580px">To secure your project and begin production, a <strong style="color:var(--gld)">50% deposit</strong> is required alongside a <strong style="color:var(--gld)">signed service agreement</strong>. This protects both parties and guarantees your start date.</p>
 
-      <!-- DEPOSIT BREAKDOWN -->
       <div class="pay-flow-card">
         <div class="pay-flow-ti">50% Deposit</div>
         <div class="pay-flow-sub">Choose your preferred payment method for the deposit. The remaining 50% is due upon project completion.</div>
@@ -382,7 +661,6 @@ renderStudio(studio)</pre>
         </div>
       </div>
 
-      <!-- CONTRACT -->
       <div class="pay-flow-card">
         <div class="pay-flow-ti">Service Agreement</div>
         <div class="pay-flow-sub">Read the agreement below, type your full name as your digital signature, and check the box to confirm your acceptance.</div>
@@ -620,7 +898,6 @@ renderStudio(studio)</pre>
     <h2 class="s-ti">About &amp; Team</h2>
     <div class="s-dv"></div>
 
-    <!-- OWNER -->
     <div class="about-hero">
       <div class="owner-visual">
         <div class="owner-frame">
@@ -655,7 +932,6 @@ renderStudio(studio)</pre>
       </div>
     </div>
 
-    <!-- TEAM -->
     <div class="s-ey" style="margin-bottom:12px">The team</div>
     <h3 class="s-ti" style="font-size:clamp(28px,3.5vw,48px);margin-bottom:14px">Built by craftspeople</h3>
     <div class="s-dv"></div>
@@ -727,7 +1003,6 @@ renderStudio(studio)</pre>
     <div class="s-dv"></div>
     <p class="pay-intro">Scan any QR code with your phone camera or tap the button to open your payment app directly. Your card details go straight to Zelle, Apple Pay, Google Pay, or Stripe — never through this site.</p>
 
-    <!-- CLIENT-FRIENDLY SECURITY STRIP -->
     <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;align-items:center">
       <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">🔒 100% Secure</div>
       <div style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(93,202,165,.06);border:1px solid rgba(93,202,165,.2);border-radius:20px;font-size:11px;color:#5DCAA5">🛡️ Your card info is never stored here</div>
@@ -736,7 +1011,6 @@ renderStudio(studio)</pre>
     </div>
 
     <div class="pay-grid" id="pay-grid-container">
-      <!-- QR cards injected by JS after qrcode lib loads -->
       <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">Generating secure QR codes…</div>
     </div>
 
@@ -759,7 +1033,6 @@ renderStudio(studio)</pre>
     <p class="cr-bo">Five distinct creative services, each built for a specific type of storyteller. Whether you're a novelist, a filmmaker, or a sound artist — there's a model tailored for you.</p>
 
     <div class="crm-grid">
-
       <div class="crm-card" style="--crm-clr:var(--pur)">
         <div class="crm-bdg">Writing</div>
         <div class="crm-ico">📖</div>
@@ -767,7 +1040,6 @@ renderStudio(studio)</pre>
         <div class="crm-ds">Full manuscript ghostwriting, co-authoring, developmental editing, and series planning. We take your story concept from outline to polished, publish-ready novel. Fiction across all genres — thriller, romance, sci-fi, fantasy, and literary.</div>
         <div class="crm-tags"><span class="crm-tag">Ghost Writing</span><span class="crm-tag">Co-Authoring</span><span class="crm-tag">Dev Editing</span><span class="crm-tag">Series Arc</span></div>
       </div>
-
       <div class="crm-card" style="--crm-clr:var(--pnk)">
         <div class="crm-bdg">Popular</div>
         <div class="crm-ico">✂️</div>
@@ -775,28 +1047,24 @@ renderStudio(studio)</pre>
         <div class="crm-ds">Professional video editing for social media, YouTube, trailers, promos, and short-form content. Color grading, motion graphics, pacing, and transitions — delivered in any format and aspect ratio for any platform.</div>
         <div class="crm-tags"><span class="crm-tag">Color Grade</span><span class="crm-tag">Motion GFX</span><span class="crm-tag">Short-form</span><span class="crm-tag">Trailers</span></div>
       </div>
-
       <div class="crm-card" style="--crm-clr:var(--tea)">
         <div class="crm-ico">🎙️</div>
         <div class="crm-nm">Sound Dubbing</div>
         <div class="crm-ds">Studio-quality audio dubbing, voiceover production, ADR, and multilingual localization for films, commercials, e-learning content, and animated projects. Voice casting and direction included.</div>
         <div class="crm-tags"><span class="crm-tag">ADR</span><span class="crm-tag">Voice Over</span><span class="crm-tag">Localization</span><span class="crm-tag">Casting</span></div>
       </div>
-
       <div class="crm-card" style="--crm-clr:var(--cor)">
         <div class="crm-ico">🎥</div>
         <div class="crm-nm">Filming</div>
         <div class="crm-ds">On-location and studio filming with professional cinematography, lighting, and direction. From indie feature films and documentaries to brand films, music videos, and commercial spots. Full crew or solo-director options available.</div>
         <div class="crm-tags"><span class="crm-tag">Cinematography</span><span class="crm-tag">On-Location</span><span class="crm-tag">Music Video</span><span class="crm-tag">Documentary</span></div>
       </div>
-
       <div class="crm-card" style="--crm-clr:#EF9F27">
         <div class="crm-ico">🎞️</div>
         <div class="crm-nm">Post Production</div>
         <div class="crm-ds">End-to-end post production including editing, VFX compositing, sound design, color grading, and final delivery for broadcast, streaming, and theatrical release. DCP and mastering available.</div>
         <div class="crm-tags"><span class="crm-tag">VFX</span><span class="crm-tag">Sound Design</span><span class="crm-tag">DCP Master</span><span class="crm-tag">Broadcast</span></div>
       </div>
-
     </div>
 
     <div style="background:#100d18;border:1px solid rgba(174,139,217,.12);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap">
@@ -833,8 +1101,6 @@ renderStudio(studio)</pre>
       </div>
 
       <div class="crp-grid">
-
-        <!-- SOLO CREATOR -->
         <div class="crp-card">
           <div class="crp-pl">Solo Creator</div>
           <div class="crp-am" id="crp1">$800<sub>/project</sub></div>
@@ -849,8 +1115,6 @@ renderStudio(studio)</pre>
           </ul>
           <button class="crp-btn go-cal">Get started</button>
         </div>
-
-        <!-- PRO CREATOR -->
         <div class="crp-card feat">
           <div class="crp-fbdg">Most Popular</div>
           <div class="crp-pl">Pro Creator</div>
@@ -867,8 +1131,6 @@ renderStudio(studio)</pre>
           </ul>
           <button class="crp-btn go-cal">Get started</button>
         </div>
-
-        <!-- STUDIO -->
         <div class="crp-card">
           <div class="crp-pl">Studio Tier</div>
           <div class="crp-am" id="crp3">$5,200<sub>/project</sub></div>
@@ -884,10 +1146,8 @@ renderStudio(studio)</pre>
           </ul>
           <button class="crp-btn go-cal">Get started</button>
         </div>
-
       </div>
 
-      <!-- PER-SERVICE BREAKDOWN -->
       <div style="margin-bottom:36px">
         <div class="cr-ey" style="margin-bottom:14px">À la carte — per service rates</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
@@ -1061,5 +1321,63 @@ renderStudio(studio)</pre>
 <script src="js/inquiry.js"></script>
 <script src="js/payments.js"></script>
 <script src="js/init.js"></script>
+
+<!-- Orange & Purple Burger Menu Logic -->
+<script>
+(function() {
+  // ── ORANGE BURGER ──
+  const burgerOrange = document.getElementById('burger-orange');
+  const sidebarOrange = document.getElementById('sidebar-orange');
+  const osbClassroomHd = document.getElementById('osb-classroom-hd');
+  const osbDdClassroom = document.getElementById('osb-dd-classroom');
+
+  burgerOrange.addEventListener('click', function(e) {
+    e.stopPropagation();
+    burgerOrange.classList.toggle('open');
+    sidebarOrange.classList.toggle('open');
+    // close purple if open
+    burgerPurple.classList.remove('open');
+    sidebarPurple.classList.remove('open');
+  });
+
+  osbClassroomHd.addEventListener('click', function() {
+    osbClassroomHd.classList.toggle('open');
+    osbDdClassroom.classList.toggle('open');
+  });
+
+  // ── PURPLE BURGER ──
+  const burgerPurple = document.getElementById('burger-purple');
+  const sidebarPurple = document.getElementById('sidebar-purple');
+  const psbClassroomHd = document.getElementById('psb-classroom-hd');
+  const psbDdClassroom = document.getElementById('psb-dd-classroom');
+
+  burgerPurple.addEventListener('click', function(e) {
+    e.stopPropagation();
+    burgerPurple.classList.toggle('open');
+    sidebarPurple.classList.toggle('open');
+    // close orange if open
+    burgerOrange.classList.remove('open');
+    sidebarOrange.classList.remove('open');
+  });
+
+  psbClassroomHd.addEventListener('click', function() {
+    psbClassroomHd.classList.toggle('open');
+    psbDdClassroom.classList.toggle('open');
+  });
+
+  // ── CLOSE ON OUTSIDE CLICK ──
+  document.addEventListener('click', function(e) {
+    if (!sidebarOrange.contains(e.target) && e.target !== burgerOrange) {
+      burgerOrange.classList.remove('open');
+      sidebarOrange.classList.remove('open');
+    }
+    if (!sidebarPurple.contains(e.target) && e.target !== burgerPurple) {
+      burgerPurple.classList.remove('open');
+      sidebarPurple.classList.remove('open');
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
