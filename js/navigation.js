@@ -1,283 +1,241 @@
-/* ── NAVIGATION: sidebars, pages, nav, routing ── Code Rendering Studio */
+/* ── NAVIGATION ── Code Rendering Studio — Full Rewrite */
 
-/* UTILITY: shorthand querySelector */
-const on = (id, ev, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(ev, fn); };
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
+const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); };
 
-/* ── PAGE SWITCHER ── */
-let currentPage = 'page-home';
-let pageHistory = ['page-home'];
-
-function showPage(pageId, opts = {}) {
-  if (!$(pageId)) return;
+/* ══════════════════════════════════════════
+   PAGE SWITCHER
+══════════════════════════════════════════ */
+function showPage(pageId, opts) {
+  if (!$(pageId)) { console.warn('showPage: missing', pageId); return; }
   $$('.page').forEach(p => p.classList.remove('on'));
   $(pageId).classList.add('on');
-  currentPage = pageId;
-  pageHistory.push(pageId);
   window.scrollTo(0, 0);
-  // Push to browser history so back/forward buttons work
-  history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
-  // Close both sidebars on page change
   closeSidebars();
-  // Update left nav active state
-  $$('.ni').forEach(n => n.classList.remove('on'));
-  // Update home-pill visibility
-  const pill = $('home-pill');
+  // home pill
+  var pill = $('home-pill');
   if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
-  // pricing tab pre-select
-  if (opts.pricingTab) {
-    setTimeout(() => {
-      const btn = $(opts.pricingTab === 'bundles' ? 'tab-bun' : 'tab-ind');
+  // browser history
+  history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
+  // pricing tab
+  if (opts && opts.pricingTab) {
+    setTimeout(function() {
+      var btn = $(opts.pricingTab === 'bundles' ? 'tab-bun' : 'tab-ind');
       if (btn) btn.click();
     }, 50);
   }
-  // inquiry pre-fill service
-  if (opts.service) {
-    const sel = $('inq-service');
+  // inquiry service prefill
+  if (opts && opts.service) {
+    var sel = $('inq-service');
     if (sel) sel.value = opts.service;
-    const lbl = $('inq-service-label');
+    var lbl = $('inq-service-label');
     if (lbl) lbl.textContent = opts.service + ' Inquiry';
-    const ti = $('inq-title');
+    var ti = $('inq-title');
     if (ti) ti.textContent = 'Tell Us About Your ' + opts.service + ' Project';
   }
 }
+window.showPage = showPage;
 
-function goBack() {
-  pageHistory.pop(); // remove current
-  const prev = pageHistory[pageHistory.length - 1] || 'page-home';
-  showPage(prev);
-}
-
-/* ── SIDEBAR STATE ── */
+/* ══════════════════════════════════════════
+   SIDEBAR OPEN / CLOSE
+══════════════════════════════════════════ */
 function closeSidebars() {
-  $('sidebar').classList.remove('open');
-  $('rsidebar').classList.remove('open');
-  $('overlay').classList.remove('on');
+  var sb = $('sidebar'); if (sb) sb.classList.remove('open');
+  var rs = $('rsidebar'); if (rs) rs.classList.remove('open');
+  var ov = $('overlay'); if (ov) ov.classList.remove('on');
 }
 
-function openLeftSidebar() {
-  $('sidebar').classList.add('open');
-  $('rsidebar').classList.remove('open');
-  $('overlay').classList.add('on');
+function openLeft() {
+  var sb = $('sidebar'); if (sb) sb.classList.add('open');
+  var rs = $('rsidebar'); if (rs) rs.classList.remove('open');
+  var ov = $('overlay'); if (ov) ov.classList.add('on');
 }
 
-function openRightSidebar() {
-  $('rsidebar').classList.add('open');
-  $('sidebar').classList.remove('open');
-  $('overlay').classList.add('on');
+function openRight() {
+  var rs = $('rsidebar'); if (rs) rs.classList.add('open');
+  var sb = $('sidebar'); if (sb) sb.classList.remove('open');
+  var ov = $('overlay'); if (ov) ov.classList.add('on');
 }
 
-/* ── BURGER BUTTONS ── */
-on('burger', 'click', () => {
-  const isOpen = $('sidebar').classList.contains('open');
-  isOpen ? closeSidebars() : openLeftSidebar();
+/* ══════════════════════════════════════════
+   BURGER BUTTONS
+══════════════════════════════════════════ */
+on('burger', 'click', function() {
+  var sb = $('sidebar');
+  if (sb && sb.classList.contains('open')) { closeSidebars(); } else { openLeft(); }
 });
 
-on('burger-r', 'click', () => {
-  const isOpen = $('rsidebar').classList.contains('open');
-  isOpen ? closeSidebars() : openRightSidebar();
+on('burger-r', 'click', function() {
+  var rs = $('rsidebar');
+  if (rs && rs.classList.contains('open')) { closeSidebars(); } else { openRight(); }
 });
 
 on('overlay', 'click', closeSidebars);
+on('home-pill', 'click', function() { showPage('page-home'); });
+on('fcta', 'click', function() { showPage('page-calendar'); });
 
-/* ── HOME PILL (back to home) ── */
-on('home-pill', 'click', () => showPage('page-home'));
-
-/* ── FREE CALL CTA (top) ── */
-on('fcta', 'click', () => showPage('page-calendar'));
-
-/* ── HOME PAGE BUTTONS ── */
-on('btn-explore', 'click', () => showPage('page-models'));
-on('btn-creative', 'click', () => showPage('page-creative'));
-
-/* ── LEFT SIDEBAR NAVIGATION ── */
-on('ni-home', 'click', () => {
-  showPage('page-home');
-  $$('.ni').forEach(n => n.classList.remove('on'));
-  $('ni-home').classList.add('on');
-  closeSidebars();
-});
+/* ══════════════════════════════════════════
+   LEFT SIDEBAR — BUSINESS
+══════════════════════════════════════════ */
+on('ni-home', 'click', function() { showPage('page-home'); });
 
 // Models dropdown
-on('ni-models-hd', 'click', () => {
-  const dd = $('dd-models');
-  const arr = $('arr-models');
-  if (!dd) return;
-  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
-  dd.style.maxHeight = isOpen ? '0px' : '300px';
-  dd.style.overflow = 'hidden';
-  dd.style.transition = 'max-height 0.3s ease';
-  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
-});
-on('di-mod-all', 'click', () => { showPage('page-models'); closeSidebars(); });
-on('di-mod-web', 'click', () => { showPage('page-models'); closeSidebars(); });
-on('di-mod-mob', 'click', () => { showPage('page-models'); closeSidebars(); });
-on('di-mod-ai',  'click', () => { showPage('page-models'); closeSidebars(); });
+on('ni-models-hd', 'click', function() { toggleDD('dd-models', 'arr-models'); });
+on('di-mod-all',  'click', function() { showPage('page-models'); });
+on('di-mod-web',  'click', function() { showPage('page-models'); });
+on('di-mod-mob',  'click', function() { showPage('page-models'); });
+on('di-mod-ai',   'click', function() { showPage('page-models'); });
 
 // Pricing dropdown
-on('ni-pricing-hd', 'click', () => {
-  const dd = $('dd-pricing');
-  const arr = $('arr-pricing');
-  if (!dd) return;
-  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
-  dd.style.maxHeight = isOpen ? '0px' : '300px';
-  dd.style.overflow = 'hidden';
-  dd.style.transition = 'max-height 0.3s ease';
-  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
-});
-on('di-pri-all', 'click', () => { showPage('page-pricing'); closeSidebars(); });
-on('di-pri-bun', 'click', () => { showPage('page-pricing', {pricingTab: 'bundles'}); closeSidebars(); });
-on('di-pri-ind', 'click', () => { showPage('page-pricing', {pricingTab: 'individual'}); closeSidebars(); });
+on('ni-pricing-hd', 'click', function() { toggleDD('dd-pricing', 'arr-pricing'); });
+on('di-pri-all', 'click', function() { showPage('page-pricing'); });
+on('di-pri-bun', 'click', function() { showPage('page-pricing', { pricingTab: 'bundles' }); });
+on('di-pri-ind', 'click', function() { showPage('page-pricing', { pricingTab: 'individual' }); });
 
-on('ni-ai',           'click', () => { showPage('page-ai');           closeSidebars(); });
-on('ni-calendar',     'click', () => { showPage('page-calendar');     closeSidebars(); });
-on('ni-testimonials', 'click', () => { showPage('page-testimonials'); closeSidebars(); });
-on('ni-about',        'click', () => { showPage('page-about');        closeSidebars(); });
-on('ni-payments',     'click', () => { showPage('page-payments');     closeSidebars(); });
-on('ni-contact',      'click', () => { showPage('page-contact');      closeSidebars(); });
+on('ni-ai',           'click', function() { showPage('page-ai'); });
+on('ni-calendar',     'click', function() { showPage('page-calendar'); });
+on('ni-testimonials', 'click', function() { showPage('page-testimonials'); });
+on('ni-about',        'click', function() { showPage('page-about'); });
+on('ni-payments',     'click', function() { showPage('page-payments'); });
+on('ni-contact',      'click', function() { showPage('page-contact'); });
 
-/* ── RIGHT SIDEBAR NAVIGATION ── */
-function rsDropdown(hdId, ddId, arrId) {
-  on(hdId, 'click', () => {
-    const dd = $(ddId);
-    const arr = $(arrId);
-    if (!dd) return;
-    const isOpen = dd.classList.contains('open');
-    dd.classList.toggle('open');
-    if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
-  });
-}
+/* ══════════════════════════════════════════
+   LEFT SIDEBAR — ONLINE CLASSROOM
+══════════════════════════════════════════ */
+on('ni-classroom-hd', 'click', function() { toggleDD('dd-classroom', 'arr-classroom'); });
+on('di-cl-java',    'click', function() { showPage('page-java'); });
+on('di-cl-js',      'click', function() { showPage('page-js'); });
+on('di-cl-html',    'click', function() { showPage('page-html'); });
+on('di-cl-python',  'click', function() { showPage('page-python'); });
+on('di-cl-backend', 'click', function() { showPage('page-backend'); });
+on('ni-fees',       'click', function() { showPage('page-fees'); });
+on('ni-lab',        'click', function() { showPage('page-lab'); });
+on('ni-placement',  'click', function() { showPage('page-placement'); });
 
-rsDropdown('rni-novels',    'rsb-dd-nov',     'rsb-arr-nov');
-rsDropdown('rni-film',      'rsb-dd-film',    'rsb-arr-film');
-rsDropdown('rni-filming',   'rsb-dd-filming', 'rsb-arr-filming');
-rsDropdown('rni-arts',      'rsb-dd-arts',    'rsb-arr-arts');
-rsDropdown('rni-cr-models', 'rsb-dd-crmod',   'rsb-arr-crmod');
-rsDropdown('rni-cr-pricing','rsb-dd-crprice', 'rsb-arr-crprice');
+// Live demo dropdown
+on('ni-live-demo',      'click', function() { toggleDD('dd-live', 'arr-live'); });
+on('di-live-youtube',   'click', function() { showPage('page-live'); });
+on('di-live-social',    'click', function() { showPage('page-live'); });
+on('di-live-schedule',  'click', function() { showPage('page-calendar'); });
 
-// Right sidebar page links
-['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit'].forEach(id => {
-  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
-});
-['rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist'].forEach(id => {
-  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
-});
-['rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short'].forEach(id => {
-  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
-});
-['rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(id => {
-  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
-});
-['rdi-crm-novel','rdi-crm-clips','rdi-crm-dub','rdi-crm-film','rdi-crm-post'].forEach(id => {
-  on(id, 'click', () => { showPage('page-crmodels'); closeSidebars(); });
-});
-['rdi-crp-solo','rdi-crp-pro','rdi-crp-studio'].forEach(id => {
-  on(id, 'click', () => { showPage('page-crpricing'); closeSidebars(); });
-});
-on('rni-collab', 'click', () => { showPage('page-calendar'); closeSidebars(); });
+/* ══════════════════════════════════════════
+   RIGHT SIDEBAR — CREATIVE STUDIO
+══════════════════════════════════════════ */
+on('rni-novels',    'click', function() { toggleDD('rsb-dd-nov',     'rsb-arr-nov');     });
+on('rni-film',      'click', function() { toggleDD('rsb-dd-film',    'rsb-arr-film');    });
+on('rni-filming',   'click', function() { toggleDD('rsb-dd-filming', 'rsb-arr-filming'); });
+on('rni-arts',      'click', function() { toggleDD('rsb-dd-arts',    'rsb-arr-arts');    });
+on('rni-cr-models', 'click', function() { toggleDD('rsb-dd-crmod',   'rsb-arr-crmod');   });
+on('rni-cr-pricing','click', function() { toggleDD('rsb-dd-crprice', 'rsb-arr-crprice'); });
+on('rni-collab',    'click', function() { showPage('page-calendar'); });
 
-/* ── SHARED BUTTON CLASSES ── */
-document.addEventListener('click', e => {
-  const t = e.target.closest('.go-inquiry');
-  if (t) { showPage('page-inquiry', { service: t.dataset.service || '' }); return; }
+// Right sidebar sub-items → creative pages
+['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit',
+ 'rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist',
+ 'rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short',
+ 'rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(function(id) {
+  on(id, 'click', function() { showPage('page-creative'); });
+});
 
-  if (e.target.closest('.go-cal') || e.target.closest('.go-cal-cr')) {
+['rdi-crm-novel','rdi-crm-clips','rdi-crm-dub','rdi-crm-film','rdi-crm-post'].forEach(function(id) {
+  on(id, 'click', function() { showPage('page-crmodels'); });
+});
+
+['rdi-crp-solo','rdi-crp-pro','rdi-crp-studio'].forEach(function(id) {
+  on(id, 'click', function() { showPage('page-crpricing'); });
+});
+
+/* ══════════════════════════════════════════
+   SPECIFIC BUTTONS
+══════════════════════════════════════════ */
+on('btn-explore',   'click', function() { showPage('page-models'); });
+on('btn-creative',  'click', function() { showPage('page-creative'); });
+on('cr-book-call',  'click', function() { showPage('page-calendar'); });
+on('cr-portfolio',  'click', function() { showPage('page-crmodels'); });
+on('bk-back-btn',   'click', function() { history.back(); });
+on('bk-home-btn',   'click', function() { showPage('page-home'); });
+on('inq-done-home',    'click', function() { showPage('page-home'); });
+on('inq-done-contact', 'click', function() { showPage('page-contact'); });
+
+// Course hub cards
+on('goto-java',       'click', function() { showPage('page-java'); });
+on('goto-js',         'click', function() { showPage('page-js'); });
+on('goto-html',       'click', function() { showPage('page-html'); });
+on('goto-python',     'click', function() { showPage('page-python'); });
+on('goto-backend',    'click', function() { showPage('page-backend'); });
+on('goto-fees-page',  'click', function() { showPage('page-fees'); });
+
+/* ══════════════════════════════════════════
+   CLASS-BASED BUTTONS (event delegation)
+   NOTE: very specific — only exact class matches
+══════════════════════════════════════════ */
+document.addEventListener('click', function(e) {
+  var t = e.target;
+
+  // .go-inquiry — data-service prefill
+  var inqBtn = t.closest('.go-inquiry');
+  if (inqBtn) { showPage('page-inquiry', { service: inqBtn.dataset.service || '' }); return; }
+
+  // Classroom course page buttons
+  if (t.classList.contains('go-java'))      { showPage('page-java');      return; }
+  if (t.classList.contains('go-js'))        { showPage('page-js');        return; }
+  if (t.classList.contains('go-html'))      { showPage('page-html');      return; }
+  if (t.classList.contains('go-python'))    { showPage('page-python');    return; }
+  if (t.classList.contains('go-backend'))   { showPage('page-backend');   return; }
+  if (t.classList.contains('go-lab'))       { showPage('page-lab');       return; }
+  if (t.classList.contains('go-fees'))      { showPage('page-fees');      return; }
+  if (t.classList.contains('go-placement')) { showPage('page-placement'); return; }
+  if (t.classList.contains('go-live'))      { showPage('page-live');      return; }
+  if (t.classList.contains('go-classroom')) { showPage('page-classroom'); return; }
+
+  // Shared navigation classes
+  if (t.classList.contains('go-cal') || t.classList.contains('go-cal-cr')) {
     showPage('page-calendar'); return;
   }
-  if (e.target.closest('.go-contact')) {
-    showPage('page-contact'); return;
-  }
-  if (e.target.closest('.go-crpricing')) {
-    showPage('page-crpricing'); return;
-  }
+  if (t.classList.contains('go-contact'))   { showPage('page-contact');   return; }
+  if (t.classList.contains('go-crpricing')) { showPage('page-crpricing'); return; }
+  if (t.classList.contains('go-calendar'))  { showPage('page-calendar');  return; }
 });
 
-/* ── ABOUT PAGE ── */
-on('cr-book-call', 'click', () => showPage('page-calendar'));
-on('cr-portfolio', 'click', () => showPage('page-crmodels'));
+/* ══════════════════════════════════════════
+   DROPDOWN HELPER
+══════════════════════════════════════════ */
+function toggleDD(ddId, arrId) {
+  var dd = $(ddId);
+  if (!dd) return;
+  var isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight = isOpen ? '0px' : '400px';
+  dd.style.overflow = 'hidden';
+  dd.style.transition = 'max-height 0.3s ease';
+  var arr = $(arrId);
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
 
-/* ── CALENDAR BACK/HOME ── */
-on('bk-back-btn', 'click', goBack);
-on('bk-home-btn', 'click', () => showPage('page-home'));
+/* ══════════════════════════════════════════
+   BROWSER BACK / FORWARD
+══════════════════════════════════════════ */
+window.addEventListener('popstate', function(e) {
+  var pageId = (e.state && e.state.page) ? e.state.page : 'page-home';
+  if (!$(pageId)) pageId = 'page-home';
+  $$('.page').forEach(function(p) { p.classList.remove('on'); });
+  $(pageId).classList.add('on');
+  window.scrollTo(0, 0);
+  var pill = $('home-pill');
+  if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
+});
 
-/* ── INQUIRY DONE BUTTONS ── */
-on('inq-done-home',    'click', () => showPage('page-home'));
-on('inq-done-contact', 'click', () => showPage('page-contact'));
-
-/* ── INIT: hide home pill on load ── */
-document.addEventListener('DOMContentLoaded', () => {
-  const pill = $('home-pill');
+/* ══════════════════════════════════════════
+   INIT ON LOAD
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  history.replaceState({ page: 'page-home' }, '', '#home');
+  var pill = $('home-pill');
   if (pill) pill.style.display = 'none';
-});
-
-
-/* ── ONLINE CLASSROOM NAVIGATION ── */
-on('ni-classroom-hd', 'click', () => {
-  const dd = $('dd-classroom');
-  const arr = $('arr-classroom');
-  if (!dd) return;
-  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
-  dd.style.maxHeight = isOpen ? '0px' : '300px';
-  dd.style.overflow = 'hidden';
-  dd.style.transition = 'max-height 0.3s ease';
-  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
-});
-
-on('di-cl-java',    'click', () => { showPage('page-java');    closeSidebars(); });
-on('di-cl-js',      'click', () => { showPage('page-js');      closeSidebars(); });
-on('di-cl-html',    'click', () => { showPage('page-html');    closeSidebars(); });
-on('di-cl-python',  'click', () => { showPage('page-python');  closeSidebars(); });
-on('di-cl-backend', 'click', () => { showPage('page-backend'); closeSidebars(); });
-on('ni-fees',       'click', () => { showPage('page-fees');    closeSidebars(); });
-on('ni-lab',        'click', () => { showPage('page-lab');     closeSidebars(); });
-on('ni-placement',  'click', () => { showPage('page-placement'); closeSidebars(); });
-
-// Live demo sessions dropdown
-on('ni-live-demo', 'click', () => {
-  const dd = $('dd-live');
-  const arr = $('arr-live');
-  if (!dd) return;
-  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
-  dd.style.maxHeight = isOpen ? '0px' : '200px';
-  dd.style.overflow = 'hidden';
-  dd.style.transition = 'max-height 0.3s ease';
-  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
-});
-on('di-live-youtube',  'click', () => { showPage('page-live'); closeSidebars(); });
-on('di-live-social',   'click', () => { showPage('page-live'); closeSidebars(); });
-on('di-live-schedule', 'click', () => { showPage('page-calendar'); closeSidebars(); });
-
-/* ── CLASSROOM COURSE CARD CLICKS (hub page) ── */
-document.addEventListener('click', e => {
-  if (e.target.closest('#goto-java'))      { showPage('page-java');      return; }
-  if (e.target.closest('#goto-js'))        { showPage('page-js');        return; }
-  if (e.target.closest('#goto-html'))      { showPage('page-html');      return; }
-  if (e.target.closest('#goto-python'))    { showPage('page-python');    return; }
-  if (e.target.closest('#goto-backend'))   { showPage('page-backend');   return; }
-  if (e.target.closest('#goto-fees-page')) { showPage('page-fees');      return; }
-
-  // Lab page course buttons
-  if (e.target.classList.contains('go-java'))      { showPage('page-java');      return; }
-  if (e.target.classList.contains('go-js'))        { showPage('page-js');        return; }
-  if (e.target.classList.contains('go-html'))      { showPage('page-html');      return; }
-  if (e.target.classList.contains('go-python'))    { showPage('page-python');    return; }
-  if (e.target.classList.contains('go-backend'))   { showPage('page-backend');   return; }
-  if (e.target.classList.contains('go-lab'))       { showPage('page-lab');       return; }
-  if (e.target.classList.contains('go-fees'))      { showPage('page-fees');      return; }
-  if (e.target.classList.contains('go-placement')) { showPage('page-placement'); return; }
-  if (e.target.classList.contains('go-live'))      { showPage('page-live');      return; }
-  if (e.target.classList.contains('go-classroom')) { showPage('page-classroom'); return; }
-});
-
-/* ── LIVE DEMO VIDEO EMBEDS ── */
-document.addEventListener('click', e => {
-  const thumb = e.target.closest('.cl-live-thumb');
-  if (!thumb) return;
-  const url = thumb.dataset.url;
-  if (!url) return;
-  const embed = thumb.closest('.cl-live-embed');
-  if (embed) {
-    embed.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="' + url + '?autoplay=1" allowfullscreen></iframe>';
+  // deep link on arrival
+  var hash = window.location.hash.replace('#', '');
+  if (hash && $('page-' + hash)) {
+    $$('.page').forEach(function(p) { p.classList.remove('on'); });
+    $('page-' + hash).classList.add('on');
   }
 });
