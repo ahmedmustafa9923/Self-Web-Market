@@ -1,194 +1,165 @@
-/* ── CALENDAR ── Code Rendering Studio
-   CSS class conventions (from components.css):
-   Days:  .dc (base) .dc.avail .dc.sel .dc.past .dc.today .dc.empty
-   Names: .dn
+/* CALENDAR - Code Rendering Studio
+   CSS classes from components.css:
+   Days: .dc .dc.avail .dc.sel .dc.past .dc.today .dc.empty  headers: .dn
    Slots: .slot .slot.avail .slot.picked .slot.taken
-   Grid:  .calgrid .slotsgrid
 */
 
-var MONTH_NAMES = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December'
-];
-
-var TIME_SLOTS = [
-  '9:00 AM','9:30 AM','10:00 AM','10:30 AM',
-  '11:00 AM','11:30 AM','1:00 PM','1:30 PM',
-  '2:00 PM','2:30 PM','3:00 PM','3:30 PM',
-  '4:00 PM','4:30 PM','5:00 PM'
-];
-
+var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var SLOTS  = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM'];
 var BOOKED = {};
 
-function pad(n) { return String(n).padStart(2,'0'); }
+function pad(n){ return String(n).padStart(2,'0'); }
 
-function buildCalendar(gridId, lblId, prevId, nextId, state, onSelect) {
+function buildCal(gridId, lblId, prevId, nextId, st, onPick) {
   var grid = document.getElementById(gridId);
   var lbl  = document.getElementById(lblId);
   if (!grid) return;
 
-  function render() {
-    if (lbl) lbl.textContent = MONTH_NAMES[state.month] + ' ' + state.year;
-    var today    = new Date();
-    var todayStr = today.getFullYear() + '-' + pad(today.getMonth()+1) + '-' + pad(today.getDate());
-    var firstDay = new Date(state.year, state.month, 1).getDay();
-    var daysInMo = new Date(state.year, state.month+1, 0).getDate();
-    var html = '';
-    ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d) {
-      html += '<div class="dn">' + d + '</div>';
-    });
-    for (var i=0; i<firstDay; i++) html += '<div class="dc empty"></div>';
-    for (var d=1; d<=daysInMo; d++) {
-      var dateStr  = state.year + '-' + pad(state.month+1) + '-' + pad(d);
-      var dow      = new Date(state.year, state.month, d).getDay();
-      var isWeekend = dow === 0 || dow === 6;
-      var isPast   = dateStr < todayStr;
-      var isToday  = dateStr === todayStr;
-      var isSel    = state.selected === dateStr;
-      var cls = 'dc';
-      if (isPast || isWeekend) cls += ' past';
-      else if (isSel)          cls += ' sel avail';
-      else if (isToday)        cls += ' today avail';
-      else                     cls += ' avail';
-      html += '<div class="' + cls + '" data-date="' + dateStr + '">' + d + '</div>';
+  function draw() {
+    if (lbl) lbl.textContent = MONTHS[st.month] + ' ' + st.year;
+    var now      = new Date();
+    var todayStr = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+    var first    = new Date(st.year, st.month, 1).getDay();
+    var days     = new Date(st.year, st.month+1, 0).getDate();
+    var h = '';
+    ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d){ h += '<div class="dn">'+d+'</div>'; });
+    for (var i=0;i<first;i++) h += '<div class="dc empty"></div>';
+    for (var d=1;d<=days;d++) {
+      var ds  = st.year+'-'+pad(st.month+1)+'-'+pad(d);
+      var dow = new Date(st.year,st.month,d).getDay();
+      var past= ds < todayStr || dow===0 || dow===6;
+      var cls = 'dc' + (past ? ' past' : (ds===st.sel ? ' sel avail' : (ds===todayStr ? ' today avail' : ' avail')));
+      h += '<div class="'+cls+'" data-d="'+ds+'">'+d+'</div>';
     }
-    grid.innerHTML = html;
-    grid.querySelectorAll('.dc.avail').forEach(function(el) {
-      el.addEventListener('click', function() {
-        state.selected = el.dataset.date;
-        render();
-        if (onSelect) onSelect(state.selected);
+    grid.innerHTML = h;
+    grid.querySelectorAll('.dc.avail').forEach(function(el){
+      el.addEventListener('click', function(){
+        st.sel = el.dataset.d;
+        draw();
+        if (onPick) onPick(st.sel);
       });
     });
   }
 
-  var prevBtn = document.getElementById(prevId);
-  var nextBtn = document.getElementById(nextId);
-  if (prevBtn) prevBtn.addEventListener('click', function() {
-    state.month--; if (state.month < 0) { state.month=11; state.year--; }
-    state.selected = null; render();
-  });
-  if (nextBtn) nextBtn.addEventListener('click', function() {
-    state.month++; if (state.month > 11) { state.month=0; state.year++; }
-    state.selected = null; render();
-  });
-  render();
+  var p = document.getElementById(prevId);
+  var n = document.getElementById(nextId);
+  if (p) p.addEventListener('click', function(){ st.month--; if(st.month<0){st.month=11;st.year--;} st.sel=null; draw(); });
+  if (n) n.addEventListener('click', function(){ st.month++; if(st.month>11){st.month=0;st.year++;} st.sel=null; draw(); });
+  draw();
 }
 
 function buildSlots(gridId, hdId, dateStr, onPick) {
   var grid = document.getElementById(gridId);
   var hd   = document.getElementById(hdId);
   if (!grid) return;
-  var parts   = dateStr.split('-');
-  var dateObj = new Date(+parts[0], +parts[1]-1, +parts[2]);
-  var label   = MONTH_NAMES[dateObj.getMonth()] + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear();
-  if (hd) hd.textContent = 'Available times for ' + label;
-  var booked = BOOKED[dateStr] || [];
-  var html = '';
-  TIME_SLOTS.forEach(function(t) {
-    var taken = booked.indexOf(t) !== -1;
-    html += '<div class="slot ' + (taken ? 'taken' : 'avail') + '" data-slot="' + t + '" data-label="' + label + '">'
-          + t + (taken ? '<br><span style="font-size:10px">Taken</span>' : '') + '</div>';
+  var p  = dateStr.split('-');
+  var lbl = MONTHS[+p[1]-1] + ' ' + (+p[2]) + ', ' + p[0];
+  if (hd) hd.textContent = 'Times for ' + lbl + ' - click to select';
+  var taken = BOOKED[dateStr] || [];
+  var h = '';
+  SLOTS.forEach(function(t){
+    var tk = taken.indexOf(t) !== -1;
+    h += '<div class="slot '+(tk?'taken':'avail')+'" data-s="'+t+'" data-l="'+lbl+'">'+t+(tk?' (taken)':'')+'</div>';
   });
-  grid.innerHTML = html;
-  grid.querySelectorAll('.slot.avail').forEach(function(el) {
-    el.addEventListener('click', function() {
-      grid.querySelectorAll('.slot').forEach(function(s) { s.classList.remove('picked'); });
+  grid.innerHTML = h;
+  grid.querySelectorAll('.slot.avail').forEach(function(el){
+    el.addEventListener('click', function(){
+      grid.querySelectorAll('.slot').forEach(function(s){s.classList.remove('picked');});
       el.classList.add('picked');
-      if (onPick) onPick(el.dataset.slot, dateStr, label);
+      if (onPick) onPick(el.dataset.s, dateStr, el.dataset.l);
     });
   });
 }
 
-function showBookForm(formId, slot, date, label) {
-  var form = document.getElementById(formId);
-  if (!form) return;
-  form.innerHTML = '<div class="book-confirm">'
-    + '<div class="book-confirm-ti">&#128197; ' + slot + ' &mdash; ' + label + '</div>'
-    + '<div class="book-confirm-sub">Enter your details to confirm this free 60-min call.</div>'
-    + '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">'
-    + '<input class="inq-input" id="book-name" placeholder="Your full name">'
-    + '<input class="inq-input" id="book-email" placeholder="Email address" type="email">'
-    + '<input class="inq-input" id="book-phone" placeholder="Phone (optional)" type="tel">'
-    + '<input class="inq-input" id="book-topic" placeholder="What would you like to discuss?">'
-    + '</div>'
-    + '<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">'
-    + '<button class="btn-g" id="book-submit-btn">Confirm Booking &rarr;</button>'
-    + '<button class="btn-p" id="book-cancel-btn" style="background:transparent;border:1px solid rgba(255,255,255,.15)">&larr; Change slot</button>'
-    + '</div></div>';
+function showBookForm(id, slot, date, lbl) {
+  var f = document.getElementById(id);
+  if (!f) return;
+  f.innerHTML =
+    '<div class="book-confirm">' +
+    '<div class="book-confirm-ti">Booking: '+slot+' on '+lbl+'</div>' +
+    '<div class="book-confirm-sub">Free 60-min call - no obligation.</div>' +
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' +
+    '<input class="inq-input" id="bk-nm" placeholder="Your full name">' +
+    '<input class="inq-input" id="bk-em" placeholder="Email address" type="email">' +
+    '<input class="inq-input" id="bk-ph" placeholder="Phone (optional)" type="tel">' +
+    '<input class="inq-input" id="bk-tp" placeholder="What to discuss?">' +
+    '</div>' +
+    '<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">' +
+    '<button class="btn-g" id="bk-ok">Confirm Booking</button>' +
+    '<button class="btn-p" id="bk-cl" style="background:transparent;border:1px solid rgba(255,255,255,.2)">Change Slot</button>' +
+    '</div></div>';
 
-  var confirmBtn = document.getElementById('book-submit-btn');
-  if (confirmBtn) confirmBtn.addEventListener('click', function() {
-    var name  = document.getElementById('book-name');
-    var email = document.getElementById('book-email');
-    if (!name || !name.value.trim())   { alert('Please enter your name'); return; }
-    if (!email || !email.value.trim()) { alert('Please enter your email'); return; }
-    form.innerHTML = '<div class="book-confirm" style="text-align:center">'
-      + '<div style="font-size:42px;margin-bottom:12px">&#10003;</div>'
-      + '<div class="book-confirm-ti">Booking Confirmed!</div>'
-      + '<div class="book-confirm-sub">' + name.value + ', confirmation goes to <strong>' + email.value + '</strong>.<br>'
-      + 'See you <strong>' + label + '</strong> at <strong>' + slot + '</strong>!</div>'
-      + '<div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap">'
-      + '<button class="btn-g go-home" onclick="showPage('page-home')">&#8962; Home</button>'
-      + '<button class="btn-p go-contact" onclick="showPage('page-contact')">Contact Us</button>'
-      + '</div></div>';
+  var ok = document.getElementById('bk-ok');
+  if (ok) ok.addEventListener('click', function(){
+    var nm = document.getElementById('bk-nm');
+    var em = document.getElementById('bk-em');
+    if (!nm||!nm.value.trim()){alert('Enter your name');return;}
+    if (!em||!em.value.trim()){alert('Enter your email');return;}
+    f.innerHTML =
+      '<div class="book-confirm" style="text-align:center">' +
+      '<div style="font-size:48px;margin-bottom:12px">&#10004;</div>' +
+      '<div class="book-confirm-ti">Booked!</div>' +
+      '<div class="book-confirm-sub">'+nm.value+', confirmation goes to '+em.value+'.<br>See you '+lbl+' at '+slot+'!</div>' +
+      '<div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap">' +
+      '<button class="btn-g" id="bk-home">Home</button>' +
+      '<button class="btn-p" id="bk-contact">Contact Us</button>' +
+      '</div></div>';
+    var bh = document.getElementById('bk-home');
+    var bc = document.getElementById('bk-contact');
+    if (bh) bh.addEventListener('click', function(){ showPage('page-home'); });
+    if (bc) bc.addEventListener('click', function(){ showPage('page-contact'); });
   });
 
-  var cancelBtn = document.getElementById('book-cancel-btn');
-  if (cancelBtn) cancelBtn.addEventListener('click', function() {
-    form.innerHTML = '';
-    var slotsGrid = document.getElementById('slots-grid') || document.getElementById('inq-slots-grid');
-    if (slotsGrid) slotsGrid.querySelectorAll('.slot.picked').forEach(function(s) { s.classList.remove('picked'); });
+  var cl = document.getElementById('bk-cl');
+  if (cl) cl.addEventListener('click', function(){
+    f.innerHTML = '';
+    var sg = document.getElementById('slots-grid');
+    if (sg) sg.querySelectorAll('.slot.picked').forEach(function(s){s.classList.remove('picked');});
   });
 }
 
 window.initCalendar = function() {
-  var state = { year: new Date().getFullYear(), month: new Date().getMonth(), selected: null };
-
-  buildCalendar('cal-grid','cal-lbl','cal-prev','cal-next', state, function(dateStr) {
-    var info    = document.getElementById('cal-sel-info');
-    var clearBtn= document.getElementById('cal-clear-btn');
-    var parts   = dateStr.split('-');
-    var label   = MONTH_NAMES[+parts[1]-1] + ' ' + +parts[2] + ', ' + parts[0];
-    if (info)    info.textContent     = 'Showing times for ' + label;
-    if (clearBtn) clearBtn.style.display = 'inline-block';
-    var bookForm = document.getElementById('book-form');
-    if (bookForm) bookForm.innerHTML = '';
-    buildSlots('slots-grid','slots-hd', dateStr, function(slot, date, lbl) {
-      showBookForm('book-form', slot, date, lbl);
-    });
-  });
-
-  var clearBtn = document.getElementById('cal-clear-btn');
-  if (clearBtn) clearBtn.addEventListener('click', function() {
-    state.selected = null;
+  var st = {year:new Date().getFullYear(), month:new Date().getMonth(), sel:null};
+  buildCal('cal-grid','cal-lbl','cal-prev','cal-next', st, function(ds) {
     var info = document.getElementById('cal-sel-info');
-    var sHd  = document.getElementById('slots-hd');
-    var sGrid= document.getElementById('slots-grid');
-    var bForm= document.getElementById('book-form');
-    if (info)  info.textContent = '';
-    if (sHd)   sHd.textContent  = 'Pick a date to see available times →';
-    if (sGrid) sGrid.innerHTML  = '';
-    if (bForm) bForm.innerHTML  = '';
-    clearBtn.style.display = 'none';
-    var grid = document.getElementById('cal-grid');
-    if (grid) grid.querySelectorAll('.dc.sel').forEach(function(el) {
-      el.classList.remove('sel');
-      if (!el.classList.contains('past') && !el.classList.contains('empty')) el.classList.add('avail');
+    var clrb = document.getElementById('cal-clear-btn');
+    var p    = ds.split('-');
+    var lbl  = MONTHS[+p[1]-1]+' '+(+p[2])+', '+p[0];
+    if (info) info.textContent = lbl;
+    if (clrb) clrb.style.display = 'inline-block';
+    var bf = document.getElementById('book-form');
+    if (bf) bf.innerHTML = '';
+    buildSlots('slots-grid','slots-hd', ds, function(slot, date, label){
+      showBookForm('book-form', slot, date, label);
     });
   });
 
-  console.log('✅ calendar.js (main) loaded');
+  var clrb = document.getElementById('cal-clear-btn');
+  if (clrb) clrb.addEventListener('click', function(){
+    st.sel = null;
+    var info=document.getElementById('cal-sel-info');
+    var sh  =document.getElementById('slots-hd');
+    var sg  =document.getElementById('slots-grid');
+    var bf  =document.getElementById('book-form');
+    if(info) info.textContent='';
+    if(sh)   sh.textContent='Pick a date to see available times';
+    if(sg)   sg.innerHTML='';
+    if(bf)   bf.innerHTML='';
+    clrb.style.display='none';
+    var cg = document.getElementById('cal-grid');
+    if(cg) cg.querySelectorAll('.dc.sel').forEach(function(el){el.classList.remove('sel');if(!el.classList.contains('past')&&!el.classList.contains('empty'))el.classList.add('avail');});
+  });
+  console.log('calendar.js loaded');
 };
 
 window.initInquiryCalendar = function() {
-  var state = { year: new Date().getFullYear(), month: new Date().getMonth(), selected: null };
-  buildCalendar('inq-cal-grid','inq-cal-lbl','inq-cal-prev','inq-cal-next', state, function(dateStr) {
-    buildSlots('inq-slots-grid','inq-slots-hd', dateStr, function(slot, date, label) {
-      var confirm = document.getElementById('inq-slot-confirm');
-      if (confirm) confirm.innerHTML = '<div style="margin-top:12px;padding:12px 14px;background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.2);border-radius:8px;font-size:13px;color:#5DCAA5">✅ <strong>' + slot + '</strong> on <strong>' + label + '</strong> — click below to continue.</div>';
-      setTimeout(function() { var s = document.getElementById('inq-skip-appt'); if(s) s.click(); }, 1500);
+  var st = {year:new Date().getFullYear(), month:new Date().getMonth(), sel:null};
+  buildCal('inq-cal-grid','inq-cal-lbl','inq-cal-prev','inq-cal-next', st, function(ds) {
+    buildSlots('inq-slots-grid','inq-slots-hd', ds, function(slot, date, label){
+      var c = document.getElementById('inq-slot-confirm');
+      if (c) c.innerHTML = '<div style="margin-top:12px;padding:12px;background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.2);border-radius:8px;font-size:13px;color:#5DCAA5">Selected: <strong>'+slot+'</strong> on <strong>'+label+'</strong> - continuing...</div>';
+      setTimeout(function(){ var s=document.getElementById('inq-skip-appt'); if(s) s.click(); }, 1500);
     });
   });
-  console.log('✅ calendar.js (inquiry) loaded');
+  console.log('inquiry calendar loaded');
 };
