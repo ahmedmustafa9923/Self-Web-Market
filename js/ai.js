@@ -1,43 +1,84 @@
-/* ── AI CHAT WIDGET ── Code Rendering Studio */
+/* ── AI CHAT ── Code Rendering Studio */
 
-/* AI CHAT */
-var BOT={
-  'offer':'We build websites, mobile apps, SaaS platforms, AI integrations, booking systems, and data dashboards. If it runs on a screen, we can craft it.',
-  'timeline':'Most projects kick off within 3–5 days. A website takes 3–6 weeks. A full mobile app runs 8–14 weeks.',
-  'price':'Plans start at $1,500/mo. Our Growth plan at $3,200/mo is most popular — web, mobile, payments, and AI features included.',
-  'mobile':'We build with Swift UI for native iOS/iPadOS/watchOS, and React Native for cross-platform. Want to scope your idea on a free call?',
+window.initAI = function() {
+  var msgs  = document.getElementById('ai-msgs');
+  var inp   = document.getElementById('ai-inp');
+  var btn   = document.getElementById('ai-snd');
+
+  if (!msgs || !inp || !btn) return;
+
+  var QUICK = {
+    'What do you offer?': 'We build websites, mobile apps, AI integrations, SaaS platforms, booking systems, and data dashboards — plus a full creative studio for novels, films, and arts.',
+    'Timelines?':         'Simple websites: 2–4 weeks. Full web apps: 4–8 weeks. Mobile apps: 6–12 weeks. AI integrations: 3–6 weeks. Complex SaaS: 3–6 months.',
+    'Pricing?':           'Starter projects from $1,500. Growth tier at $3,200. Pro builds at $5,800. Creative services from $800. First 30–60 min consultation is always free.',
+    'Mobile app':         'We build native iOS (SwiftUI) and Android (React Native) apps, including Apple Watch and iPad support. Built for iPhone 16 Pro and future-ready platforms.'
+  };
+
+  ['qb1','qb2','qb3','qb4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var keys = Object.keys(QUICK);
+    el.addEventListener('click', function() {
+      addMsg(el.textContent, 'user');
+      setTimeout(function() { addMsg(QUICK[keys[i]], 'bot'); }, 600);
+    });
+  });
+
+  btn.addEventListener('click', sendMsg);
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMsg(); });
+
+  function sendMsg() {
+    var text = inp.value.trim();
+    if (!text) return;
+    inp.value = '';
+    addMsg(text, 'user');
+
+    // Show typing indicator
+    var typing = document.createElement('div');
+    typing.className = 'msg bot typing';
+    typing.textContent = '...';
+    msgs.appendChild(typing);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    // Call API if available, else fallback
+    if (typeof window.callAI === 'function') {
+      window.callAI(text).then(function(reply) {
+        msgs.removeChild(typing);
+        addMsg(reply, 'bot');
+      }).catch(function() {
+        msgs.removeChild(typing);
+        addMsg('I\'m having trouble connecting right now. Please email us at coderenderingstudio@gmail.com or call +1 (630) 335-3342.', 'bot');
+      });
+    } else {
+      setTimeout(function() {
+        msgs.removeChild(typing);
+        addMsg(getFallbackReply(text), 'bot');
+      }, 800);
+    }
+  }
+
+  function addMsg(text, role) {
+    var el = document.createElement('div');
+    el.className = 'msg ' + role;
+    el.textContent = text;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function getFallbackReply(text) {
+    var t = text.toLowerCase();
+    if (t.includes('price') || t.includes('cost') || t.includes('fee'))
+      return 'Our projects start at $1,500. Book a free call and we\'ll give you an exact quote for your project.';
+    if (t.includes('time') || t.includes('long') || t.includes('week'))
+      return 'Most projects take 4–8 weeks. Complex builds can take 3–6 months. We\'ll give you a timeline on your free call.';
+    if (t.includes('mobile') || t.includes('app') || t.includes('ios'))
+      return 'We build native iOS (SwiftUI) and Android (React Native) apps. Want to discuss your app idea?';
+    if (t.includes('ai') || t.includes('chat') || t.includes('bot'))
+      return 'We integrate AI into your product using Claude API, GPT, and LangChain. Book a call to discuss your use case.';
+    if (t.includes('hello') || t.includes('hi') || t.includes('hey'))
+      return 'Hi there! Tell me about your project and I\'ll help you figure out the best approach. 👋';
+    return 'Great question! For the most accurate answer, book a free 30-minute call with our team. We\'ll walk through your project in detail.';
+  }
+
+  console.log('✅ ai.js loaded');
 };
-var typEl=null;
-function addMsg(txt,type){
-  var box=g('ai-msgs');if(!box)return;
-  var d=document.createElement('div');d.className='msg '+type;d.textContent=txt;
-  box.appendChild(d);box.scrollTop=box.scrollHeight;
-}
-function startTyping(){
-  var box=g('ai-msgs');if(!box)return;
-  typEl=document.createElement('div');typEl.className='typing';
-  typEl.innerHTML='<span></span><span></span><span></span>';
-  box.appendChild(typEl);box.scrollTop=box.scrollHeight;
-}
-function stopTyping(){if(typEl){typEl.remove();typEl=null;}}
-function sendMsg(){
-  var inp=g('ai-inp');if(!inp)return;
-  var txt=inp.value.trim();if(!txt)return;
-  addMsg(txt,'usr');inp.value='';
-  setTimeout(function(){
-    startTyping();
-    setTimeout(function(){
-      stopTyping();
-      var lc=txt.toLowerCase(),reply=null;
-      Object.keys(BOT).forEach(function(k){if(lc.indexOf(k)>=0)reply=BOT[k];});
-      if(!reply)reply='Great question! Every project is unique — click "Book a Call" in the menu for a free 30-minute chat with our team.';
-      addMsg(reply,'bot');
-    },1400);
-  },280);
-}
-on('ai-snd','click',sendMsg);
-on('ai-inp','keydown',function(e){if(e.key==='Enter')sendMsg();});
-[['qb1','What do you offer?'],['qb2','What are your timelines?'],['qb3','Tell me about pricing'],['qb4','I want to build a mobile app']].forEach(function(pair){
-  on(pair[0],'click',function(){var inp=g('ai-inp');if(inp){inp.value=pair[1];sendMsg();}});
-});
-
