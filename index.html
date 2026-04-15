@@ -19,38 +19,6 @@
   <link rel="stylesheet" href="css/creative.css">
 
 <style>
-/* ── ORANGE BURGER (bottom-left) ── */
-#burger-orange {
-  position: fixed;
-  bottom: 28px;
-  left: 28px;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  z-index: 1100;
-  background: rgba(239,159,39,0.12);
-  border: 1px solid rgba(239,159,39,0.35);
-  border-radius: 10px;
-  padding: 8px;
-  transition: background 0.2s, border-color 0.2s;
-}
-#burger-orange:hover { background: rgba(239,159,39,0.22); border-color: rgba(239,159,39,0.6); }
-#burger-orange span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: #EF9F27;
-  border-radius: 2px;
-  transition: all 0.3s;
-}
-#burger-orange.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-#burger-orange.open span:nth-child(2) { opacity: 0; }
-#burger-orange.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ── PURPLE BURGER (bottom-right) ── */
 #burger-purple {
@@ -281,6 +249,54 @@
   background: rgba(201,168,76,0.22);
   border-color: rgba(201,168,76,0.6);
 }
+
+/* ── CLASSROOM NAV SECTION ── */
+.nav-sec {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  padding: 0 20px;
+  margin: 18px 0 6px;
+}
+
+/* ═══════════════════════════════════════════════ */
+/* CLASSROOM STYLES                                */
+/* ═══════════════════════════════════════════════ */
+
+/* Course cards hover */
+.cl-card { transition: transform 0.2s, box-shadow 0.2s; }
+.cl-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+
+/* Module layout */
+.cl-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 20px; margin: 32px 0; }
+.cl-mod { background: #0f0f0f; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; }
+.cl-mod-hd { padding: 16px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); letter-spacing: 0.3px; }
+.cl-mod-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.cl-topic { font-size: 13px; color: rgba(255,255,255,0.55); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.cl-dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--gld,#C9A84C); margin-top: 7px; }
+.cl-topic strong { color: rgba(255,255,255,0.75); }
+
+/* CTA bar on course pages */
+.cl-cta-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); }
+
+/* Live sessions grid */
+.cl-live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 20px; margin: 32px 0; }
+.cl-live-card { background: #0f0f0f; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; }
+.cl-live-badge { display: inline-block; padding: 4px 12px; background: rgba(255,0,0,0.12); border: 1px solid rgba(255,0,0,0.25); border-radius: 20px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ff6b6b; margin: 16px 16px 0; }
+.cl-live-badge.live-now { background: rgba(93,202,165,0.12); border-color: rgba(93,202,165,0.3); color: #5DCAA5; }
+.cl-live-badge.social { background: rgba(174,139,217,0.12); border-color: rgba(174,139,217,0.3); color: #AE8BD9; }
+.cl-live-title { padding: 12px 16px 8px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.4; }
+.cl-live-embed { padding: 0 16px 12px; }
+.cl-live-thumb { background: #1a1a1a; border-radius: 10px; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 8px; border: 1px solid rgba(255,255,255,0.06); transition: background 0.2s; }
+.cl-live-thumb:hover { background: #222; }
+.cl-live-play { width: 48px; height: 48px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; padding-left: 4px; }
+.cl-live-label { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
+.cl-live-meta { padding: 0 16px 16px; font-size: 11px; color: rgba(255,255,255,0.28); letter-spacing: 0.3px; }
+.cl-live-social-links { padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.cl-social-btn { display: block; padding: 10px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; font-size: 13px; color: rgba(255,255,255,0.65); text-decoration: none; text-align: center; transition: background 0.15s, color 0.15s; }
+.cl-social-btn:hover { background: rgba(255,255,255,0.08); color: var(--gld,#C9A84C); }
+
 </style>
 </head>
 <body>
@@ -294,16 +310,9 @@
 <!-- RIGHT BURGER -->
 <div id="burger-r"><span></span><span></span><span></span></div>
 
-<!-- ORANGE BURGER (bottom-left) — Online Classroom -->
-<div id="burger-orange"><span></span><span></span><span></span></div>
-
 <!-- PURPLE BURGER (bottom-right) — Online Classroom -->
 <div id="burger-purple"><span></span><span></span><span></span></div>
 
-<!-- ORANGE SIDEBAR PANEL -->
-<div id="sidebar-orange">
-  <div class="osb-hd">
-    <div class="osb-brand">Online Classroom</div>
     <div class="osb-sub">Education Portal</div>
   </div>
   <nav class="osb-nav">
@@ -368,6 +377,25 @@
     <div class="ni" id="ni-about">About &amp; Team</div>
     <div class="ni" id="ni-payments">Payments / QR</div>
     <div class="ni" id="ni-contact">Contact</div>
+
+    <div class="nav-sec" style="margin-top:16px">Online Classroom</div>
+    <div class="ni" id="ni-classroom-hd">🎓 Courses <span class="arr" id="arr-classroom">&#9660;</span></div>
+    <div class="dd" id="dd-classroom">
+      <div class="di" id="di-cl-java">☕ Java</div>
+      <div class="di" id="di-cl-js">🌐 JavaScript</div>
+      <div class="di" id="di-cl-html">🎨 HTML &amp; CSS</div>
+      <div class="di" id="di-cl-python">🐍 Python</div>
+      <div class="di" id="di-cl-backend">⚙️ Back End</div>
+    </div>
+    <div class="ni" id="ni-fees">💰 Fees</div>
+    <div class="ni" id="ni-lab">🔬 Lab &amp; Practice</div>
+    <div class="ni" id="ni-placement">🚀 Placement</div>
+    <div class="ni" id="ni-live-demo">📺 Live Demo Sessions <span class="arr" id="arr-live">&#9660;</span></div>
+    <div class="dd" id="dd-live">
+      <div class="di" id="di-live-youtube">▶ YouTube Sessions</div>
+      <div class="di" id="di-live-social">📱 Social Media</div>
+      <div class="di" id="di-live-schedule">📅 Schedule</div>
+    </div>
   </nav>
   <div class="sb-ft">
     <div class="sb-ct">
@@ -1334,6 +1362,577 @@ renderStudio(studio)</pre>
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ONLINE CLASSROOM PAGES                          -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- COURSES HUB -->
+<div class="page" id="page-classroom">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom</div>
+    <h2 class="s-ti">Choose Your Course</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Industry-ready courses taught through theory, hands-on labs, and live sessions. Pick your language and start building.</p>
+    <div class="mgrid">
+      <div class="mc cl-card" id="goto-java" style="cursor:pointer;--mc-clr:#EF9F27">
+        <div class="mc-ico">☕</div>
+        <div class="mc-nm">Java</div>
+        <div class="mc-ds">Object-oriented programming, Spring Boot, REST APIs, and enterprise-grade application development.</div>
+        <div class="tags"><span class="tag">OOP</span><span class="tag">Spring Boot</span><span class="tag">REST API</span></div>
+      </div>
+      <div class="mc cl-card" id="goto-js" style="cursor:pointer;--mc-clr:#F7DF1E">
+        <div class="mc-ico">🌐</div>
+        <div class="mc-nm">JavaScript</div>
+        <div class="mc-ds">From DOM manipulation to full-stack with Node.js, React, and modern ES6+ patterns.</div>
+        <div class="tags"><span class="tag">ES6+</span><span class="tag">React</span><span class="tag">Node.js</span></div>
+      </div>
+      <div class="mc cl-card" id="goto-html" style="cursor:pointer;--mc-clr:#E44D26">
+        <div class="mc-ico">🎨</div>
+        <div class="mc-nm">HTML &amp; CSS</div>
+        <div class="mc-ds">Semantic markup, Flexbox, Grid, animations, and responsive design for modern web interfaces.</div>
+        <div class="tags"><span class="tag">Semantic</span><span class="tag">Flexbox</span><span class="tag">Grid</span></div>
+      </div>
+      <div class="mc cl-card" id="goto-python" style="cursor:pointer;--mc-clr:#3776AB">
+        <div class="mc-ico">🐍</div>
+        <div class="mc-nm">Python</div>
+        <div class="mc-ds">Scripting, data analysis, automation, Django/Flask, and AI/ML foundations with real projects.</div>
+        <div class="tags"><span class="tag">Django</span><span class="tag">Flask</span><span class="tag">AI/ML</span></div>
+      </div>
+      <div class="mc cl-card" id="goto-backend" style="cursor:pointer;--mc-clr:#5DCAA5">
+        <div class="mc-ico">⚙️</div>
+        <div class="mc-nm">Back End</div>
+        <div class="mc-ds">Databases, server architecture, APIs, authentication, cloud deployment, and DevOps fundamentals.</div>
+        <div class="tags"><span class="tag">SQL</span><span class="tag">APIs</span><span class="tag">Cloud</span></div>
+      </div>
+      <div class="mc cl-card" id="goto-fees-page" style="cursor:pointer;--mc-clr:#AFA9EC">
+        <div class="mc-ico">💰</div>
+        <div class="mc-nm">Fees &amp; Plans</div>
+        <div class="mc-ds">Transparent pricing for every course. Monthly, per-module, or bundle options available.</div>
+        <div class="tags"><span class="tag">Monthly</span><span class="tag">Bundle</span><span class="tag">Flexible</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JAVA COURSE -->
+<div class="page" id="page-java">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Java</div>
+    <h2 class="s-ti">☕ Java Course</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">From Java basics to enterprise-level Spring Boot apps. Theory + practical labs every session.</p>
+    <div class="cl-modules">
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📘 Module 1 — Java Fundamentals</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Data types, variables, operators</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Control flow: if/else, loops, switch</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Methods, arrays, and strings</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Build a calculator app</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📗 Module 2 — Object-Oriented Programming</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Classes, objects, constructors</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Inheritance, polymorphism, abstraction</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Interfaces and encapsulation</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Library management system</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📙 Module 3 — Advanced Java</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Collections framework, generics</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Exception handling, file I/O</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Multithreading and concurrency</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Multi-threaded chat app</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">🚀 Module 4 — Spring Boot &amp; REST APIs</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Spring Boot setup and architecture</div>
+          <div class="cl-topic"><span class="cl-dot"></span>REST API design with GET/POST/PUT/DELETE</div>
+          <div class="cl-topic"><span class="cl-dot"></span>JPA, Hibernate, database integration</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Build a full CRUD REST API</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl-cta-bar">
+      <button class="btn-g go-lab">🔬 Go to Lab &amp; Practice</button>
+      <button class="btn-p go-fees">💰 View Fees</button>
+      <button class="btn-pur go-live">📺 Live Demo Sessions</button>
+    </div>
+  </div>
+</div>
+
+<!-- JAVASCRIPT COURSE -->
+<div class="page" id="page-js">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · JavaScript</div>
+    <h2 class="s-ti">🌐 JavaScript Course</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Master the language of the web — from vanilla JS to full-stack React and Node.js applications.</p>
+    <div class="cl-modules">
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📘 Module 1 — JavaScript Fundamentals</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Variables: var, let, const · Data types</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Functions, arrow functions, scope</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Arrays, objects, destructuring</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Interactive to-do list</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📗 Module 2 — DOM &amp; Browser APIs</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>DOM selection, manipulation, events</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Forms, validation, local storage</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Fetch API, JSON, async/await</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Weather app using live API</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📙 Module 3 — React.js</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Components, props, state, hooks</div>
+          <div class="cl-topic"><span class="cl-dot"></span>React Router, Context API</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Fetching data, lifecycle methods</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> E-commerce product page</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">🚀 Module 4 — Node.js &amp; Express</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Node.js runtime, npm ecosystem</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Express routing, middleware, REST</div>
+          <div class="cl-topic"><span class="cl-dot"></span>MongoDB integration with Mongoose</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Full-stack blog with auth</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl-cta-bar">
+      <button class="btn-g go-lab">🔬 Go to Lab &amp; Practice</button>
+      <button class="btn-p go-fees">💰 View Fees</button>
+      <button class="btn-pur go-live">📺 Live Demo Sessions</button>
+    </div>
+  </div>
+</div>
+
+<!-- HTML & CSS COURSE -->
+<div class="page" id="page-html">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · HTML &amp; CSS</div>
+    <h2 class="s-ti">🎨 HTML &amp; CSS Course</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Build beautiful, accessible, responsive web pages from scratch. The foundation of every web developer.</p>
+    <div class="cl-modules">
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📘 Module 1 — HTML Foundations</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Document structure, semantic tags</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Headings, paragraphs, links, images</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Forms, tables, accessibility (a11y)</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Personal portfolio page</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📗 Module 2 — CSS Styling</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Selectors, specificity, the cascade</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Box model, display, positioning</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Colors, typography, custom properties</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Style a full landing page</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📙 Module 3 — Layouts: Flexbox &amp; Grid</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Flexbox: rows, columns, alignment</div>
+          <div class="cl-topic"><span class="cl-dot"></span>CSS Grid: tracks, areas, auto-flow</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Responsive design, media queries</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Mobile-first dashboard layout</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">🚀 Module 4 — Animations &amp; Advanced CSS</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Transitions, keyframe animations</div>
+          <div class="cl-topic"><span class="cl-dot"></span>CSS variables, dark mode theming</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Sass/SCSS fundamentals</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Animated hero section</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl-cta-bar">
+      <button class="btn-g go-lab">🔬 Go to Lab &amp; Practice</button>
+      <button class="btn-p go-fees">💰 View Fees</button>
+      <button class="btn-pur go-live">📺 Live Demo Sessions</button>
+    </div>
+  </div>
+</div>
+
+<!-- PYTHON COURSE -->
+<div class="page" id="page-python">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Python</div>
+    <h2 class="s-ti">🐍 Python Course</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">From scripting to AI — Python's versatility makes it the most in-demand language in tech today.</p>
+    <div class="cl-modules">
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📘 Module 1 — Python Fundamentals</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Syntax, variables, data types</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Lists, tuples, dicts, sets</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Functions, modules, file handling</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Automation scripts</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📗 Module 2 — OOP &amp; Advanced Python</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Classes, inheritance, decorators</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Error handling, context managers</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Comprehensions, generators, lambdas</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> OOP inventory system</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📙 Module 3 — Web with Django/Flask</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Flask routing, templates, forms</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Django MVC, ORM, admin panel</div>
+          <div class="cl-topic"><span class="cl-dot"></span>REST APIs with Django REST Framework</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Blog platform with auth</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">🚀 Module 4 — Data &amp; AI Foundations</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>NumPy, Pandas, data wrangling</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Matplotlib, Seaborn for visualization</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Scikit-learn: ML model basics</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Predict housing prices ML model</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl-cta-bar">
+      <button class="btn-g go-lab">🔬 Go to Lab &amp; Practice</button>
+      <button class="btn-p go-fees">💰 View Fees</button>
+      <button class="btn-pur go-live">📺 Live Demo Sessions</button>
+    </div>
+  </div>
+</div>
+
+<!-- BACK END COURSE -->
+<div class="page" id="page-backend">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Back End</div>
+    <h2 class="s-ti">⚙️ Back End Development</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Databases, servers, APIs, and cloud — the engine room behind every great web application.</p>
+    <div class="cl-modules">
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📘 Module 1 — Databases &amp; SQL</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Relational databases, schema design</div>
+          <div class="cl-topic"><span class="cl-dot"></span>SQL: SELECT, JOIN, GROUP BY, indexes</div>
+          <div class="cl-topic"><span class="cl-dot"></span>PostgreSQL &amp; MySQL in depth</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Design an e-commerce database</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📗 Module 2 — API Design &amp; Auth</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>REST principles, HTTP methods</div>
+          <div class="cl-topic"><span class="cl-dot"></span>JWT authentication, OAuth 2.0</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Rate limiting, security best practices</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Secure user auth API</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">📙 Module 3 — NoSQL &amp; Cloud</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>MongoDB, Firestore, Redis</div>
+          <div class="cl-topic"><span class="cl-dot"></span>AWS S3, EC2, Lambda basics</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Docker containers, environment management</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Deploy API to AWS</div>
+        </div>
+      </div>
+      <div class="cl-mod">
+        <div class="cl-mod-hd">🚀 Module 4 — DevOps &amp; CI/CD</div>
+        <div class="cl-mod-body">
+          <div class="cl-topic"><span class="cl-dot"></span>Git workflows, branching strategy</div>
+          <div class="cl-topic"><span class="cl-dot"></span>GitHub Actions, automated pipelines</div>
+          <div class="cl-topic"><span class="cl-dot"></span>Nginx, reverse proxy, SSL setup</div>
+          <div class="cl-topic"><span class="cl-dot"></span>🔬 <strong>Lab:</strong> Full CI/CD pipeline</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl-cta-bar">
+      <button class="btn-g go-lab">🔬 Go to Lab &amp; Practice</button>
+      <button class="btn-p go-fees">💰 View Fees</button>
+      <button class="btn-pur go-live">📺 Live Demo Sessions</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEES PAGE -->
+<div class="page" id="page-fees">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Fees</div>
+    <h2 class="s-ti">💰 Course Fees &amp; Plans</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Simple, transparent pricing. No hidden fees. Learn at your own pace or join a live cohort.</p>
+    <div class="pgrid" style="margin-top:32px">
+      <div class="pc">
+        <div class="p-pl">Self-Paced</div>
+        <div class="p-am">$49<sub>/course</sub></div>
+        <div class="p-ds">Learn on your own schedule with full access to course materials.</div>
+        <ul class="p-ft">
+          <li>Full video course access</li>
+          <li>Lab exercises &amp; files</li>
+          <li>Community forum access</li>
+          <li>Certificate of completion</li>
+          <li>Lifetime access</li>
+        </ul>
+        <button class="pbtn go-inquiry" data-service="Online Classroom">Enroll Now &rarr;</button>
+      </div>
+      <div class="pc feat">
+        <div class="fbdg">Most Popular</div>
+        <div class="p-pl">Live Cohort</div>
+        <div class="p-am">$149<sub>/month</sub></div>
+        <div class="p-ds">Join weekly live sessions with instructor-led labs and Q&amp;A.</div>
+        <ul class="p-ft">
+          <li>Everything in Self-Paced</li>
+          <li>Weekly live demo sessions</li>
+          <li>1-on-1 instructor Q&amp;A</li>
+          <li>Code review &amp; feedback</li>
+          <li>Job placement support</li>
+          <li>LinkedIn profile review</li>
+        </ul>
+        <button class="pbtn go-inquiry" data-service="Online Classroom">Enroll Now &rarr;</button>
+      </div>
+      <div class="pc">
+        <div class="p-pl">Full Stack Bundle</div>
+        <div class="p-am">$349<sub>/bundle</sub></div>
+        <div class="p-ds">All 5 courses — Java, JS, HTML/CSS, Python, Back End — in one package.</div>
+        <ul class="p-ft">
+          <li>All 5 courses included</li>
+          <li>Everything in Live Cohort</li>
+          <li>Placement assistance</li>
+          <li>Resume &amp; interview prep</li>
+          <li>Priority lab access</li>
+          <li>Group project experience</li>
+        </ul>
+        <button class="pbtn go-inquiry" data-service="Online Classroom">Enroll Now &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LAB & PRACTICE PAGE -->
+<div class="page" id="page-lab">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Lab</div>
+    <h2 class="s-ti">🔬 Lab &amp; Practice</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Hands-on coding challenges, guided projects, and real-world exercises for every language.</p>
+    <div class="mgrid">
+      <div class="mc">
+        <div class="mc-ico">☕</div>
+        <div class="mc-nm">Java Labs</div>
+        <div class="mc-ds">Calculator, OOP library system, multithreaded chat, REST API with Spring Boot.</div>
+        <div class="tags"><span class="tag">4 Projects</span><span class="tag">Guided</span></div>
+        <button class="pbtn go-java" style="margin-top:12px;width:100%">Start Java Labs &rarr;</button>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🌐</div>
+        <div class="mc-nm">JavaScript Labs</div>
+        <div class="mc-ds">To-do app, weather API, React e-commerce page, full-stack blog with Node.js.</div>
+        <div class="tags"><span class="tag">4 Projects</span><span class="tag">Guided</span></div>
+        <button class="pbtn go-js" style="margin-top:12px;width:100%">Start JS Labs &rarr;</button>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🎨</div>
+        <div class="mc-nm">HTML &amp; CSS Labs</div>
+        <div class="mc-ds">Portfolio page, landing page, responsive dashboard, animated hero section.</div>
+        <div class="tags"><span class="tag">4 Projects</span><span class="tag">Guided</span></div>
+        <button class="pbtn go-html" style="margin-top:12px;width:100%">Start HTML Labs &rarr;</button>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🐍</div>
+        <div class="mc-nm">Python Labs</div>
+        <div class="mc-ds">Automation scripts, OOP inventory, Flask blog, ML housing price predictor.</div>
+        <div class="tags"><span class="tag">4 Projects</span><span class="tag">Guided</span></div>
+        <button class="pbtn go-python" style="margin-top:12px;width:100%">Start Python Labs &rarr;</button>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">⚙️</div>
+        <div class="mc-nm">Back End Labs</div>
+        <div class="mc-ds">E-commerce database, auth API, AWS deployment, full CI/CD pipeline.</div>
+        <div class="tags"><span class="tag">4 Projects</span><span class="tag">Guided</span></div>
+        <button class="pbtn go-backend" style="margin-top:12px;width:100%">Start Back End Labs &rarr;</button>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🏆</div>
+        <div class="mc-nm">Capstone Project</div>
+        <div class="mc-ds">Build a full-stack application from scratch — design, develop, deploy, and present.</div>
+        <div class="tags"><span class="tag">Final Project</span><span class="tag">Portfolio</span></div>
+        <button class="pbtn go-placement" style="margin-top:12px;width:100%">Learn More &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLACEMENT PAGE -->
+<div class="page" id="page-placement">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Placement</div>
+    <h2 class="s-ti">🚀 Job Placement Support</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">We don't just teach — we help you land your first tech role. Career support included with every Live Cohort and Bundle plan.</p>
+    <div class="mgrid">
+      <div class="mc">
+        <div class="mc-ico">📄</div>
+        <div class="mc-nm">Resume Building</div>
+        <div class="mc-ds">1-on-1 resume review tailored for junior dev roles. ATS-optimized formatting and content that gets noticed.</div>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">💼</div>
+        <div class="mc-nm">LinkedIn Optimization</div>
+        <div class="mc-ds">Profile headline, summary, and skills section optimized to attract recruiters and appear in searches.</div>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🎤</div>
+        <div class="mc-nm">Mock Interviews</div>
+        <div class="mc-ds">Technical and behavioral mock interviews with real feedback. Covers LeetCode-style problems and system design basics.</div>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🗂️</div>
+        <div class="mc-nm">Portfolio Review</div>
+        <div class="mc-ds">Code review of your GitHub projects. Guidance on what to showcase and how to present your best work.</div>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">🤝</div>
+        <div class="mc-nm">Job Referrals</div>
+        <div class="mc-ds">Direct referrals to our network of hiring partners across tech companies in Illinois and remote-friendly roles.</div>
+      </div>
+      <div class="mc">
+        <div class="mc-ico">📊</div>
+        <div class="mc-nm">Salary Negotiation</div>
+        <div class="mc-ds">Know your worth. We guide you through offer evaluation, counter-offers, and benefits comparison for your first role.</div>
+      </div>
+    </div>
+    <div class="about-cta-bar" style="margin-top:40px">
+      <div class="acta-txt">
+        <h3>Ready to land your first tech job?</h3>
+        <p>Enroll in the Live Cohort or Full Stack Bundle to unlock placement support.</p>
+      </div>
+      <div class="acta-btns">
+        <button class="btn-p go-fees">View Fees &amp; Plans &rarr;</button>
+        <button class="btn-g go-calendar">Book a Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE DEMO SESSIONS PAGE -->
+<div class="page" id="page-live">
+  <div class="wrap">
+    <div class="s-ey">Online Classroom · Live Sessions</div>
+    <h2 class="s-ti">📺 Live Demo Sessions</h2>
+    <div class="s-dv"></div>
+    <p class="s-bo">Watch recorded sessions or join live — streamed on YouTube and social media every week.</p>
+
+    <div class="cl-live-grid">
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge">YouTube</div>
+        <div class="cl-live-title">☕ Java Spring Boot — Build a REST API</div>
+        <div class="cl-live-embed" id="embed-java">
+          <div class="cl-live-thumb" data-url="https://www.youtube.com/embed/videoseries?list=PLtSjMIqz1Q2Z5wPpKY_J1NXi3d6xsUVqS">
+            <div class="cl-live-play">▶</div>
+            <div class="cl-live-label">Click to watch</div>
+          </div>
+        </div>
+        <div class="cl-live-meta">Duration: 90 min · Level: Intermediate · Java Module 4</div>
+      </div>
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge">YouTube</div>
+        <div class="cl-live-title">🌐 React.js — Build an E-Commerce UI</div>
+        <div class="cl-live-embed" id="embed-react">
+          <div class="cl-live-thumb" data-url="https://www.youtube.com/embed/videoseries?list=PLtSjMIqz1Q2Z5wPpKY_J1NXi3d6xsUVqS">
+            <div class="cl-live-play">▶</div>
+            <div class="cl-live-label">Click to watch</div>
+          </div>
+        </div>
+        <div class="cl-live-meta">Duration: 75 min · Level: Intermediate · JS Module 3</div>
+      </div>
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge">YouTube</div>
+        <div class="cl-live-title">🐍 Python ML — Predict Housing Prices</div>
+        <div class="cl-live-embed" id="embed-python">
+          <div class="cl-live-thumb" data-url="https://www.youtube.com/embed/videoseries?list=PLtSjMIqz1Q2Z5wPpKY_J1NXi3d6xsUVqS">
+            <div class="cl-live-play">▶</div>
+            <div class="cl-live-label">Click to watch</div>
+          </div>
+        </div>
+        <div class="cl-live-meta">Duration: 60 min · Level: Advanced · Python Module 4</div>
+      </div>
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge live-now">📡 Next Live</div>
+        <div class="cl-live-title">🎨 CSS Grid Masterclass — Dashboard Layout</div>
+        <div class="cl-live-embed" id="embed-css">
+          <div class="cl-live-thumb" data-url="https://www.youtube.com/embed/videoseries?list=PLtSjMIqz1Q2Z5wPpKY_J1NXi3d6xsUVqS">
+            <div class="cl-live-play">▶</div>
+            <div class="cl-live-label">Click to watch</div>
+          </div>
+        </div>
+        <div class="cl-live-meta">Duration: 60 min · Level: Beginner · HTML/CSS Module 3</div>
+      </div>
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge">YouTube</div>
+        <div class="cl-live-title">⚙️ Deploy Node.js API to AWS — Full Walkthrough</div>
+        <div class="cl-live-embed" id="embed-aws">
+          <div class="cl-live-thumb" data-url="https://www.youtube.com/embed/videoseries?list=PLtSjMIqz1Q2Z5wPpKY_J1NXi3d6xsUVqS">
+            <div class="cl-live-play">▶</div>
+            <div class="cl-live-label">Click to watch</div>
+          </div>
+        </div>
+        <div class="cl-live-meta">Duration: 120 min · Level: Advanced · Back End Module 3</div>
+      </div>
+
+      <div class="cl-live-card">
+        <div class="cl-live-badge social">📱 Social</div>
+        <div class="cl-live-title">🔴 Follow Us for Live Coding Shorts</div>
+        <div class="cl-live-social-links">
+          <a class="cl-social-btn" href="https://youtube.com" target="_blank">▶ YouTube Channel</a>
+          <a class="cl-social-btn" href="https://instagram.com" target="_blank">📸 Instagram Reels</a>
+          <a class="cl-social-btn" href="https://tiktok.com" target="_blank">🎵 TikTok</a>
+          <a class="cl-social-btn" href="https://linkedin.com" target="_blank">💼 LinkedIn Live</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:28px 32px;margin-top:32px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gld);margin-bottom:6px">Want to join a live session?</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.38)">Sessions run every Tuesday &amp; Thursday · 7PM CST · Free for enrolled students</div>
+      </div>
+      <button class="btn-g go-calendar">📅 Book Your Spot</button>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- Scripts (load order matters) -->
@@ -1392,25 +1991,6 @@ renderStudio(studio)</pre>
     homePill.addEventListener('click', () => navigateTo('page-home'));
   }
 
-  /* ── ORANGE BURGER ── */
-  const burgerOrange  = document.getElementById('burger-orange');
-  const sidebarOrange = document.getElementById('sidebar-orange');
-  const osbClassroomHd  = document.getElementById('osb-classroom-hd');
-  const osbDdClassroom  = document.getElementById('osb-dd-classroom');
-
-  burgerOrange.addEventListener('click', function(e) {
-    e.stopPropagation();
-    burgerOrange.classList.toggle('open');
-    sidebarOrange.classList.toggle('open');
-    burgerPurple.classList.remove('open');
-    sidebarPurple.classList.remove('open');
-  });
-
-  osbClassroomHd.addEventListener('click', function() {
-    osbClassroomHd.classList.toggle('open');
-    osbDdClassroom.classList.toggle('open');
-  });
-
   /* ── PURPLE BURGER ── */
   const burgerPurple  = document.getElementById('burger-purple');
   const sidebarPurple = document.getElementById('sidebar-purple');
@@ -1432,10 +2012,6 @@ renderStudio(studio)</pre>
 
   /* ── CLOSE ON OUTSIDE CLICK ── */
   document.addEventListener('click', function(e) {
-    if (!sidebarOrange.contains(e.target) && e.target !== burgerOrange) {
-      burgerOrange.classList.remove('open');
-      sidebarOrange.classList.remove('open');
-    }
     if (!sidebarPurple.contains(e.target) && e.target !== burgerPurple) {
       burgerPurple.classList.remove('open');
       sidebarPurple.classList.remove('open');
