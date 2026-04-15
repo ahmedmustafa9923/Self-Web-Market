@@ -1,14 +1,18 @@
 /* -- API CLIENT -- Code Rendering Studio
- * SECURE: No credentials here. All calls route through Edge Function proxy.
- * PROXY_URL loaded from env.js (gitignored). Keys live only in Supabase secrets.
+ * SECURE: No DB credentials here.
+ * All calls route through the Edge Function proxy (server-side).
+ * The proxy URL is public — it is safe to commit.
+ * The real DB keys live ONLY inside Supabase Edge Function secrets.
  */
 const API = (function () {
 
-  const PROXY = window.ENV && window.ENV.PROXY_URL ? window.ENV.PROXY_URL : '';
-  if (!PROXY) console.warn('[API] No PROXY_URL in env.js');
+  // Proxy URL — safe to commit (it is just an endpoint, not a key)
+  // Override via env.js PROXY_URL for local dev if needed
+  const PROXY = (window.ENV && window.ENV.PROXY_URL)
+    ? window.ENV.PROXY_URL
+    : 'https://jndhpdadetvylnluahhk.supabase.co/functions/v1/api-proxy';
 
   async function call(action, payload) {
-    if (!PROXY) return { ok: false, error: 'API not configured' };
     try {
       const r = await fetch(PROXY, {
         method: 'POST',
