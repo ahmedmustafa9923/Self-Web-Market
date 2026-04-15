@@ -1,136 +1,212 @@
 /* ── NAVIGATION: sidebars, pages, nav, routing ── Code Rendering Studio */
 
-/* SIDEBARS */
-on('burger','click',function(){ document.body.classList.toggle('sb-on'); document.body.classList.remove('rsb-on'); });
-on('burger-r','click',function(){ document.body.classList.toggle('rsb-on'); document.body.classList.remove('sb-on'); });
-on('overlay','click',function(){ document.body.classList.remove('sb-on'); document.body.classList.remove('rsb-on'); });
-function closeSB(){ document.body.classList.remove('sb-on'); document.body.classList.remove('rsb-on'); }
+/* UTILITY: shorthand querySelector */
+const on = (id, ev, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(ev, fn); };
+const $ = id => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
 
-/* HOME PILL */
-function updateHomePill(name){
-  var pill = g('home-pill');
-  if(!pill) return;
-  if(name === 'home'){ pill.classList.remove('vis'); }
-  else { pill.classList.add('vis'); }
-}
-on('home-pill','click',function(){ goPage('home'); });
+/* ── PAGE SWITCHER ── */
+let currentPage = 'page-home';
+let pageHistory = ['page-home'];
 
-/* PAGES */
-var ALL_PAGES = ['home','models','pricing','ai','calendar','testimonials','about','payments','contact','creative','crmodels','crpricing','inquiry'];
-var prevPage = 'home';
-var currentPage = 'home';
-
-function goPage(name){
-  if(ALL_PAGES.indexOf(name) < 0) return;
-  prevPage = currentPage || 'home';
-  currentPage = name;
-  ALL_PAGES.forEach(function(p){
-    var el = g('page-'+p); if(el) el.classList.remove('on');
-    var ni = g('ni-'+p); if(ni) ni.classList.remove('on');
-  });
-  var pg = g('page-'+name); if(pg) pg.classList.add('on');
-  var ni = g('ni-'+name); if(ni) ni.classList.add('on');
-  closeSB();
+function showPage(pageId, opts = {}) {
+  if (!$(pageId)) return;
+  $$('.page').forEach(p => p.classList.remove('on'));
+  $(pageId).classList.add('on');
+  currentPage = pageId;
+  pageHistory.push(pageId);
   window.scrollTo(0, 0);
-  updateHomePill(name);
-  if(name === 'calendar'){
-    if(typeof resetBookingState === 'function') resetBookingState();
-    if(typeof renderCal === 'function') renderCal();
-    hideFCTA();
-  } else {
-    scheduleFCTA(700);
+  // Push to browser history so back/forward buttons work
+  history.pushState({ page: pageId }, '', '#' + pageId.replace('page-', ''));
+  // Close both sidebars on page change
+  closeSidebars();
+  // Update left nav active state
+  $$('.ni').forEach(n => n.classList.remove('on'));
+  // Update home-pill visibility
+  const pill = $('home-pill');
+  if (pill) pill.style.display = pageId === 'page-home' ? 'none' : 'flex';
+  // pricing tab pre-select
+  if (opts.pricingTab) {
+    setTimeout(() => {
+      const btn = $(opts.pricingTab === 'bundles' ? 'tab-bun' : 'tab-ind');
+      if (btn) btn.click();
+    }, 50);
+  }
+  // inquiry pre-fill service
+  if (opts.service) {
+    const sel = $('inq-service');
+    if (sel) sel.value = opts.service;
+    const lbl = $('inq-service-label');
+    if (lbl) lbl.textContent = opts.service + ' Inquiry';
+    const ti = $('inq-title');
+    if (ti) ti.textContent = 'Tell Us About Your ' + opts.service + ' Project';
   }
 }
 
-/* FLOAT CTA */
-var fctaTimer = null;
-function showFCTA(){ cls('fcta','vis',true); }
-function hideFCTA(){ cls('fcta','vis',false); }
-function scheduleFCTA(d){ clearTimeout(fctaTimer); fctaTimer = setTimeout(showFCTA, d); }
-on('fcta','click',function(){ goPage('calendar'); });
-scheduleFCTA(2400);
-
-/* LEFT NAV */
-on('ni-home','click',function(){ goPage('home'); });
-on('ni-ai','click',function(){ goPage('ai'); });
-on('ni-calendar','click',function(){ goPage('calendar'); });
-on('ni-testimonials','click',function(){ goPage('testimonials'); });
-on('ni-about','click',function(){ goPage('about'); });
-on('ni-payments','click',function(){ goPage('payments'); });
-on('ni-contact','click',function(){ goPage('contact'); });
-on('ni-inquiry','click',function(){ goPage('inquiry'); });
-
-function toggleDD(ddId, arrId){
-  var dd = g('dd-'+ddId), arr = g('arr-'+arrId);
-  if(!dd) return;
-  var opening = !dd.classList.contains('open');
-  ['models','pricing'].forEach(function(x){
-    var d = g('dd-'+x), a = g('arr-'+x);
-    if(d) d.classList.remove('open');
-    if(a) a.classList.remove('spin');
-  });
-  if(opening){ dd.classList.add('open'); if(arr) arr.classList.add('spin'); }
+function goBack() {
+  pageHistory.pop(); // remove current
+  const prev = pageHistory[pageHistory.length - 1] || 'page-home';
+  showPage(prev);
 }
 
-on('ni-models-hd','click',function(){ toggleDD('models','models'); });
-on('ni-pricing-hd','click',function(){ toggleDD('pricing','pricing'); });
-on('di-mod-all','click',function(){ goPage('models'); });
-on('di-mod-web','click',function(){ goPage('models'); });
-on('di-mod-mob','click',function(){ goPage('models'); });
-on('di-mod-ai','click',function(){ goPage('models'); });
-on('di-pri-all','click',function(){ goPage('pricing'); });
-on('di-pri-bun','click',function(){ goPage('pricing'); if(typeof showPTab==='function') showPTab('bun'); });
-on('di-pri-ind','click',function(){ goPage('pricing'); if(typeof showPTab==='function') showPTab('ind'); });
-
-/* RIGHT NAV DROPDOWNS */
-function toggleRDD(key){
-  var dd = g('rsb-dd-'+key), arr = g('rsb-arr-'+key);
-  if(!dd) return;
-  var opening = !dd.classList.contains('open');
-  ['nov','film','filming','arts','crmod','crprice'].forEach(function(x){
-    var d = g('rsb-dd-'+x), a = g('rsb-arr-'+x);
-    if(d) d.classList.remove('open');
-    if(a) a.classList.remove('spin');
-  });
-  if(opening){ dd.classList.add('open'); if(arr) arr.classList.add('spin'); }
+/* ── SIDEBAR STATE ── */
+function closeSidebars() {
+  $('sidebar').classList.remove('open');
+  $('rsidebar').classList.remove('open');
+  $('overlay').classList.remove('on');
 }
 
-on('rni-novels','click',function(){ toggleRDD('nov'); });
-on('rni-film','click',function(){ toggleRDD('film'); });
-on('rni-filming','click',function(){ toggleRDD('filming'); });
-on('rni-arts','click',function(){ toggleRDD('arts'); });
-on('rni-cr-models','click',function(){ toggleRDD('crmod'); });
-on('rni-cr-pricing','click',function(){ toggleRDD('crprice'); });
-on('rni-collab','click',function(){ goPage('calendar'); });
+function openLeftSidebar() {
+  $('sidebar').classList.add('open');
+  $('rsidebar').classList.remove('open');
+  $('overlay').classList.add('on');
+}
 
-['rdi-crm-novel','rdi-crm-clips','rdi-crm-dub','rdi-crm-film','rdi-crm-post'].forEach(function(id){
-  on(id,'click',function(){ goPage('crmodels'); });
-});
-['rdi-crp-solo','rdi-crp-pro','rdi-crp-studio'].forEach(function(id){
-  on(id,'click',function(){ goPage('crpricing'); });
-});
-['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit'].forEach(function(id){
-  on(id,'click',function(){ goPage('crmodels'); });
-});
-['rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist',
- 'rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short'].forEach(function(id){
-  on(id,'click',function(){ goPage('crmodels'); });
-});
-['rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(function(id){
-  on(id,'click',function(){ goPage('creative'); });
+function openRightSidebar() {
+  $('rsidebar').classList.add('open');
+  $('sidebar').classList.remove('open');
+  $('overlay').classList.add('on');
+}
+
+/* ── BURGER BUTTONS ── */
+on('burger', 'click', () => {
+  const isOpen = $('sidebar').classList.contains('open');
+  isOpen ? closeSidebars() : openLeftSidebar();
 });
 
-/* HOME BUTTONS */
-on('btn-explore','click',function(){ goPage('models'); });
-on('btn-creative','click',function(){ goPage('creative'); });
+on('burger-r', 'click', () => {
+  const isOpen = $('rsidebar').classList.contains('open');
+  isOpen ? closeSidebars() : openRightSidebar();
+});
 
-/* DELEGATE: class-based buttons anywhere on page */
-document.addEventListener('click', function(e){
-  if(e.target.closest('.go-cal'))       goPage('calendar');
-  if(e.target.closest('.go-cal-cr'))    goPage('calendar');
-  if(e.target.closest('.go-contact'))   goPage('contact');
-  if(e.target.closest('.go-inquiry'))   goPage('inquiry');
-  if(e.target.closest('.go-crmodels'))  goPage('crmodels');
-  if(e.target.closest('.go-crpricing')) goPage('crpricing');
-  if(e.target.closest('.go-creative'))  goPage('creative');
+on('overlay', 'click', closeSidebars);
+
+/* ── HOME PILL (back to home) ── */
+on('home-pill', 'click', () => showPage('page-home'));
+
+/* ── FREE CALL CTA (top) ── */
+on('fcta', 'click', () => showPage('page-calendar'));
+
+/* ── HOME PAGE BUTTONS ── */
+on('btn-explore', 'click', () => showPage('page-models'));
+on('btn-creative', 'click', () => showPage('page-creative'));
+
+/* ── LEFT SIDEBAR NAVIGATION ── */
+on('ni-home', 'click', () => {
+  showPage('page-home');
+  $$('.ni').forEach(n => n.classList.remove('on'));
+  $('ni-home').classList.add('on');
+  closeSidebars();
+});
+
+// Models dropdown
+on('ni-models-hd', 'click', () => {
+  const dd = $('dd-models');
+  const arr = $('arr-models');
+  if (!dd) return;
+  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight = isOpen ? '0px' : '300px';
+  dd.style.overflow = 'hidden';
+  dd.style.transition = 'max-height 0.3s ease';
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+});
+on('di-mod-all', 'click', () => { showPage('page-models'); closeSidebars(); });
+on('di-mod-web', 'click', () => { showPage('page-models'); closeSidebars(); });
+on('di-mod-mob', 'click', () => { showPage('page-models'); closeSidebars(); });
+on('di-mod-ai',  'click', () => { showPage('page-models'); closeSidebars(); });
+
+// Pricing dropdown
+on('ni-pricing-hd', 'click', () => {
+  const dd = $('dd-pricing');
+  const arr = $('arr-pricing');
+  if (!dd) return;
+  const isOpen = dd.style.maxHeight && dd.style.maxHeight !== '0px';
+  dd.style.maxHeight = isOpen ? '0px' : '300px';
+  dd.style.overflow = 'hidden';
+  dd.style.transition = 'max-height 0.3s ease';
+  if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+});
+on('di-pri-all', 'click', () => { showPage('page-pricing'); closeSidebars(); });
+on('di-pri-bun', 'click', () => { showPage('page-pricing', {pricingTab: 'bundles'}); closeSidebars(); });
+on('di-pri-ind', 'click', () => { showPage('page-pricing', {pricingTab: 'individual'}); closeSidebars(); });
+
+on('ni-ai',           'click', () => { showPage('page-ai');           closeSidebars(); });
+on('ni-calendar',     'click', () => { showPage('page-calendar');     closeSidebars(); });
+on('ni-testimonials', 'click', () => { showPage('page-testimonials'); closeSidebars(); });
+on('ni-about',        'click', () => { showPage('page-about');        closeSidebars(); });
+on('ni-payments',     'click', () => { showPage('page-payments');     closeSidebars(); });
+on('ni-contact',      'click', () => { showPage('page-contact');      closeSidebars(); });
+
+/* ── RIGHT SIDEBAR NAVIGATION ── */
+function rsDropdown(hdId, ddId, arrId) {
+  on(hdId, 'click', () => {
+    const dd = $(ddId);
+    const arr = $(arrId);
+    if (!dd) return;
+    const isOpen = dd.classList.contains('open');
+    dd.classList.toggle('open');
+    if (arr) arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+  });
+}
+
+rsDropdown('rni-novels',    'rsb-dd-nov',     'rsb-arr-nov');
+rsDropdown('rni-film',      'rsb-dd-film',    'rsb-arr-film');
+rsDropdown('rni-filming',   'rsb-dd-filming', 'rsb-arr-filming');
+rsDropdown('rni-arts',      'rsb-dd-arts',    'rsb-arr-arts');
+rsDropdown('rni-cr-models', 'rsb-dd-crmod',   'rsb-arr-crmod');
+rsDropdown('rni-cr-pricing','rsb-dd-crprice', 'rsb-arr-crprice');
+
+// Right sidebar page links
+['rdi-nov-series','rdi-nov-genres','rdi-nov-ghost','rdi-nov-edit'].forEach(id => {
+  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
+});
+['rdi-film-script','rdi-film-prod','rdi-film-post','rdi-film-dist'].forEach(id => {
+  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
+});
+['rdi-filming-dir','rdi-filming-cin','rdi-filming-doc','rdi-filming-short'].forEach(id => {
+  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
+});
+['rdi-arts-visual','rdi-arts-dig','rdi-arts-illus','rdi-arts-brand'].forEach(id => {
+  on(id, 'click', () => { showPage('page-creative'); closeSidebars(); });
+});
+['rdi-crm-novel','rdi-crm-clips','rdi-crm-dub','rdi-crm-film','rdi-crm-post'].forEach(id => {
+  on(id, 'click', () => { showPage('page-crmodels'); closeSidebars(); });
+});
+['rdi-crp-solo','rdi-crp-pro','rdi-crp-studio'].forEach(id => {
+  on(id, 'click', () => { showPage('page-crpricing'); closeSidebars(); });
+});
+on('rni-collab', 'click', () => { showPage('page-calendar'); closeSidebars(); });
+
+/* ── SHARED BUTTON CLASSES ── */
+document.addEventListener('click', e => {
+  const t = e.target.closest('.go-inquiry');
+  if (t) { showPage('page-inquiry', { service: t.dataset.service || '' }); return; }
+
+  if (e.target.closest('.go-cal') || e.target.closest('.go-cal-cr')) {
+    showPage('page-calendar'); return;
+  }
+  if (e.target.closest('.go-contact')) {
+    showPage('page-contact'); return;
+  }
+  if (e.target.closest('.go-crpricing')) {
+    showPage('page-crpricing'); return;
+  }
+});
+
+/* ── ABOUT PAGE ── */
+on('cr-book-call', 'click', () => showPage('page-calendar'));
+on('cr-portfolio', 'click', () => showPage('page-crmodels'));
+
+/* ── CALENDAR BACK/HOME ── */
+on('bk-back-btn', 'click', goBack);
+on('bk-home-btn', 'click', () => showPage('page-home'));
+
+/* ── INQUIRY DONE BUTTONS ── */
+on('inq-done-home',    'click', () => showPage('page-home'));
+on('inq-done-contact', 'click', () => showPage('page-contact'));
+
+/* ── INIT: hide home pill on load ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const pill = $('home-pill');
+  if (pill) pill.style.display = 'none';
 });
