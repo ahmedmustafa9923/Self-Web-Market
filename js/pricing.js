@@ -31,8 +31,8 @@ document.querySelectorAll('.pbtn.go-inquiry').forEach(function(b){
 document.querySelectorAll('#view-bun .bc').forEach(function(card){
   card.style.cursor='pointer';
   card.addEventListener('click',function(e){
-    // Don't double-fire if a button inside was clicked
-    if(e.target.tagName==='BUTTON') return;
+    // Let button clicks bubble up naturally — card handles anything not on the button text itself
+    if(e.target.closest('button')) return;
     var nm = this.querySelector('.b-nm2');
     var service = nm ? nm.textContent.trim() : '';
     if(typeof openInquiry === 'function') openInquiry(service);
