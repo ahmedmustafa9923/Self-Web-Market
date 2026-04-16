@@ -163,11 +163,11 @@ function showBookForm(formId, slot, date, lbl) {
       '<div class="book-confirm-sub">' + nm.value + ', confirmation sent to ' + em.value + '.<br>' +
       'See you ' + lbl + ' at ' + slot + '!</div>' +
       '<div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap">' +
-      '<button class="btn-g" id="bk-home">&#8962; Home</button>' +
+      '<button class="btn-g" id="bk-home-btn">&#8962; Home</button>' +
       '<button class="btn-p" id="bk-contact">Contact Us</button>' +
       '</div></div>';
 
-    var bh = document.getElementById('bk-home');
+    var bh = document.getElementById('bk-home-btn');
     var bc = document.getElementById('bk-contact');
     if (bh) bh.addEventListener('click', function(){ if(typeof showPage==='function') showPage('page-home'); });
     if (bc) bc.addEventListener('click', function(){ if(typeof showPage==='function') showPage('page-contact'); });
