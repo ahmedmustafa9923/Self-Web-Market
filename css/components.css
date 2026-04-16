@@ -167,3 +167,46 @@
 .cfok-ti{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gld);letter-spacing:1px;margin-top:12px}
 .cfok-sub{font-size:14px;color:var(--mut);margin-top:6px}
 
+
+
+/* ── Booking confirmation screen (injected by calendar.js showBookForm) ── */
+.book-confirm {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.book-confirm h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wht);
+  margin-bottom: 4px;
+}
+.book-confirm-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* ── Inquiry validation error box (requires #inq-errors in index.html) ─── */
+.inq-error-box {
+  background: rgba(240,80,80,.08);
+  border: 1px solid rgba(240,80,80,.35);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #f07070;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.inq-error-box ul { margin: 4px 0 0 16px; }
+.inq-error-box li { margin-top: 3px; }
+
+/* ── Slot past state (.avail exists; .past was missing) ─────────────────── */
+.slot.past {
+  color: #2a2a2a;
+  cursor: default;
+  pointer-events: none;
+  border-color: rgba(255,255,255,.03);
+}
