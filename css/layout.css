@@ -73,6 +73,6 @@ body.rsb-on #rsidebar{transform:translateX(0)}
 /* PAGES */
 main{min-height:100vh}
 .page{display:none;min-height:100vh}
-.page.on{display:block;animation:pgin .32s ease}
-@keyframes pgin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page.on{display:block;animation:pgin .32s ease forwards}
+@keyframes pgin{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}to{opacity:1;transform:translateY(0)}}
 
