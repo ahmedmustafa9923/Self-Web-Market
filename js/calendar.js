@@ -86,7 +86,7 @@ function showBookForm(id, slot, date, lbl) {
     '</div>' +
     '<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">' +
     '<button class="btn-g" id="bk-ok">Confirm Booking</button>' +
-    '<button class="btn-p" id="bk-cl" style="background:transparent;border:1px solid rgba(255,255,255,.2)">Change Slot</button>' +
+    '<button class="btn-p" id="bk-cl" style="background:transparent;border:1px solid rgba(255,255,255,.2)">Cancel</button>' +
     '</div></div>';
 
   var ok = document.getElementById('bk-ok');
