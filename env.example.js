@@ -11,7 +11,7 @@
  * Set your secrets server-side with:
  *   supabase secrets set SUPABASE_URL=
  *   supabase secrets set SUPABASE_SERVICE_KEY=YOUR_SERVICE_ROLE_KEY
- *   supabase secrets set ALLOWED_ORIGIN=https://ahmedmustafa9923.github.io
+ *   supabase secrets set ALLOWED_ORIGIN=
  */
 window.ENV = {
   PROXY_URL: 'https://jndhpdadetvylnluahhk.supabase.co/functions/v1/api-proxy'
