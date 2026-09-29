@@ -5,7 +5,7 @@
 
 function apiCall(action, payload) {
   var cfg = window.ENV || {};
-  var url = cfg.FUNCTION_URL || "";
+  var url = cfg.FUNCTION_URL || cfg.PROXY_URL || "";
   if (!url) { console.warn("api.js: FUNCTION_URL not set in env.js"); return Promise.resolve({error:"not configured"}); }
   return fetch(url, {
     method: "POST",
@@ -68,6 +68,17 @@ window.submitContact = function(data) {
     if (res.error) { console.error("Contact failed:", res.error); }
     else { console.log("Contact saved to Supabase:", res); }
     return res;
+  });
+};
+
+/* Called by payments.js — asks the Edge Function to open a Stripe Checkout session.
+   The Stripe secret key never touches the browser; only the returned checkout URL does. */
+window.createCheckout = function(data) {
+  return apiCall("createCheckout", {
+    amount:      data.amount,
+    name:        data.name,
+    email:       data.email,
+    description: data.description || "",
   });
 };
 

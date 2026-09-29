@@ -121,8 +121,7 @@ window.initPricing = function() {
     'Web Platform': 3200, 'Mobile App': 5800, 'AI Integration': 4500,
     'SaaS Build': 7500, 'Booking System': 2800, 'Data Dashboard': 3500,
     'Novel Writing': 2400, 'Editing Clips': 1200, 'Sound Dubbing': 1800,
-    'Filming': 4000, 'Post Production': 5200,
-    'Online Classroom': 349
+    'Filming': 4000, 'Post Production': 5200
   };
 
   function updateDeposit() {

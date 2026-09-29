@@ -8,11 +8,9 @@
 
 var ALL_PAGES = [
   'page-home','page-inquiry','page-models','page-pricing',
-  'page-ai','page-calendar','page-testimonials','page-about',
+  'page-ai','page-calendar',
   'page-payments','page-crmodels','page-crpricing','page-creative',
-  'page-contact','page-classroom','page-java','page-js','page-html',
-  'page-python','page-backend','page-fees','page-lab',
-  'page-placement','page-live'
+  'page-contact'
 ];
 
 /* ══════════════════════════════════════════
@@ -122,25 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
   on('di-pri-ind',      'click', function() { showPage('page-pricing', {pricingTab:'individual'}); });
   on('ni-ai',           'click', function() { showPage('page-ai'); });
   on('ni-calendar',     'click', function() { showPage('page-calendar'); });
-  on('ni-testimonials', 'click', function() { showPage('page-testimonials'); });
-  on('ni-about',        'click', function() { showPage('page-about'); });
   on('ni-payments',     'click', function() { showPage('page-payments'); });
   on('ni-contact',      'click', function() { showPage('page-contact'); });
-
-  /* ── LEFT SIDEBAR — ONLINE CLASSROOM ── */
-  on('ni-classroom-hd', 'click', function() { toggleDD('dd-classroom','arr-classroom'); });
-  on('di-cl-java',      'click', function() { showPage('page-java'); });
-  on('di-cl-js',        'click', function() { showPage('page-js'); });
-  on('di-cl-html',      'click', function() { showPage('page-html'); });
-  on('di-cl-python',    'click', function() { showPage('page-python'); });
-  on('di-cl-backend',   'click', function() { showPage('page-backend'); });
-  on('ni-fees',         'click', function() { showPage('page-fees'); });
-  on('ni-lab',          'click', function() { showPage('page-lab'); });
-  on('ni-placement',    'click', function() { showPage('page-placement'); });
-  on('ni-live-demo',    'click', function() { toggleDD('dd-live','arr-live'); });
-  on('di-live-youtube', 'click', function() { showPage('page-live'); });
-  on('di-live-social',  'click', function() { showPage('page-live'); });
-  on('di-live-schedule','click', function() { showPage('page-calendar'); });
 
   /* ── RIGHT SIDEBAR — CREATIVE ── */
   on('rni-novels',    'click', function() { toggleDD('rsb-dd-nov',    'rsb-arr-nov'); });
@@ -171,39 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
   on('bk-home-btn',      'click', function() { showPage('page-home'); });
   on('inq-done-home',    'click', function() { showPage('page-home'); });
   on('inq-done-contact', 'click', function() { showPage('page-contact'); });
-  on('goto-java',        'click', function() { showPage('page-java'); });
-  on('goto-js',          'click', function() { showPage('page-js'); });
-  on('goto-html',        'click', function() { showPage('page-html'); });
-  on('goto-python',      'click', function() { showPage('page-python'); });
-  on('goto-backend',     'click', function() { showPage('page-backend'); });
-  on('goto-fees-page',   'click', function() { showPage('page-fees'); });
-
-  /* ── PURPLE BURGER (bottom-right) ── */
-  var bp  = document.getElementById('burger-purple');
-  var sp  = document.getElementById('sidebar-purple');
-  var pHd = document.getElementById('psb-classroom-hd');
-  var pDd = document.getElementById('psb-dd-classroom');
-  if (bp && sp) {
-    bp.addEventListener('click', function(e) {
-      e.stopPropagation();
-      sp.classList.toggle('open');
-      bp.classList.toggle('open');
-    });
-    document.addEventListener('click', function(e) {
-      if (!sp.contains(e.target) && e.target !== bp) {
-        sp.classList.remove('open');
-        bp.classList.remove('open');
-      }
-    });
-  }
-  if (pHd && pDd) {
-    pHd.addEventListener('click', function() {
-      var open = pDd.classList.toggle('open');
-      pDd.style.maxHeight = open ? '300px' : '0px';
-      pDd.style.overflow  = 'hidden';
-      pDd.style.transition= 'max-height 0.3s ease';
-    });
-  }
 
   /* ── CLASS-BASED BUTTON DELEGATION ── */
   document.addEventListener('click', function(e) {
@@ -220,23 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (up('go-contact'))   { showPage('page-contact');   return; }
     if (up('go-crpricing')) { showPage('page-crpricing'); return; }
     if (up('go-calendar'))  { showPage('page-calendar');  return; }
-    if (up('go-classroom')) { showPage('page-classroom'); return; }
-    if (up('go-java'))      { showPage('page-java');      return; }
-    if (up('go-js'))        { showPage('page-js');        return; }
-    if (up('go-html'))      { showPage('page-html');      return; }
-    if (up('go-python'))    { showPage('page-python');    return; }
-    if (up('go-backend'))   { showPage('page-backend');   return; }
-    if (up('go-lab'))       { showPage('page-lab');       return; }
-    if (up('go-fees'))      { showPage('page-fees');      return; }
-    if (up('go-placement')) { showPage('page-placement'); return; }
-    if (up('go-live'))      { showPage('page-live');      return; }
-    // Live video embed
-    var thumb = up('cl-live-thumb');
-    if (thumb) {
-      var url  = thumb.getAttribute('data-url');
-      var wrap = thumb.closest ? thumb.closest('.cl-live-embed') : thumb.parentElement;
-      if (url && wrap) wrap.innerHTML = '<iframe width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" src="'+url+'?autoplay=1" allowfullscreen></iframe>';
-    }
   });
 
   /* ── BROWSER BACK/FORWARD ── */
@@ -251,10 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   /* ── INIT STATE ── */
+  var hash = window.location.hash.replace('#','');
   try { history.replaceState({page:'page-home'}, '', '#home'); } catch(e) {}
   var pill = document.getElementById('home-pill');
   if (pill) pill.style.display = 'none';
-  var hash = window.location.hash.replace('#','');
   if (hash && document.getElementById('page-'+hash)) {
     setTimeout(function() { showPage('page-'+hash); }, 50);
   }
