@@ -33,3 +33,12 @@
 .pay-note-txt strong{color:var(--gld)}
 
 .pay-val{word-break:break-all;max-width:100%}
+/* ZELLE / VENMO EMAILS */
+.pay-steps{font-size:12px;color:rgba(255,255,255,.45);line-height:1.6;margin:6px 0 12px}
+.pay-emails{display:flex;flex-direction:column;gap:8px;width:100%}
+.pay-email{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:#111;border:1px solid var(--bdr);border-radius:8px}
+.pay-email-val{font-size:12px;color:rgba(255,255,255,.75);word-break:break-all;text-align:left}
+.pay-copy{flex-shrink:0;padding:5px 10px;border-radius:6px;background:transparent;border:1px solid var(--pay-color,rgba(201,168,76,.4));color:var(--pay-color,var(--gld));font-family:'Outfit',sans-serif;font-size:11px;cursor:pointer}
+.pay-copy:hover{background:var(--pay-color,var(--gld));color:#fff}
+.pay-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.pay-email-val{word-break:normal;overflow-wrap:anywhere}
