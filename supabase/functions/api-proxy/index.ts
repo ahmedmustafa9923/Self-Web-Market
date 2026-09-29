@@ -9,6 +9,11 @@ const TWILIO_SID  = Deno.env.get("TWILIO_SID") || "";
 const TWILIO_TOKEN= Deno.env.get("TWILIO_TOKEN") || "";
 const TWILIO_FROM = Deno.env.get("TWILIO_FROM") || "";
 const ALLOWED     = Deno.env.get("ALLOWED_ORIGIN") || "https://www.coderenderingstudio.com";
+// Stripe secret key lives ONLY here, as a Supabase secret — never in the website files.
+//   supabase secrets set STRIPE_SECRET_KEY=sk_live_...
+const STRIPE_KEY  = Deno.env.get("STRIPE_SECRET_KEY") || "";
+const PAY_MIN_USD = 1;
+const PAY_MAX_USD = 50000;
 
 const rateMap = new Map();
 function limited(ip: string) {
@@ -62,6 +67,44 @@ async function sendSMS(to: string, body: string) {
   }).catch(console.error);
 }
 
+async function stripeCheckout(p: Record<string,unknown>) {
+  if (!STRIPE_KEY) return {error:"Card payments are not configured yet"};
+  const amount = typeof p.amount==="number" ? p.amount : parseFloat(String(p.amount ?? ""));
+  if (!isFinite(amount) || amount < PAY_MIN_USD || amount > PAY_MAX_USD)
+    return {error:"Amount must be between $"+PAY_MIN_USD+" and $"+PAY_MAX_USD.toLocaleString()};
+  const cents = Math.round(amount * 100);
+  const name  = clean(p.name,100), email = eml(p.email), memo = clean(p.description,120);
+  if (!name)  return {error:"Name required"};
+  if (!email) return {error:"Valid email required"};
+
+  const form = new URLSearchParams({
+    "mode": "payment",
+    "submit_type": "pay",
+    "customer_email": email,
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "usd",
+    "line_items[0][price_data][unit_amount]": String(cents),
+    "line_items[0][price_data][product_data][name]": "Code Rendering Studio" + (memo ? " — " + memo : " payment"),
+    "payment_intent_data[description]": "Code Rendering Studio — " + (memo || "payment") + " (" + name + ")",
+    "metadata[client_name]": name,
+    "metadata[memo]": memo,
+    "success_url": ALLOWED + "/?payment=success#payments",
+    "cancel_url":  ALLOWED + "/?payment=cancelled#payments",
+  });
+  const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + STRIPE_KEY,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Idempotency-Key": crypto.randomUUID(),
+    },
+    body: form,
+  });
+  const d = await r.json();
+  if (!r.ok || !d.url) { console.error("[stripe]", d?.error?.message || r.status); return {error:"Could not start checkout. Please try again."}; }
+  return { url: d.url };
+}
+
 const ACTIONS: Record<string, (p: Record<string,unknown>) => Promise<unknown>> = {
 
   getSlotsForDate: async (p) => {
@@ -111,6 +154,8 @@ const ACTIONS: Record<string, (p: Record<string,unknown>) => Promise<unknown>> =
     }
     return res;
   },
+
+  createCheckout: stripeCheckout,
 
   createContact: async (p) => {
     const name=clean(p.name,100), email=eml(p.email);
