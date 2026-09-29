@@ -4,20 +4,21 @@ window.initPayments = function() {
   var container = document.getElementById('pay-grid-container');
   if (!container) return;
 
+  var PAY_EMAILS = ['coderenderingstudio@gmail.com', 'ahmed.mustafa9923@gmail.com'];
+
   var PAYMENT_METHODS = [
     {
       name: 'Zelle',
       icon: '💜',
       desc: 'Instant bank transfer — no fees',
-      value: 'coderenderingstudio@gmail.com',
-      url: 'https://enroll.zellepay.com/',
+      steps: 'Open your bank\'s app → Zelle → Send, and enter either email:',
       color: '#6D31ED'
     },
     {
       name: 'Venmo',
       icon: '💙',
-      desc: 'Send instantly via Venmo app',
-      value: '@coderenderingstudio',
+      desc: 'Send instantly via the Venmo app',
+      steps: 'Open Venmo → Pay/Request, search either email:',
       url: 'https://venmo.com/',
       color: '#3D95CE'
     }
@@ -95,6 +96,11 @@ window.initPayments = function() {
   PAYMENT_METHODS.forEach(function(method) {
     var card = document.createElement('div');
     card.className = 'pay-card';
+    card.style.setProperty('--pay-color', method.color);
+    var rows = PAY_EMAILS.map(function(email) {
+      return '<div class="pay-email"><span class="pay-email-val">' + email + '</span>' +
+             '<button type="button" class="pay-copy" data-copy="' + email + '">Copy</button></div>';
+    }).join('');
     card.innerHTML = [
       '<div class="pay-card-hd">',
         '<div class="pay-icon">' + method.icon + '</div>',
@@ -103,28 +109,23 @@ window.initPayments = function() {
           '<div class="pay-desc">' + method.desc + '</div>',
         '</div>',
       '</div>',
-      '<div class="pay-qr-wrap" id="qr-' + method.name.replace(/\s/g,'') + '"></div>',
-      '<div class="pay-val">' + method.value + '</div>',
-      '<a class="pay-btn" href="' + method.url + '" target="_blank" rel="noopener">',
-        'Open ' + method.name + ' →',
-      '</a>'
+      '<div class="pay-steps">' + method.steps + '</div>',
+      '<div class="pay-emails">' + rows + '</div>',
+      method.url ? '<a class="pay-btn" href="' + method.url + '" target="_blank" rel="noopener">Open ' + method.name + ' →</a>' : ''
     ].join('');
     container.appendChild(card);
+  });
 
-    // Generate QR code if library loaded
-    if (typeof QRCode !== 'undefined') {
-      try {
-        new QRCode(document.getElementById('qr-' + method.name.replace(/\s/g,'')), {
-          text: method.value,
-          width: 160, height: 160,
-          colorDark: method.color,
-          colorLight: '#0a0a0a',
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      } catch(e) {
-        var qrEl = document.getElementById('qr-' + method.name.replace(/\s/g,''));
-        if (qrEl) qrEl.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:12px;padding:20px;text-align:center">QR unavailable</div>';
-      }
+  /* ── COPY EMAIL BUTTONS ── */
+  container.addEventListener('click', function(e) {
+    var btn = e.target.closest ? e.target.closest('.pay-copy') : null;
+    if (!btn) return;
+    var text = btn.getAttribute('data-copy');
+    function done() { btn.textContent = 'Copied ✓'; setTimeout(function() { btn.textContent = 'Copy'; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function() { window.prompt('Copy this email:', text); });
+    } else {
+      window.prompt('Copy this email:', text);
     }
   });
 
