@@ -12,6 +12,9 @@
  *   supabase secrets set SUPABASE_URL=
  *   supabase secrets set SUPABASE_SERVICE_KEY=YOUR_SERVICE_ROLE_KEY
  *   supabase secrets set ALLOWED_ORIGIN=
+ *   supabase secrets set STRIPE_SECRET_KEY=sk_live_...   (card / Apple Pay / Google Pay)
+ *
+ * Never put a Stripe secret key (sk_...) in this file or any frontend file.
  */
 window.ENV = {
   PROXY_URL: 'https://jndhpdadetvylnluahhk.supabase.co/functions/v1/api-proxy'
