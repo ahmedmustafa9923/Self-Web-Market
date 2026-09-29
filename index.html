@@ -8,7 +8,6 @@
 <meta name="theme-color" content="#0a0a0a">
 <title>Code Rendering Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <!-- Styles -->
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -60,7 +59,7 @@
     </div>
     <div class="ni" id="ni-ai">AI Session</div>
     <div class="ni" id="ni-calendar">Book a Call</div>
-    <div class="ni" id="ni-payments">Payments / QR</div>
+    <div class="ni" id="ni-payments">Payments</div>
     <div class="ni" id="ni-contact">Contact</div>
 
   </nav>
@@ -578,13 +577,13 @@ renderStudio(studio)</pre>
   </div>
 </div>
 
-<!-- PAYMENTS / QR CODES -->
+<!-- PAYMENTS -->
 <div class="page" id="page-payments">
   <div class="wrap">
     <div class="s-ey">Secure &amp; instant payments</div>
     <h2 class="s-ti">Pay Your Way</h2>
     <div class="s-dv"></div>
-    <p class="pay-intro">Pay by card, Apple Pay or Google Pay through Stripe's secure checkout, or scan a QR code to send with Zelle or Venmo. Your card details go straight to Stripe — never through this site.</p>
+    <p class="pay-intro">Pay by card, Apple Pay or Google Pay through Stripe's secure checkout, or send with Zelle or Venmo to either of our emails. Your card details go straight to Stripe — never through this site.</p>
 
     <div id="pay-status" class="pay-status" style="display:none"></div>
 
@@ -596,7 +595,7 @@ renderStudio(studio)</pre>
     </div>
 
     <div class="pay-grid" id="pay-grid-container">
-      <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">Generating secure QR codes…</div>
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">Loading payment options…</div>
     </div>
 
     <div class="pay-note" style="margin-top:32px">
