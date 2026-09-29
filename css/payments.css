@@ -13,8 +13,23 @@
 .pay-handle{font-size:11px;color:rgba(255,255,255,.4);word-break:break-all;line-height:1.5}
 .pay-btn{margin-top:12px;padding:8px 18px;border-radius:6px;background:transparent;border:1px solid var(--pay-color,rgba(201,168,76,.4));color:var(--pay-color,var(--gld));font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
 .pay-btn:hover{background:var(--pay-color,var(--gld));color:var(--blk)}
+/* STRIPE CHECKOUT CARD */
+.pay-card.pay-stripe{grid-column:1/-1;align-items:stretch;text-align:left;--pay-color:#8f86ff;padding:28px}
+.pay-stripe .pay-card-hd{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.pay-stripe .pay-icon{font-size:26px}
+.pay-stripe-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.pay-stripe-form .inq-lbl{margin-bottom:6px}
+.pay-stripe-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.pay-stripe .pay-btn{margin-top:0;padding:11px 22px;font-size:13px}
+.pay-stripe .pay-btn[disabled]{opacity:.5;cursor:wait}
+.pay-stripe-err{font-size:12px;color:#F0997B;min-height:1em}
+.pay-stripe-fine{font-size:11px;color:rgba(255,255,255,.3);margin-top:12px;line-height:1.6}
+.pay-status{padding:14px 18px;border-radius:10px;font-size:13px;margin:-20px 0 30px;max-width:700px}
+.pay-status.ok{background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.25);color:#5DCAA5}
+.pay-status.warn{background:rgba(240,153,123,.08);border:1px solid rgba(240,153,123,.25);color:#F0997B}
 .pay-note{background:#0c0c0c;border:1px solid var(--bdr);border-radius:14px;padding:24px 28px;display:flex;gap:16px;align-items:flex-start;max-width:700px}
 .pay-note-ico{font-size:22px;flex-shrink:0;margin-top:2px}
 .pay-note-txt{font-size:13px;color:rgba(255,255,255,.42);line-height:1.8}
 .pay-note-txt strong{color:var(--gld)}
 
+.pay-val{word-break:break-all;max-width:100%}
