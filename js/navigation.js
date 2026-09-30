@@ -10,7 +10,7 @@ var ALL_PAGES = [
   'page-home','page-inquiry','page-models','page-pricing',
   'page-ai','page-calendar',
   'page-payments','page-crmodels','page-crpricing','page-creative',
-  'page-contact','page-projects'
+  'page-contact','page-projects','page-legal'
 ];
 
 /* ══════════════════════════════════════════
@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
   on('ni-calendar',     'click', function() { showPage('page-calendar'); });
   on('ni-payments',     'click', function() { showPage('page-payments'); });
   on('ni-contact',      'click', function() { showPage('page-contact'); });
+  on('ni-legal',        'click', function() { showPage('page-legal'); });
   on('di-mod-devops',   'click', function() { showPage('page-projects'); });
 
   /* ── RIGHT SIDEBAR — CREATIVE ── */
