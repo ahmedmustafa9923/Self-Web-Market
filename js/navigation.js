@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
   on('ni-calendar',     'click', function() { showPage('page-calendar'); });
   on('ni-payments',     'click', function() { showPage('page-payments'); });
   on('ni-contact',      'click', function() { showPage('page-contact'); });
-  on('ni-projects',     'click', function() { showPage('page-projects'); });
   on('di-mod-devops',   'click', function() { showPage('page-projects'); });
 
   /* ── RIGHT SIDEBAR — CREATIVE ── */
