@@ -73,3 +73,41 @@
   .cd-case{padding:24px}
   .cd-arrows{display:none}
 }
+
+/* ── CONTRACTS & DISCLOSURES PAGE ── */
+.lg-page{max-width:760px}
+.lg-page .s-ti{font-size:clamp(34px,4.4vw,52px)}
+.lg-page .s-bo{margin-bottom:0}
+.lg-sec{margin-top:64px}
+.lg-h{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:26px;letter-spacing:.5px;margin-bottom:18px}
+.lg-list{list-style:none;display:flex;flex-direction:column}
+.lg-list li{padding:16px 0;border-top:1px solid var(--bdr);font-size:14px;line-height:1.75;color:#a8a8a8}
+.lg-list li:last-child{border-bottom:1px solid var(--bdr)}
+.lg-list strong{color:var(--wht);font-weight:500}
+.lg-doc{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.lg-doc p{font-size:14px;line-height:1.7;color:#a8a8a8;max-width:460px}
+.lg-dl{display:inline-block;padding:11px 22px;border:1px solid var(--gld);color:var(--gld);border-radius:6px;font-size:13px;text-decoration:none;white-space:nowrap;transition:all .2s}
+.lg-dl:hover{background:var(--gld);color:var(--blk)}
+.lg-terms{display:flex;flex-direction:column}
+.lg-terms details{border-top:1px solid var(--bdr)}
+.lg-terms details:last-child{border-bottom:1px solid var(--bdr)}
+.lg-terms summary{list-style:none;cursor:pointer;padding:15px 0;font-size:14px;color:#d8d8d8;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.lg-terms summary:hover{color:var(--wht)}
+.lg-terms summary::-webkit-details-marker{display:none}
+.lg-terms summary::after{content:'+';color:var(--gld);font-size:18px;line-height:1}
+.lg-terms details[open] summary::after{content:'\2212'}
+.lg-terms .lg-body{padding:0 0 20px;font-size:13.5px;line-height:1.8;color:#a8a8a8}
+.lg-terms .lg-body p{margin-bottom:10px}
+.lg-terms .lg-body ol{padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.lg-terms .lg-body strong{color:var(--wht);font-weight:500}
+.lg-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 12px}
+.lg-tbl th,.lg-tbl td{border-bottom:1px solid var(--bdr);padding:10px 12px 10px 0;text-align:left;vertical-align:top}
+.lg-tbl th{color:var(--gld);font-weight:500}
+.lg-wrap{overflow-x:auto}
+.lg-updated{font-size:12px;color:#8a8a8a;margin-top:18px}
+.lg-page{margin-left:auto;margin-right:auto}
+.lg-center{text-align:center}
+.lg-center .s-dv{margin-left:auto;margin-right:auto}
+.lg-page .lg-sec:first-of-type{margin-top:0}
+#lg-terms{margin-top:48px}
+.lg-updated{text-align:center}
