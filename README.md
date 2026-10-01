@@ -93,5 +93,5 @@ git push -u origin main
 
 **Code Rendering Studio**  
 
-+1 (630) 335-3342  
-coderenderingstudio@gmail.com
++1 (630) 379-9923  
+moreinfo@codrenderingstudio.com
